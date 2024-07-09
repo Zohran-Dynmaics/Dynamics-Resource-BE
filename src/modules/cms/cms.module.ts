@@ -9,6 +9,7 @@ import { BookingModule } from "./modules/booking/booking.module";
 import { ResourceModule } from "./modules/resource/resource.module";
 import { IncidentModule } from "./modules/incident/incident.module";
 import { WorkOrderModule } from './modules/work-order/work-order.module';
+import { ProblemIssueModule } from './modules/problem-issue/problem-issue.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { WorkOrderModule } from './modules/work-order/work-order.module';
     ResourceModule,
     IncidentModule,
     WorkOrderModule,
+    ProblemIssueModule,
   ],
   controllers: [CmsController],
   providers: [CmsService],
