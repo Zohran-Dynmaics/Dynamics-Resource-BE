@@ -3,7 +3,7 @@ import { ResourceService } from "./resource.service";
 import { CustomRequest } from "src/shared/custom-interface";
 import { GetResourceSlotsDto } from "./resource.dto";
 
-@Controller("resource")
+@Controller("cms/resource")
 export class ResourceController {
   constructor(private resourceService: ResourceService) { }
 

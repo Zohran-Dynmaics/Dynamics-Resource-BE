@@ -2,9 +2,9 @@ import { Controller, Get, Req, UseGuards } from "@nestjs/common";
 import { ContactService } from "./contact.service";
 import { CustomRequest } from "src/shared/custom-interface";
 
-@Controller("contact")
+@Controller("cms/contact")
 export class ContactController {
-  constructor(private readonly contactService: ContactService) {}
+  constructor(private readonly contactService: ContactService) { }
 
   @Get("/:contact_id")
   async getContact(@Req() req: CustomRequest): Promise<any> {

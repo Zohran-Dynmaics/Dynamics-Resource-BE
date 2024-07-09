@@ -5,7 +5,7 @@ import { User } from "../users/users.entity";
 
 @Controller("auth")
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
   @Post("sign-up")
   async signup(@Body() signupDto: SignUpDto): Promise<ResponseSignUpDto> {

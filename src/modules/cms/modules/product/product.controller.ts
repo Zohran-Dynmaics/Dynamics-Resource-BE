@@ -3,9 +3,9 @@ import { ProductService } from "./product.service";
 
 import { CustomRequest } from "src/shared/custom-interface";
 
-@Controller("product")
+@Controller("cms/product")
 export class ProductController {
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService) { }
 
   @Get("price-list/:product_id")
   async getPriceList(@Req() req: CustomRequest): Promise<any> {

@@ -4,9 +4,9 @@ import { CustomRequest } from "src/shared/custom-interface";
 import { IncidentService } from "./incident.service";
 import { CreateIncidentDto } from "./incident.dto";
 
-@Controller("incident")
+@Controller("cms/incident")
 export class IncidentController {
-  constructor(private incidentService: IncidentService) {}
+  constructor(private incidentService: IncidentService) { }
 
   @Get("/:incident_id")
   async getIncident(@Req() req: CustomRequest): Promise<any> {

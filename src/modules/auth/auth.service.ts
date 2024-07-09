@@ -21,7 +21,7 @@ export class AuthService {
     private jwtService: JwtService,
     private cmsService: CmsService,
     private envService: EnvironmentService,
-  ) {}
+  ) { }
 
   async signup(signupDto: SignUpDto): Promise<ResponseSignUpDto> {
     try {
@@ -61,7 +61,7 @@ export class AuthService {
       );
       if (!userValidation)
         throw new HttpException("Invalid credentials", HttpStatus.BAD_REQUEST);
-      return { email, password, access_token };
+      return { access_token };
     } catch (error) {
       throw error;
     }
