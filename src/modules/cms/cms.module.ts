@@ -8,6 +8,7 @@ import { ContactModule } from "./modules/contact/contact.module";
 import { BookingModule } from "./modules/booking/booking.module";
 import { ResourceModule } from "./modules/resource/resource.module";
 import { IncidentModule } from "./modules/incident/incident.module";
+import { WorkOrderModule } from './modules/work-order/work-order.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { IncidentModule } from "./modules/incident/incident.module";
     BookingModule,
     ResourceModule,
     IncidentModule,
+    WorkOrderModule,
   ],
   controllers: [CmsController],
   providers: [CmsService],
