@@ -26,6 +26,15 @@ export class User {
   @Prop({ type: String, required: false })
   project?: string
 
+  @Prop({ type: Boolean, default: false })
+  resetPasswordRequested?: boolean;
+
+  @Prop({ type: String, required: false })
+  resetPasswordOtp?: string;
+
+  @Prop({ type: Date, required: false })
+  resetPasswordOtpExpiry?: Date;
+
   @Prop({ type: String, required: true, default: UserRole.TECHNICIAN })
   roles: [];
 }

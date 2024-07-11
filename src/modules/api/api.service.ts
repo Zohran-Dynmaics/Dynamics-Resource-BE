@@ -23,9 +23,16 @@ export class ApiService {
     try {
       response = await axios.request(config).then((res) => {
         return res.data
-      }).catch(error => { throw error });
+      })
 
     } catch (error) {
+      if (this.isTokenExpired(error)) {
+        const expiredToken = await this.cmsService.refreshCrmToken(error.config.headers.Authorization.split(' ')[1]);
+        config.headers.Authorization = `Bearer ${expiredToken}`;
+        response = await axios.request(config).then((res) => {
+          return res.data
+        });
+      }
       throw error;
     }
 

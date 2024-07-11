@@ -9,7 +9,9 @@ import {
   ResponseSignUpDto,
   SignInDto,
   SignUpDto,
-  UpdatePasswordDto
+  UpdatePasswordDto,
+  UpdatePasswordRequestDto,
+  VerifyOtpDto
 } from "./auth.dto";
 import * as bcrypt from "bcrypt";
 import { UsersService } from "../users/users.service";
@@ -19,6 +21,9 @@ import { CmsService } from "./../cms/cms.service";
 import { EnvironmentService } from "../environment/environment.service";
 import { UpdateUserDto } from "../users/users.dto";
 import { generateHash } from "src/shared/utility/utility";
+const otpGenerator = require('otp-generator')
+import { sendMail } from "src/shared/utility/mail.util";
+import { OTP_EMAIL_TEMPLATE } from "./constants";
 
 @Injectable()
 export class AuthService {
@@ -79,7 +84,53 @@ export class AuthService {
           bookableresourceid: user.resourceId
         }
       };
-      return { token: await this.jwtService.signAsync(payload) };
+      return { token: await this.generateToken(payload) };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updatePasswordRequest(updatePasswordReqDto: UpdatePasswordRequestDto): Promise<{ message: string }> {
+    try {
+      const { email } = updatePasswordReqDto;
+      const user = await this.usersService.findByEmail(email.toLowerCase());
+      if (!user) {
+        throw new HttpException("User not found.", HttpStatus.UNAUTHORIZED);
+      }
+
+      const resetPasswordOtp = otpGenerator.generate(6, { upperCaseAlphabets: false, lowerCaseAlphabets: false, specialChars: false });
+      const resetPasswordOtpExpiry = new Date().setMinutes(new Date().getMinutes() + 5);
+
+      await sendMail(OTP_EMAIL_TEMPLATE("zeerasheed97@gmail.com", resetPasswordOtp));
+
+      user.resetPasswordOtp = resetPasswordOtp;
+      user.resetPasswordOtpExpiry = new Date(resetPasswordOtpExpiry);
+      user.resetPasswordRequested = true;
+      await user.save();
+      return { message: "OTP has been sent to your provided email." };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async verifyOtp(verifyOtpDto: VerifyOtpDto): Promise<{ message: string }> {
+    try {
+      const { email, otp } = verifyOtpDto;
+      const user = await this.usersService.findByEmail(email.toLowerCase());
+      if (!user) {
+        throw new HttpException("User not found.", HttpStatus.UNAUTHORIZED);
+      }
+      if (new Date().getTime() > user.resetPasswordOtpExpiry.getTime()) {
+        throw new HttpException("OTP expired.", HttpStatus.BAD_REQUEST);
+      }
+      if (user.resetPasswordOtp !== otp) {
+        throw new HttpException("Invalid OTP.", HttpStatus.BAD_REQUEST);
+      }
+
+      user.resetPasswordOtp = null;
+      user.resetPasswordOtpExpiry = null;
+      await user.save();
+      return { message: "OTP verified successfully. You can change your password now." };
     } catch (error) {
       throw error;
     }
@@ -92,10 +143,17 @@ export class AuthService {
       if (!user) {
         throw new HttpException("User not found.", HttpStatus.UNAUTHORIZED);
       }
+      else if (!user.resetPasswordRequested) {
+        throw new HttpException("You have not requested update password yet. Please follow the password reset flow first.", HttpStatus.BAD_REQUEST);
+      }
+      else if (user.resetPasswordRequested && user.resetPasswordOtp) {
+        throw new HttpException("Please verify your otp first.", HttpStatus.UNAUTHORIZED);
+      }
 
       return await this.usersService.update({
         _id: user._id,
-        password
+        password,
+        resetPasswordRequested: false
       });
     } catch (error) {
       throw error;
@@ -109,7 +167,7 @@ export class AuthService {
     return await bcrypt.compare(password, hashedPassword);
   }
 
-  async generateToken(payload: Partial<User>): Promise<string> {
+  async generateToken(payload: any): Promise<string> {
     return await this.jwtService.signAsync(payload);
   }
   async verifyUserOnCrm(email: string, password: string): Promise<any> {

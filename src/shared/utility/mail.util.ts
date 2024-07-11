@@ -10,7 +10,7 @@ interface SendMailOptions {
 export const sendMail = async (options: SendMailOptions) => {
     try {
         const mailOptions = {
-            from: '"Your Name" <your-email@example.com>', // Replace with your name and email
+            from: '"Dynamics+" zeerasheed97@gmail.com',
             to: options.to,
             subject: options.subject,
             text: options.text || '',
