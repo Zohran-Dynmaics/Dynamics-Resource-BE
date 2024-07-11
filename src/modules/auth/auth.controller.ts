@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Patch, Post } from "@nestjs/common";
 import { AuthService } from "./auth.service";
-import { ResponseSignUpDto, SignInDto, SignUpDto } from "./auth.dto";
+import { ResponseSignUpDto, SignInDto, SignUpDto, UpdatePasswordDto } from "./auth.dto";
 import { User } from "../users/users.entity";
 
 @Controller("auth")
@@ -14,8 +14,14 @@ export class AuthController {
 
   @Post("sign-in")
   async signin(
-    @Body() signinDto: { email: string; password: string },
+    @Body() signinDto: { email: string; password: string }
   ): Promise<any> {
     return await this.authService.signin(signinDto);
+  }
+
+
+  @Patch('update-password')
+  async updatePassword(@Body() updatePasswordDto: UpdatePasswordDto): Promise<User> {
+    return await this.authService.updatePassword(updatePasswordDto);
   }
 }

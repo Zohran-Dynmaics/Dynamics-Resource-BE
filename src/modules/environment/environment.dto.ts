@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional } from "class-validator";
+import { IsMongoId, IsNotEmpty, IsOptional, IsString } from "class-validator";
 import { GetCrmTokenDto } from "../cms/cms.dto";
 
 export class CreateEnvironmentDto extends GetCrmTokenDto {
@@ -9,7 +9,31 @@ export class CreateEnvironmentDto extends GetCrmTokenDto {
   token: string;
 }
 
-export class UpdateEnvironmentDto extends CreateEnvironmentDto {
-  @IsNotEmpty({ message: "Environment Id is required" })
+export class UpdateEnvironmentDto {
+  @IsMongoId({ message: "Environment Id is required" })
   _id: string;
+
+  @IsOptional()
+  @IsString()
+  env_name?: string;
+
+  @IsOptional()
+  @IsString()
+  client_id?: string;
+
+  @IsOptional()
+  @IsString()
+  client_secret?: string;
+
+  @IsOptional()
+  @IsString()
+  tenant_id?: string;
+
+  @IsOptional()
+  @IsString()
+  base_url?: string;
+
+  @IsOptional()
+  @IsString()
+  token?: string;
 }

@@ -7,6 +7,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
     transform: (doc, ret) => {
       delete ret.password;
       delete ret.__v;
+      delete ret.resourceId;
       return ret;
     },
   },
@@ -19,10 +20,13 @@ export class User {
   @Prop({ type: String, required: true })
   password: string;
 
+  @Prop({ type: String, required: true })
+  resourceId: string;
+
   @Prop({ type: String, required: false })
   project?: string
 
-  @Prop({ type: String, required: true, default: UserRole.USER })
+  @Prop({ type: String, required: true, default: UserRole.TECHNICIAN })
   roles: [];
 }
 

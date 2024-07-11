@@ -1,8 +1,9 @@
 import { IsMongoId, IsOptional, IsString } from "class-validator";
+import { Types } from "mongoose";
 
 export class UpdateUserDto {
     @IsMongoId({ message: "Invalid Object Id." })
-    _id: string;
+    _id: Types.ObjectId;
 
     @IsOptional()
     @IsString()
@@ -16,7 +17,7 @@ export class UpdateUserDto {
 export class SearchUserDto {
     @IsOptional()
     @IsMongoId()
-    _id?: string;
+    _id?: Types.ObjectId;
 
     @IsOptional()
     @IsString()

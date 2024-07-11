@@ -8,7 +8,7 @@ import { CreateEnvironmentDto, UpdateEnvironmentDto } from "./environment.dto";
 export class EnvironmentService {
   constructor(
     @InjectModel(Environment.name) private envModel: Model<Environment>,
-  ) {}
+  ) { }
 
   async create(createEnvDto: CreateEnvironmentDto): Promise<Environment> {
     try {
@@ -21,7 +21,6 @@ export class EnvironmentService {
           HttpStatus.BAD_REQUEST,
         );
       }
-
       return await this.envModel.create({
         ...createEnvDto,
         env_name: env_name.toLowerCase(),
@@ -34,23 +33,6 @@ export class EnvironmentService {
   async update(updateEnvDto: UpdateEnvironmentDto): Promise<Environment> {
     try {
       const { _id, env_name } = updateEnvDto;
-      const env = await this.findByName(env_name);
-
-      if (env) {
-        throw new HttpException(
-          "Environment with this name already exists",
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-
-      const tartgetEnv = await this.findById(_id);
-      if (!env) {
-        throw new HttpException(
-          "Environment with this name does not exist",
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-
       return await this.envModel.findByIdAndUpdate(
         _id,
         { ...updateEnvDto, env_name: env_name.toLowerCase() },
@@ -65,7 +47,7 @@ export class EnvironmentService {
     return this.envModel.findOne({ env_name }).exec();
   }
 
-  async findByBaseUrl(base_url: string): Promise<Environment> {
+  async findByBaseUrl(base_url: string): Promise<any> {
     return this.envModel.findOne({ base_url }).exec();
   }
 

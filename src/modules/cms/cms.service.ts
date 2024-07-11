@@ -6,18 +6,23 @@ import { GRANT_TYPES } from "./constants";
 import { jwtDecode } from "jwt-decode";
 import { createFormData } from "src/shared/utility";
 import { EnvironmentService } from "../environment/environment.service";
+import { ObjectId } from 'mongoose';
 
 @Injectable()
 export class CmsService {
   constructor(
     @Inject(forwardRef(() => ApiService)) private apiService: ApiService,
     private envService: EnvironmentService,
-  ) {}
+  ) { }
 
   async getCrmToken(
     getCrmTokenDto: GetCrmTokenDto,
   ): Promise<GetCrmTokenResponseDto> {
     const { base_url, client_id, client_secret, tenant_id } = getCrmTokenDto;
+    const env = await this.envService.findByBaseUrl(base_url);
+    if (!env) {
+      throw new Error("Environment not found");
+    }
     const data: FormData = createFormData({
       resource: base_url,
       client_id,
@@ -35,7 +40,8 @@ export class CmsService {
     };
 
     try {
-      const response = await this.apiService.request(config);
+      const response: any = await this.apiService.request(config);
+      await this.envService.update({ _id: env?._id, env_name: env?.env_name.toLowerCase(), token: response?.access_token })
       return response as GetCrmTokenResponseDto;
     } catch (error) {
       throw error;

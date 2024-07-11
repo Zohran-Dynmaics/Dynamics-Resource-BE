@@ -37,7 +37,6 @@ export class BookingService {
       token,
 
     );
-    console.log("🚀 ~ BookingService ~ config:", config)
 
     try {
       return await this.apiService.request(config);

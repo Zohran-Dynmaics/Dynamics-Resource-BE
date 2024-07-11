@@ -10,8 +10,11 @@ export class SignUpDto {
   password: string;
 }
 
-export class SignInDto extends SignUpDto {}
+export class SignInDto extends SignUpDto { }
 
-export class ResponseSignUpDto {
-  user: Partial<User>;
+export class ResponseSignUpDto extends User {
+}
+
+
+export class UpdatePasswordDto extends SignUpDto {
 }

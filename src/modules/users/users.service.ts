@@ -14,8 +14,8 @@ import { generateHash } from "src/shared/utility";
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) { }
 
-  async create(email: string, password: string) {
-    return await this.userModel.create({ email, password });
+  async create(email: string, password: string, resourceId: string) {
+    return await this.userModel.create({ email, password, resourceId });
   }
 
   async update(updateUserDto: UpdateUserDto): Promise<User> {
@@ -29,9 +29,7 @@ export class UsersService {
         updateUserDto.password = await generateHash(password);
       }
       // TODO: update User on crm here.
-      return await this.userModel
-        .findByIdAndUpdate(_id, updateUserDto, { new: true })
-        .exec();
+      return await this.userModel.findByIdAndUpdate(_id, { ...updateUserDto }, { new: true }).exec();
     } catch (error) {
       throw error;
     }
