@@ -5,4 +5,5 @@ export interface CustomRequest extends Request {
   env: {
     base_url: string;
   };
+  user: any;
 }
