@@ -12,4 +12,5 @@ export class ProblemIssueController {
         const { crmToken, env, query } = req;
         return this.problemIssueService.getAllProblemIssues(crmToken, env.base_url, query);
     }
+
 }

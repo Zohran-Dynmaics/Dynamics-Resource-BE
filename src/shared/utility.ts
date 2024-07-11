@@ -1,5 +1,6 @@
 import * as bcrypt from "bcrypt";
 import { HASH_SALT } from "./constant";
+const moment = require('moment');
 
 export const generateHash = async (input: string): Promise<string> => {
   return await bcrypt.hash(input, HASH_SALT);
@@ -34,3 +35,15 @@ export const formatCrmError = (
     status: getErrorStatus(error),
   };
 };
+
+
+
+export const getDayBoundaries = (date: Date | string): { startOfDay: string, endOfDay: string } => {
+  try {
+    const startOfDay = moment(date).startOf('day').toISOString();
+    const endOfDay = moment(date).add(1, 'day').startOf('day').toISOString();
+    return { startOfDay, endOfDay };
+  } catch (error) {
+    throw error;
+  }
+}

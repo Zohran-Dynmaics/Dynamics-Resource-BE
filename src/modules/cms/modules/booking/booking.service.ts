@@ -6,7 +6,7 @@ import { formatCrmError } from "src/shared/utility";
 
 @Injectable()
 export class BookingService {
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService) { }
 
   async getAllBooking(
     token: string,
@@ -19,6 +19,26 @@ export class BookingService {
       token,
       query,
     );
+    try {
+      return await this.apiService.request(config);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getTasksOfDay(
+    token: string,
+    url: string,
+    query?: any
+  ): Promise<any> {
+    const config: AxiosRequestConfig = this.apiService.getConfig(
+      `${url}${query}`,
+      HTTPS_METHODS.GET,
+      token,
+
+    );
+    console.log("🚀 ~ BookingService ~ config:", config)
+
     try {
       return await this.apiService.request(config);
     } catch (error) {

@@ -9,7 +9,7 @@ export class ApiService {
   constructor(
     @Inject(forwardRef(() => CmsService))
     private readonly cmsService: CmsService,
-  ) {}
+  ) { }
 
   isTokenExpired(error: any) {
     return (
@@ -22,7 +22,10 @@ export class ApiService {
   async request(config: AxiosRequestConfig): Promise<AxiosResponse> {
     let response: AxiosResponse = null;
     try {
-      response = await axios.request(config).then((response) => response.data);
+      response = await axios.request(config).then((res) => {
+        return res.data
+      }).catch(error => { throw error });
+
     } catch (error) {
       const { message, status } = formatCrmError(error);
       throw new HttpException(message, status);
