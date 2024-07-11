@@ -1,4 +1,4 @@
-import { getDayBoundaries } from "./utility";
+import { getDayBoundaries } from "./utility/utility";
 
 export const HASH_SALT = 10;
 export const CRM_VERSION = "v9.1";

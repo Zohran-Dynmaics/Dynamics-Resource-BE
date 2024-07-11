@@ -1,5 +1,5 @@
 import * as bcrypt from "bcrypt";
-import { HASH_SALT } from "./constant";
+import { HASH_SALT } from "../constant";
 const moment = require('moment');
 
 export const generateHash = async (input: string): Promise<string> => {

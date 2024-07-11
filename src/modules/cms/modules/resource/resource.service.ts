@@ -1,7 +1,6 @@
-import { HttpException, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { ApiService } from "src/modules/api/api.service";
 import { HTTPS_METHODS } from "src/shared/enum";
-import { formatCrmError } from "src/shared/utility";
 import { GetResourceSlotsDto } from "./resource.dto";
 import { mapGetResourceSlotsDtoToApiObject } from "./resource.mapper";
 

@@ -13,12 +13,12 @@ import {
 } from "./auth.dto";
 import * as bcrypt from "bcrypt";
 import { UsersService } from "../users/users.service";
-import { generateHash } from "src/shared/utility";
 import { User } from "../users/users.entity";
 import { JwtService } from "@nestjs/jwt";
 import { CmsService } from "./../cms/cms.service";
 import { EnvironmentService } from "../environment/environment.service";
 import { UpdateUserDto } from "../users/users.dto";
+import { generateHash } from "src/shared/utility/utility";
 
 @Injectable()
 export class AuthService {

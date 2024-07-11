@@ -4,11 +4,11 @@ import {
   Injectable,
   NotFoundException
 } from "@nestjs/common";
-import { User } from "./users.entity";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model, Mongoose, MongooseError } from "mongoose";
+import { Model } from "mongoose";
 import { SearchUserDto, UpdateUserDto } from "./users.dto";
-import { generateHash } from "src/shared/utility";
+import { User } from "./users.entity";
+import { generateHash } from "src/shared/utility/utility";
 
 @Injectable()
 export class UsersService {

@@ -1,7 +1,6 @@
-import { forwardRef, HttpException, Inject, Injectable } from "@nestjs/common";
+import { forwardRef, Inject, Injectable } from "@nestjs/common";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { HTTPS_METHODS } from "src/shared/enum";
-import { formatCrmError } from "src/shared/utility";
 import { CmsService } from "../cms/cms.service";
 
 @Injectable()
@@ -27,8 +26,7 @@ export class ApiService {
       }).catch(error => { throw error });
 
     } catch (error) {
-      const { message, status } = formatCrmError(error);
-      throw new HttpException(message, status);
+      throw error;
     }
 
     return response;

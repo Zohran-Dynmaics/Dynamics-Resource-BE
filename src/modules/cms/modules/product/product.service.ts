@@ -1,12 +1,11 @@
-import { HttpException, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { AxiosRequestConfig } from "axios";
 import { ApiService } from "src/modules/api/api.service";
 import { HTTPS_METHODS } from "src/shared/enum";
-import { formatCrmError } from "src/shared/utility";
 
 @Injectable()
 export class ProductService {
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService) { }
 
   async inventoryProducts(
     token: string,
