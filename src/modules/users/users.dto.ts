@@ -17,7 +17,7 @@ export class UpdateUserDto {
 export class SearchUserDto {
     @IsOptional()
     @IsMongoId()
-    _id?: Types.ObjectId;
+    _id?: Types.ObjectId | string;
 
     @IsOptional()
     @IsString()
