@@ -9,29 +9,29 @@ export class ResourceController {
 
   @Get("")
   async getBookableResource(@Req() req: CustomRequest) {
-    const { crmToken, env, query } = req;
+    const { env, query } = req;
     return await this.resourceService.getBookableResource(
-      crmToken,
-      env.base_url,
+      env?.token,
+      env?.base_url,
       query,
     );
   }
   @Get("categories")
   async getBookableResourceCategories(@Req() req: CustomRequest) {
-    const { crmToken, env, query } = req;
+    const { env, query } = req;
     return await this.resourceService.getBookableResourceCategories(
-      crmToken,
-      env.base_url,
+      env?.token,
+      env?.base_url,
       query,
     );
   }
 
   @Get("characteristics")
   async getBookableResourceCharacteristics(@Req() req: CustomRequest) {
-    const { crmToken, env, query } = req;
+    const { env, query } = req;
     return await this.resourceService.getBookableResourceCharacteristics(
-      crmToken,
-      env.base_url,
+      env?.token,
+      env?.base_url,
       query,
     );
   }
@@ -41,9 +41,9 @@ export class ResourceController {
     @Req() req: CustomRequest,
     @Body() getResourceSlot: GetResourceSlotsDto
   ) {
-    const { crmToken, env, query } = req;
+    const { env, query } = req;
     return await this.resourceService.getAvailableResourceSlots(
-      crmToken,
+      env?.token,
       env.base_url,
       getResourceSlot,
       query,

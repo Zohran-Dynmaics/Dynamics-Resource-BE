@@ -21,7 +21,7 @@ export class UpdateUserDto {
 export class SearchUserDto {
     @IsOptional()
     @IsMongoId()
-    _id?: Types.ObjectId | string;
+    _id?: string | Types.ObjectId;
 
     @IsOptional()
     @IsString()
@@ -36,7 +36,7 @@ export class TokenUserDto {
 
     @IsMongoId()
     @IsNotEmpty()
-    _id: Schema.Types.ObjectId;
+    _id: Types.ObjectId;
 
     @IsEmail({}, { message: "Invalid Email." })
     @IsNotEmpty()

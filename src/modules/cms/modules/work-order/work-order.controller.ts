@@ -8,8 +8,8 @@ export class WorkOrderController {
 
     @Get("types")
     async getWorkOrderTypes(@Req() req: CustomRequest) {
-        const { crmToken, env } = req;
-        return await this.workOrderService.getWorkOrderTypes(crmToken, env.base_url);
+        const { env } = req;
+        return await this.workOrderService.getWorkOrderTypes(env?.token, env?.base_url);
     }
 
 

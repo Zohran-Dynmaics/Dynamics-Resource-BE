@@ -1,9 +1,7 @@
-import { Body, Controller, Get, Query, Req, UseGuards } from "@nestjs/common";
-import { BookingService } from "./booking.service";
+import { Controller, Get, Query, Req } from "@nestjs/common";
 import { CustomRequest } from "src/shared/custom-interface";
 import { DateDto } from "./booking.dto";
-import { AuthService } from './../../../auth/auth.service';
-import { URLS_AND_QUERY_PARAMS } from "src/shared/constant";
+import { BookingService } from "./booking.service";
 
 @Controller("cms/booking")
 export class BookingController {
@@ -12,14 +10,14 @@ export class BookingController {
   @Get("")
   async getTasksOfDay(@Req() req: CustomRequest, @Query() { date }: DateDto): Promise<any> {
     const { env, user } = req;
-    return await this.bookingService.getTasksOfDay(env._id, user.bookableresourceid, date);
+    return await this.bookingService.getTasksOfDay(env.token, env.base_url, user.bookableresourceid, date);
   }
 
   @Get("all")
   async getContact(@Req() req: CustomRequest): Promise<any> {
-    const { crmToken, env } = req;
+    const { env, query } = req;
     return await this.bookingService.getAllBooking(
-      crmToken,
+      env.token,
       env.base_url,
       query,
     );

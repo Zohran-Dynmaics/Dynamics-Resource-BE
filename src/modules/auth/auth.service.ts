@@ -25,7 +25,6 @@ import { generateHash } from "src/shared/utility/utility";
 const otpGenerator = require('otp-generator')
 import { sendMail } from "src/shared/utility/mail.util";
 import { OTP_EMAIL_TEMPLATE } from "./constants";
-import { EnvironmentDto } from './../cms/cms.dto';
 
 @Injectable()
 export class AuthService {

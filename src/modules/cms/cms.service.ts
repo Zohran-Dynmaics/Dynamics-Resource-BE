@@ -6,6 +6,7 @@ import { EnvironmentService } from "../environment/environment.service";
 import { GetCrmTokenDto, GetCrmTokenResponseDto } from "./cms.dto";
 import { GRANT_TYPES } from "./constants";
 import { createFormData } from "src/shared/utility/utility";
+import { Schema, Types } from "mongoose";
 
 @Injectable()
 export class CmsService {
@@ -47,7 +48,7 @@ export class CmsService {
     }
   }
 
-  async getBookableResourceCategories(env_id: string): Promise<any> {
+  async getBookableResourceCategories(env_id: Types.ObjectId): Promise<any> {
     const env = await this.envService.findById(env_id);
     const config: AxiosRequestConfig = {
       headers: {

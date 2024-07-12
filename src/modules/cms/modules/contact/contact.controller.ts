@@ -8,9 +8,9 @@ export class ContactController {
 
   @Get("/:contact_id")
   async getContact(@Req() req: CustomRequest): Promise<any> {
-    const { crmToken, env, params, query } = req;
+    const { env, params, query } = req;
     return await this.contactService.getContact(
-      crmToken,
+      env.token,
       env.base_url,
       params.contact_id,
       query,

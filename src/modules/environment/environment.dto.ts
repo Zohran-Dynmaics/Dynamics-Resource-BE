@@ -1,6 +1,6 @@
 import { IsMongoId, IsNotEmpty, IsOptional, IsString } from "class-validator";
 import { GetCrmTokenDto } from "../cms/cms.dto";
-import { Schema } from "mongoose";
+import { Schema, Types } from "mongoose";
 
 export class CreateEnvironmentDto extends GetCrmTokenDto {
   @IsNotEmpty({ message: "Environment Name is required" })
@@ -42,7 +42,7 @@ export class UpdateEnvironmentDto {
 export class TokenEnvironmentDto {
   @IsMongoId()
   @IsNotEmpty()
-  _id: Schema.Types.ObjectId;
+  _id: Types.ObjectId;
 
   @IsString()
   @IsNotEmpty()

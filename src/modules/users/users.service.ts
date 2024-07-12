@@ -5,7 +5,7 @@ import {
   NotFoundException
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Model, Schema, Types } from "mongoose";
 import { SearchUserDto, UpdateUserDto } from "./users.dto";
 import { User } from "./users.entity";
 import { generateHash } from "src/shared/utility/utility";
@@ -35,7 +35,7 @@ export class UsersService {
     }
   }
 
-  async delete(_id: string): Promise<boolean> {
+  async delete(_id: string | Types.ObjectId): Promise<boolean> {
     try {
       const user = await this.findOne({ _id });
       if (!user) {

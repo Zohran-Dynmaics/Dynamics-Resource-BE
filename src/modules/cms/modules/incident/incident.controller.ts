@@ -10,10 +10,10 @@ export class IncidentController {
 
   @Get("/:incident_id")
   async getIncident(@Req() req: CustomRequest): Promise<any> {
-    const { crmToken, env, params, query } = req;
+    const { env, params, query } = req;
     try {
       return await this.incidentService.getIncident(
-        crmToken,
+        env.token,
         env.base_url,
         params.incident_id,
         query,
@@ -28,9 +28,9 @@ export class IncidentController {
     @Req() req: CustomRequest,
     @Body() createIncidentDto: CreateIncidentDto,
   ): Promise<any> {
-    const { crmToken, env } = req;
+    const { env } = req;
     return await this.incidentService.createIncident(
-      crmToken,
+      env.token,
       env.base_url,
       createIncidentDto,
     );

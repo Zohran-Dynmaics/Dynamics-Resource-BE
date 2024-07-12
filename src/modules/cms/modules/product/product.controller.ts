@@ -9,31 +9,31 @@ export class ProductController {
 
   @Get("price-list/:product_id")
   async getPriceList(@Req() req: CustomRequest): Promise<any> {
-    const { crmToken, env, params, query } = req;
+    const { env, params, query } = req;
     return await this.productService.productRateList(
-      crmToken,
+      env?.token,
       env?.base_url,
-      params.product_id,
+      params?.product_id,
       query,
     );
   }
 
   @Get("price-level/:product_id")
   async productPriceLevel(@Req() req: CustomRequest): Promise<any> {
-    const { crmToken, env, params, query } = req;
+    const { env, params, query } = req;
     return await this.productService.productPriceLevels(
-      crmToken,
+      env?.token,
       env?.base_url,
-      params.product_id,
+      params?.product_id,
       query,
     );
   }
 
   @Get("inventory-products")
   async getInventoryProducts(@Req() req: CustomRequest): Promise<any> {
-    const { crmToken, env, query } = req;
+    const { env, query } = req;
     return await this.productService.inventoryProducts(
-      crmToken,
+      env?.token,
       env?.base_url,
       query,
     );

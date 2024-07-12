@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Environment } from "./environment.entity";
-import { Model } from "mongoose";
+import { Model, Schema, Types } from "mongoose";
 import { CreateEnvironmentDto, UpdateEnvironmentDto } from "./environment.dto";
 
 @Injectable()
@@ -51,7 +51,7 @@ export class EnvironmentService {
     return this.envModel.findOne({ base_url }).exec();
   }
 
-  async findById(_id: string): Promise<Environment> {
+  async findById(_id: string | Types.ObjectId): Promise<Environment> {
     return this.envModel.findById(_id).exec();
   }
 }

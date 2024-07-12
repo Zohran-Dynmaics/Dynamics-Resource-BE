@@ -9,8 +9,8 @@ export class ProblemIssueController {
 
     @Get('all')
     getAllProblemIssues(@Req() req: CustomRequest): Promise<any> {
-        const { crmToken, env, query } = req;
-        return this.problemIssueService.getAllProblemIssues(crmToken, env.base_url, query);
+        const { env, query } = req;
+        return this.problemIssueService.getAllProblemIssues(env.token, env.base_url, query);
     }
 
 }

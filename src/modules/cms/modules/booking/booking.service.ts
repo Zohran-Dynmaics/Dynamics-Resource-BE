@@ -1,13 +1,12 @@
-import { HttpException, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { AxiosRequestConfig } from "axios";
 import { ApiService } from "src/modules/api/api.service";
-import { EnvironmentService } from "src/modules/environment/environment.service";
 import { URLS_AND_QUERY_PARAMS } from "src/shared/constant";
 import { HTTPS_METHODS } from "src/shared/enum";
 
 @Injectable()
 export class BookingService {
-  constructor(private apiService: ApiService, private envService: EnvironmentService) { }
+  constructor(private apiService: ApiService) { }
 
   async getAllBooking(
     token: string,
@@ -29,12 +28,13 @@ export class BookingService {
 
   async getTasksOfDay(
     token: string,
+    base_url: string,
     resource_id: string,
     date: Date | string,
   ): Promise<any> {
     const { endpoint, query } = URLS_AND_QUERY_PARAMS.BOOKING.GET.TASKS_OF_DAY;
     const config: AxiosRequestConfig = this.apiService.getConfig(
-      `${endpoint(env.base_url)}${query(date, resource_id)}`,
+      `${endpoint(base_url)}${query(date, resource_id)}`,
       HTTPS_METHODS.GET,
       token,
     );
