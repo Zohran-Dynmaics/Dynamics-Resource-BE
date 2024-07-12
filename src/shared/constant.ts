@@ -13,7 +13,7 @@ export const URLS_AND_QUERY_PARAMS = {
 
                 query: (date: Date | string, resourceId: string) => {
                     const { startOfDay, endOfDay } = getDayBoundaries(
-                        new Date(date).toISOString()
+                        new Date(date)
                     );
                     return `$select=starttime,endtime&$expand=cafm_Case($select=ticketnumber,title;$expand=msdyn_FunctionalLocation($select=msdyn_name),cafm_Building($select=cafm_name),customerid_account($select=name)),msdyn_workorder($select=msdyn_name),BookingStatus($select=name)&$filter=starttime ge ${startOfDay} and starttime lt ${endOfDay} and _resource_value eq ${resourceId}&$count=true`;
                 }

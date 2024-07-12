@@ -38,7 +38,6 @@ export class BookingService {
       HTTPS_METHODS.GET,
       token,
     );
-
     try {
       return await this.apiService.request(config);
     } catch (error) {

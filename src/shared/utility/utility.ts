@@ -40,8 +40,9 @@ export const formatCrmError = (
 
 export const getDayBoundaries = (date: Date | string): { startOfDay: string, endOfDay: string } => {
   try {
+    date = moment(date).format("YYYY-DD-MMTHH:mm:ssZ")
     const startOfDay = moment(date).startOf('day').toISOString();
-    const endOfDay = moment(date).add(1, 'day').startOf('day').toISOString();
+    const endOfDay = moment(date).endOf('day').toISOString();
     return { startOfDay, endOfDay };
   } catch (error) {
     throw error;
