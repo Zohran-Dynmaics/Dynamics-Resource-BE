@@ -47,10 +47,11 @@ export class CmsService {
     }
   }
 
-  async getBookableResourceCategories(token: string): Promise<any> {
+  async getBookableResourceCategories(env_id: string): Promise<any> {
+    const env = await this.envService.findById(env_id);
     const config: AxiosRequestConfig = {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${env.token}`,
       },
       method: "GET",
       url: `${process.env.RESOURCE}/api/data/v9.1/bookableresourcecategories`,

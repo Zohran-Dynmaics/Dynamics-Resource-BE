@@ -11,14 +11,13 @@ export class BookingController {
 
   @Get("")
   async getTasksOfDay(@Req() req: CustomRequest, @Query() { date }: DateDto): Promise<any> {
-    const { crmToken, env } = req;
-    const { endpoint, query } = URLS_AND_QUERY_PARAMS.BOOKING.GET.TASKS_OF_DAY;
-    return await this.bookingService.getTasksOfDay(crmToken, endpoint(env.base_url), query(date, "3578de06-8502-ed11-82e5-000d3ada26aa"));
+    const { env, user } = req;
+    return await this.bookingService.getTasksOfDay(env._id, user.bookableresourceid, date);
   }
 
   @Get("all")
   async getContact(@Req() req: CustomRequest): Promise<any> {
-    const { crmToken, env, query } = req;
+    const { crmToken, env } = req;
     return await this.bookingService.getAllBooking(
       crmToken,
       env.base_url,

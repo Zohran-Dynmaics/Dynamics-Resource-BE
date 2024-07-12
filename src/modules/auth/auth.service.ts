@@ -9,6 +9,7 @@ import {
   ResponseSignUpDto,
   SignInDto,
   SignUpDto,
+  TokenPayloadDto,
   UpdatePasswordDto,
   UpdatePasswordRequestDto,
   VerifyOtpDto
@@ -24,6 +25,7 @@ import { generateHash } from "src/shared/utility/utility";
 const otpGenerator = require('otp-generator')
 import { sendMail } from "src/shared/utility/mail.util";
 import { OTP_EMAIL_TEMPLATE } from "./constants";
+import { EnvironmentDto } from './../cms/cms.dto';
 
 @Injectable()
 export class AuthService {
@@ -73,15 +75,21 @@ export class AuthService {
         throw new HttpException("Invalid credentials", HttpStatus.BAD_REQUEST);
       }
 
-      const userValidation = await this.verifyUserOnCrm(email, password);
+      const { userValidation, env } = await this.verifyUserOnCrm(email, password);
       if (!userValidation)
         throw new HttpException("Not verified by CRM.", HttpStatus.BAD_REQUEST);
 
-      const payload = {
+      const payload: TokenPayloadDto = {
         user: {
           _id: user._id,
           email: user.email,
-          bookableresourceid: user.resourceId
+          bookableresourceid: user.resourceId,
+          role: user.role,
+        },
+        env: {
+          _id: env._id,
+          base_url: env.baseUrl,
+          name: env.name
         }
       };
       return { token: await this.generateToken(payload) };
@@ -187,7 +195,7 @@ export class AuthService {
           "Not verified by CRM. Signup with CRM credentials.",
           HttpStatus.BAD_REQUEST
         );
-      return userValidation;
+      return { userValidation, env };
     } catch (error) {
       throw error;
     }

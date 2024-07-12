@@ -2,10 +2,11 @@ import { Body, Controller, Get, Post, Req, UseGuards } from "@nestjs/common";
 import { CmsService } from "./cms.service";
 import { GetCrmTokenDto, GetCrmTokenResponseDto } from "./cms.dto";
 import { Request } from "express";
+import { CustomRequest } from "src/shared/custom-interface";
 
 @Controller("cms")
 export class CmsController {
-  constructor(private cmsService: CmsService) {}
+  constructor(private cmsService: CmsService) { }
   /**
    *
    * TODO:
@@ -22,8 +23,8 @@ export class CmsController {
   }
 
   @Get("bookable-resource-categories")
-  async getBookableResourceCategories(@Req() req): Promise<any> {
-    const token = req?.crmToken;
-    return await this.cmsService.getBookableResourceCategories(token);
+  async getBookableResourceCategories(@Req() req: CustomRequest): Promise<any> {
+    const { env } = req;
+    return await this.cmsService.getBookableResourceCategories(env._id);
   }
 }

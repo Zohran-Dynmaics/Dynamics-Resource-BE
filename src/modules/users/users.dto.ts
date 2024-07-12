@@ -1,5 +1,5 @@
-import { IsBoolean, IsMongoId, IsOptional, IsString } from "class-validator";
-import { Types } from "mongoose";
+import { IsBoolean, IsEmail, IsMongoId, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { Schema, Types } from "mongoose";
 
 export class UpdateUserDto {
     @IsMongoId({ message: "Invalid Object Id." })
@@ -30,4 +30,23 @@ export class SearchUserDto {
     @IsOptional()
     @IsString()
     projectId?: string;
+}
+
+export class TokenUserDto {
+
+    @IsMongoId()
+    @IsNotEmpty()
+    _id: Schema.Types.ObjectId;
+
+    @IsEmail({}, { message: "Invalid Email." })
+    @IsNotEmpty()
+    email: string;
+
+    @IsString()
+    @IsNotEmpty()
+    bookableresourceid: string;
+
+    @IsString()
+    @IsNotEmpty()
+    role: string;
 }
