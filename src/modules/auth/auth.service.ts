@@ -69,15 +69,12 @@ export class AuthService {
         throw new HttpException("User not found.", HttpStatus.UNAUTHORIZED);
       }
       const isMatch = await this.comparePasswords(password, user.password);
-
       if (!isMatch) {
         throw new HttpException("Invalid credentials", HttpStatus.BAD_REQUEST);
       }
-
       const { userValidation, env } = await this.verifyUserOnCrm(email, password);
       if (!userValidation)
         throw new HttpException("Not verified by CRM.", HttpStatus.BAD_REQUEST);
-
       const payload: TokenPayloadDto = {
         user: {
           _id: user._id,
@@ -87,8 +84,8 @@ export class AuthService {
         },
         env: {
           _id: env._id,
-          base_url: env.baseUrl,
-          name: env.name
+          base_url: env.base_url,
+          name: env.env_name
         }
       };
       return { token: await this.generateToken(payload) };
@@ -182,6 +179,7 @@ export class AuthService {
       const env = await this.envService.findByName(
         this.getEnvironmentNameFromEmail(email)
       );
+      console.log("🚀 ~ AuthService ~ verifyUserOnCrm ~ env:", env)
       const access_token = env?.token ?? (await this.cmsService.getCrmToken(env)).access_token;
       const { value } = await this.cmsService.getBookableResources(access_token);
       const userValidation = value.find(
