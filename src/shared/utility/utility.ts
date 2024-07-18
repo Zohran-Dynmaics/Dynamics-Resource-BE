@@ -1,5 +1,6 @@
 import * as bcrypt from "bcrypt";
 import { HASH_SALT } from "../constant";
+import { HttpException, HttpStatus } from "@nestjs/common";
 const moment = require('moment');
 
 export const generateHash = async (input: string): Promise<string> => {
@@ -44,6 +45,21 @@ export const getDayBoundaries = (date: Date | string): { startOfDay: string, end
     const startOfDay = moment(date).startOf('day').toISOString();
     const endOfDay = moment(date).endOf('day').toISOString();
     return { startOfDay, endOfDay };
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const getEnvironmentNameFromEmail = (email: string): string => {
+  try {
+    const env = email.split("@")[1].split(".")[0];
+    if (!env) {
+      throw new HttpException(
+        "Environment not found.",
+        HttpStatus.BAD_REQUEST
+      );
+    }
+    return env;
   } catch (error) {
     throw error;
   }

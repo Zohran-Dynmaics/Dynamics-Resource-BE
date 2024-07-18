@@ -1,12 +1,13 @@
 import { Inject, Injectable, forwardRef } from "@nestjs/common";
 import { AxiosRequestConfig } from "axios";
 import { jwtDecode } from "jwt-decode";
+import { Types } from "mongoose";
+import { HTTPS_METHODS } from "src/shared/enum";
+import { createFormData } from "src/shared/utility/utility";
 import { ApiService } from "../api/api.service";
 import { EnvironmentService } from "../environment/environment.service";
-import { GetCrmTokenDto, GetCrmTokenResponseDto } from "./cms.dto";
+import { GetCrmTokenDto, GetCrmTokenResponseDto, UpdateBookableResourceDto } from "./cms.dto";
 import { GRANT_TYPES } from "./constants";
-import { createFormData } from "src/shared/utility/utility";
-import { Schema, Types } from "mongoose";
 
 @Injectable()
 export class CmsService {
@@ -73,6 +74,21 @@ export class CmsService {
       method: "GET",
       url: `${process.env.RESOURCE}/api/data/v9.1/bookableresources?$select=cafm_username,cafm_password`,
     };
+    try {
+      return await this.apiService.request(config);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateBookaableResource(token: string, base_url: string, resourceId: string, updateBookableResourceDto: UpdateBookableResourceDto): Promise<any> {
+    const config: AxiosRequestConfig = this.apiService.getConfig(
+      `${base_url}api/data/v9.1/bookableresources(${resourceId}) `,
+      HTTPS_METHODS.PATCH,
+      token,
+      null,
+      updateBookableResourceDto
+    );
     try {
       return await this.apiService.request(config);
     } catch (error) {

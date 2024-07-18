@@ -1,6 +1,6 @@
 import { Controller, Delete, Req } from "@nestjs/common";
-import { UsersService } from "./users.service";
 import { CustomRequest } from "src/shared/custom-interface";
+import { UsersService } from "./users.service";
 
 @Controller("user")
 export class UsersController {

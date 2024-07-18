@@ -1,10 +1,16 @@
 import {
   HttpException,
   HttpStatus,
-  Inject,
-  Injectable,
-  forwardRef
+  Injectable
 } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import * as bcrypt from "bcrypt";
+import { sendMail } from "src/shared/utility/mail.util";
+import { generateHash, getEnvironmentNameFromEmail } from "src/shared/utility/utility";
+import { EnvironmentService } from "../environment/environment.service";
+import { User } from "../users/users.entity";
+import { UsersService } from "../users/users.service";
+import { CmsService } from "./../cms/cms.service";
 import {
   ResponseSignUpDto,
   SignInDto,
@@ -14,17 +20,8 @@ import {
   UpdatePasswordRequestDto,
   VerifyOtpDto
 } from "./auth.dto";
-import * as bcrypt from "bcrypt";
-import { UsersService } from "../users/users.service";
-import { User } from "../users/users.entity";
-import { JwtService } from "@nestjs/jwt";
-import { CmsService } from "./../cms/cms.service";
-import { EnvironmentService } from "../environment/environment.service";
-import { UpdateUserDto } from "../users/users.dto";
-import { generateHash } from "src/shared/utility/utility";
-const otpGenerator = require('otp-generator')
-import { sendMail } from "src/shared/utility/mail.util";
 import { OTP_EMAIL_TEMPLATE } from "./constants";
+const otpGenerator = require('otp-generator')
 
 @Injectable()
 export class AuthService {
@@ -177,7 +174,7 @@ export class AuthService {
   async verifyUserOnCrm(email: string, password: string): Promise<any> {
     try {
       const env = await this.envService.findByName(
-        this.getEnvironmentNameFromEmail(email)
+        getEnvironmentNameFromEmail(email)
       );
       const access_token = env?.token ?? (await this.cmsService.getCrmToken(env)).access_token;
       const { value } = await this.cmsService.getBookableResources(access_token);
@@ -196,18 +193,5 @@ export class AuthService {
       throw error;
     }
   }
-  getEnvironmentNameFromEmail(email: string): string {
-    try {
-      const env = email.split("@")[1].split(".")[0];
-      if (!env) {
-        throw new HttpException(
-          "Environment not found.",
-          HttpStatus.BAD_REQUEST
-        );
-      }
-      return env;
-    } catch (error) {
-      throw error;
-    }
-  }
+
 }
