@@ -1,6 +1,4 @@
-import { IsMongoId, isMongoId, IsNotEmpty, IsOptional, IsString } from "class-validator";
-import { Environment } from './../environment/environment.entity';
-import { Schema } from "mongoose";
+import { IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 export class GetCrmTokenDto {
   @IsNotEmpty({ message: "Tenant Id is required" })
@@ -40,3 +38,8 @@ export class GetCrmTokenResponseDto {
 }
 
 
+export class UpdateBookableResourceDto {
+  @IsNotEmpty()
+  @IsString()
+  cafm_password: string;
+}
