@@ -3,8 +3,9 @@ import {
   Catch,
   ExceptionFilter,
   HttpException,
-  HttpStatus,
+  HttpStatus
 } from "@nestjs/common";
+import { exec } from "child_process";
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -21,13 +22,14 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const errorResponse = {
       statusCode: status,
       success: false,
-      message: exception.message || "Internal Server Error",
+      message: exception?.message || "Internal Server Error",
       timestamp: new Date().toISOString(),
-      path: request.url,
+      path: request.url
     };
 
     if (exception instanceof HttpException) {
       const res = exception.getResponse();
+
 
       if (typeof res === "object" && res !== null) {
         errorResponse.message = (res as any).message || exception.message;
