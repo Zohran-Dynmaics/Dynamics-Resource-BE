@@ -11,6 +11,13 @@ export class UpdatePasswordRequestDto {
 export class SignUpDto extends UpdatePasswordRequestDto {
   @IsNotEmpty({ message: "Password should not be empty." })
   password: string;
+
+  @IsNotEmpty({ message: "Email should not be empty." })
+  @IsEmail({}, { message: "Invalid Email." })
+  email: string;
+
+  @IsNotEmpty({ message: "Environment Name should not be empty." })
+  env_name: string;
 }
 
 export class SignInDto extends SignUpDto { }

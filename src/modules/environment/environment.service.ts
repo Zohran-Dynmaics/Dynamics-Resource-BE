@@ -44,7 +44,14 @@ export class EnvironmentService {
   }
 
   async findByName(env_name: string): Promise<Environment> {
-    return this.envModel.findOne({ env_name }).exec();
+    const env = this.envModel.findOne({ env_name }).exec();
+    if (!env) {
+      throw new HttpException(
+        "Environment not found with name '" + env_name,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return env;
   }
 
   async findByBaseUrl(base_url: string): Promise<any> {

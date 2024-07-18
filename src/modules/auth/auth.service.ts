@@ -34,12 +34,12 @@ export class AuthService {
 
   async signup(signupDto: SignUpDto): Promise<ResponseSignUpDto> {
     try {
-      const { email, password } = signupDto;
+      const { email, password, env_name } = signupDto;
       const user = await this.usersService.findByEmail(email.toLowerCase());
       if (user) {
         throw new HttpException("User already exists.", HttpStatus.BAD_REQUEST);
       }
-      const { userValidation } = await this.verifyUserOnCrm(email, password);
+      const { userValidation } = await this.verifyUserOnCrm(email, password, env_name);
       if (!userValidation)
         throw new HttpException(
           "Not verified by CRM. Signup with CRM credentials.",
@@ -58,7 +58,7 @@ export class AuthService {
 
   async signin(singinDto: SignInDto): Promise<any> {
     try {
-      const { email, password } = singinDto;
+      const { email, password, env_name } = singinDto;
       let user: any = await this.usersService.findByEmail(
         email.toLowerCase()
       );
@@ -69,7 +69,7 @@ export class AuthService {
       if (!isMatch) {
         throw new HttpException("Invalid credentials", HttpStatus.BAD_REQUEST);
       }
-      const { userValidation, env } = await this.verifyUserOnCrm(email, password);
+      const { userValidation, env } = await this.verifyUserOnCrm(email, password, env_name);
       if (!userValidation)
         throw new HttpException("Not verified by CRM.", HttpStatus.BAD_REQUEST);
       const payload: TokenPayloadDto = {
@@ -171,10 +171,10 @@ export class AuthService {
   async generateToken(payload: any): Promise<string> {
     return await this.jwtService.signAsync(payload);
   }
-  async verifyUserOnCrm(email: string, password: string): Promise<any> {
+  async verifyUserOnCrm(email: string, password: string, env_name: string): Promise<any> {
     try {
       const env = await this.envService.findByName(
-        getEnvironmentNameFromEmail(email)
+        env_name
       );
       const access_token = env?.token ?? (await this.cmsService.getCrmToken(env)).access_token;
       const { value } = await this.cmsService.getBookableResources(access_token);
@@ -185,7 +185,7 @@ export class AuthService {
       );
       if (!userValidation)
         throw new HttpException(
-          "Not verified by CRM. Signup with CRM credentials.",
+          "Not verified by CRM. SignUp/SignIn with CRM credentials.",
           HttpStatus.BAD_REQUEST
         );
       return { userValidation, env };
