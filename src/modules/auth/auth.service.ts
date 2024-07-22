@@ -36,7 +36,6 @@ export class AuthService {
     try {
       const { username, password, env_name } = signupDto;
       const user = await this.usersService.findByUsername(username.toLowerCase());
-      console.log("🚀 ~ AuthService ~ signup ~ user:", user)
       if (user) {
         throw new HttpException("User already exists.", HttpStatus.BAD_REQUEST);
       }
@@ -67,12 +66,10 @@ export class AuthService {
         user = await this.signup(singinDto);
       }
       const isMatch = await this.comparePasswords(password, user.password);
-      console.log("🚀 ~ AuthService ~ signin ~ isMatch:", isMatch)
       if (!isMatch) {
         throw new HttpException("Invalid credentials", HttpStatus.BAD_REQUEST);
       }
       const { userValidation, env } = await this.verifyUserOnCrm(username, password, env_name);
-      console.log("🚀 ~ AuthService ~ signin ~ userValidation:", userValidation)
       if (!userValidation)
         throw new HttpException("Not verified by CRM.", HttpStatus.BAD_REQUEST);
       const payload: TokenPayloadDto = {
@@ -181,7 +178,6 @@ export class AuthService {
       );
       const access_token = env?.token ?? (await this.cmsService.getCrmToken(env)).access_token;
       const { value } = await this.cmsService.getBookableResources(access_token);
-      console.log("🚀 ~ AuthService ~ verifyUserOnCrm ~ value:", value)
       const userValidation = value.find(
         (user) => {
           return username === user.cafm_username && user.cafm_password === password;

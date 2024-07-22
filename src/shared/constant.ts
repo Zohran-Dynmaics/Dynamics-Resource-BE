@@ -13,8 +13,8 @@ export const URLS_AND_QUERY_PARAMS = {
 
                 query: (date: Date | string | null, resourceId: string) => {
                     const params = {
-                        '$select': 'starttime,endtime',
-                        '$expand': 'cafm_Case($select=ticketnumber,title;$expand=msdyn_FunctionalLocation($select=msdyn_name),cafm_Building($select=cafm_name),customerid_account($select=name)),msdyn_workorder($select=msdyn_name),BookingStatus($select=name)',
+                        // '$select': 'starttime,endtime',
+                        '$expand': 'cafm_Case($select=ticketnumber,title, ;$expand=msdyn_FunctionalLocation($select=msdyn_name),cafm_Building($select=cafm_name),customerid_account($select=name)),msdyn_workorder($select=msdyn_name),BookingStatus($select=name)',
                         '$filter': `_resource_value eq ${resourceId}`,
                         '$count': 'true'
                     };
