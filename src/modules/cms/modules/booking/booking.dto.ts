@@ -1,8 +1,7 @@
-import { Transform } from "class-transformer";
-import { IsDate, IsDateString, IsString } from "class-validator";
-import moment from "moment";
+import { IsString,IsOptional } from "class-validator";
 
 export class DateDto {
     @IsString()
+    @IsOptional()
     date: Date | string;
 }

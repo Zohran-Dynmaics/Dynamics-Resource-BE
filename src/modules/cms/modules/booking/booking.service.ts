@@ -38,6 +38,7 @@ export class BookingService {
       HTTPS_METHODS.GET,
       token,
     );
+    console.log("🚀 ~ BookingService ~ config:", config)
     try {
       return await this.apiService.request(config);
     } catch (error) {
