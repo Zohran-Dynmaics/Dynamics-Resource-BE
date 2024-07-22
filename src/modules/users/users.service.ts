@@ -16,8 +16,8 @@ import { User } from "./users.entity";
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<User>, private envService: EnvironmentService, private cmsService: CmsService) { }
 
-  async create(email: string, password: string, resourceId: string) {
-    return await this.userModel.create({ email, password, resourceId });
+  async create(username: string, password: string, resourceId: string) {
+    return await this.userModel.create({ username, password, resourceId });
   }
 
   async update(updateUserDto: UpdateUserDto, crmToken?: string): Promise<User> {
@@ -31,7 +31,7 @@ export class UsersService {
         updateUserDto.password = await generateHash(password);
 
         const env = await this.envService.findByName(
-          getEnvironmentNameFromEmail(user?.email)
+          getEnvironmentNameFromEmail(user?.username)
         );
         const access_token = env?.token ?? (await this.cmsService.getCrmToken(env)).access_token;
 
@@ -64,6 +64,10 @@ export class UsersService {
 
   async findByEmail(email: string) {
     return await this.userModel.findOne({ email }).exec();
+  }
+
+  async findByUsername(username: string) {
+    return await this.userModel.findOne({ username }).exec();
   }
 
   async findOne(searchUserDto: SearchUserDto): Promise<User> {

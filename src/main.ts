@@ -4,6 +4,7 @@ import { ResponseInterceptor } from "./interceptors/response.interceptor";
 import { ConfigService } from "@nestjs/config";
 import { HttpExceptionFilter } from "./filters/exception.filters";
 import { Logger as NestLogger, ValidationPipe } from "@nestjs/common";
+import * as cookieParser from "cookie-parser";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -16,6 +17,8 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+
+  app.use(cookieParser())
 
   app.useGlobalInterceptors(new ResponseInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter());

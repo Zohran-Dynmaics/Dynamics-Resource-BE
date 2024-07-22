@@ -34,12 +34,13 @@ export class AuthService {
 
   async signup(signupDto: SignUpDto): Promise<ResponseSignUpDto> {
     try {
-      const { email, password, env_name } = signupDto;
-      const user = await this.usersService.findByEmail(email.toLowerCase());
+      const { username, password, env_name } = signupDto;
+      const user = await this.usersService.findByUsername(username.toLowerCase());
+      console.log("🚀 ~ AuthService ~ signup ~ user:", user)
       if (user) {
         throw new HttpException("User already exists.", HttpStatus.BAD_REQUEST);
       }
-      const { userValidation } = await this.verifyUserOnCrm(email, password, env_name);
+      const { userValidation } = await this.verifyUserOnCrm(username, password, env_name);
       if (!userValidation)
         throw new HttpException(
           "Not verified by CRM. Signup with CRM credentials.",
@@ -47,7 +48,7 @@ export class AuthService {
         );
       const hashedPassword: string = await generateHash(password);
       return await this.usersService.create(
-        email.toLowerCase(),
+        username.toLowerCase(),
         hashedPassword,
         userValidation.bookableresourceid
       );
@@ -58,18 +59,21 @@ export class AuthService {
 
   async signin(singinDto: SignInDto): Promise<any> {
     try {
-      const { email, password, env_name } = singinDto;
-      let user: any = await this.usersService.findByEmail(
-        email.toLowerCase()
+      const { username, password, env_name } = singinDto;
+      let user: any = await this.usersService.findByUsername(
+        username.toLowerCase()
       );
+      console.log("🚀 ~ AuthService ~ signin ~ user:", user)
       if (!user) {
         user = await this.signup(singinDto);
       }
       const isMatch = await this.comparePasswords(password, user.password);
+      console.log("🚀 ~ AuthService ~ signin ~ isMatch:", isMatch)
       if (!isMatch) {
         throw new HttpException("Invalid credentials", HttpStatus.BAD_REQUEST);
       }
-      const { userValidation, env } = await this.verifyUserOnCrm(email, password, env_name);
+      const { userValidation, env } = await this.verifyUserOnCrm(username, password, env_name);
+      console.log("🚀 ~ AuthService ~ signin ~ userValidation:", userValidation)
       if (!userValidation)
         throw new HttpException("Not verified by CRM.", HttpStatus.BAD_REQUEST);
       const payload: TokenPayloadDto = {
@@ -93,8 +97,8 @@ export class AuthService {
 
   async updatePasswordRequest(updatePasswordReqDto: UpdatePasswordRequestDto): Promise<{ message: string }> {
     try {
-      const { email } = updatePasswordReqDto;
-      const user = await this.usersService.findByEmail(email.toLowerCase());
+      const { username } = updatePasswordReqDto;
+      const user = await this.usersService.findByEmail(username.toLowerCase());
       if (!user) {
         throw new HttpException("User not found.", HttpStatus.UNAUTHORIZED);
       }
@@ -116,8 +120,8 @@ export class AuthService {
 
   async verifyOtp(verifyOtpDto: VerifyOtpDto): Promise<{ message: string }> {
     try {
-      const { email, otp } = verifyOtpDto;
-      const user = await this.usersService.findByEmail(email.toLowerCase());
+      const { username, otp } = verifyOtpDto;
+      const user = await this.usersService.findByEmail(username.toLowerCase());
       if (!user) {
         throw new HttpException("User not found.", HttpStatus.UNAUTHORIZED);
       }
@@ -139,8 +143,8 @@ export class AuthService {
 
   async updatePassword(updatePasswordDto: UpdatePasswordDto): Promise<User> {
     try {
-      const { email, password } = updatePasswordDto;
-      const user = await this.usersService.findByEmail(email);
+      const { username, password } = updatePasswordDto;
+      const user = await this.usersService.findByEmail(username);
       if (!user) {
         throw new HttpException("User not found.", HttpStatus.UNAUTHORIZED);
       }
@@ -171,7 +175,7 @@ export class AuthService {
   async generateToken(payload: any): Promise<string> {
     return await this.jwtService.signAsync(payload);
   }
-  async verifyUserOnCrm(email: string, password: string, env_name: string): Promise<any> {
+  async verifyUserOnCrm(username: string, password: string, env_name: string): Promise<any> {
     try {
       const env = await this.envService.findByName(
         env_name
@@ -180,7 +184,7 @@ export class AuthService {
       const { value } = await this.cmsService.getBookableResources(access_token);
       const userValidation = value.find(
         (user) => {
-          return email.includes(user.cafm_username) && user.cafm_password === password;
+          return username === user.cafm_username && user.cafm_password === password;
         }
       );
       if (!userValidation)

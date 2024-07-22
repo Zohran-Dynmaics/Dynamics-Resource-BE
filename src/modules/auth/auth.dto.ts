@@ -4,17 +4,12 @@ import { TokenUserDto } from "../users/users.dto";
 import { TokenEnvironmentDto } from "../environment/environment.dto";
 
 export class UpdatePasswordRequestDto {
-  @IsNotEmpty({ message: "Email should not be empty." })
-  @IsEmail({}, { message: "Invalid Email." })
-  email: string;
+  @IsNotEmpty({ message: "Username should not be empty." })
+  username: string;
 }
 export class SignUpDto extends UpdatePasswordRequestDto {
   @IsNotEmpty({ message: "Password should not be empty." })
   password: string;
-
-  @IsNotEmpty({ message: "Email should not be empty." })
-  @IsEmail({}, { message: "Invalid Email." })
-  email: string;
 
   @IsNotEmpty({ message: "Environment Name should not be empty." })
   env_name: string;
