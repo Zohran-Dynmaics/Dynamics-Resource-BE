@@ -3,11 +3,11 @@ import { ResourceService } from "./resource.service";
 import { CustomRequest } from "src/shared/custom-interface";
 import { GetResourceSlotsDto } from "./resource.dto";
 
-@Controller("cms/resource")
+@Controller("cms")
 export class ResourceController {
   constructor(private resourceService: ResourceService) { }
 
-  @Get("")
+  @Get("bookableresources")
   async getBookableResource(@Req() req: CustomRequest) {
     const { env, query } = req;
     return await this.resourceService.getBookableResource(
@@ -16,7 +16,7 @@ export class ResourceController {
       query,
     );
   }
-  @Get("categories")
+  @Get("bookableresourcecategories")
   async getBookableResourceCategories(@Req() req: CustomRequest) {
     const { env, query } = req;
     return await this.resourceService.getBookableResourceCategories(
@@ -26,7 +26,7 @@ export class ResourceController {
     );
   }
 
-  @Get("characteristics")
+  @Get("bookableresourcecharacteristics")
   async getBookableResourceCharacteristics(@Req() req: CustomRequest) {
     const { env, query } = req;
     return await this.resourceService.getBookableResourceCharacteristics(
@@ -36,7 +36,7 @@ export class ResourceController {
     );
   }
 
-  @Get("available-resource-slots")
+  @Get("cafm_AvailableResourceSlot")
   async getAvailableResourceSlots(
     @Req() req: CustomRequest,
     @Body() getResourceSlot: GetResourceSlotsDto

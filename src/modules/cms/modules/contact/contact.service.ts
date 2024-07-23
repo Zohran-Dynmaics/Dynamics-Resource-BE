@@ -25,4 +25,22 @@ export class ContactService {
       throw error;
     }
   }
+
+  async getAllContacts(
+    token: string,
+    base_url: string,
+    query?: any,
+  ): Promise<any> {
+    const config: AxiosRequestConfig = this.apiService.getConfig(
+      `${base_url}api/data/v9.1/contacts?`,
+      HTTPS_METHODS.GET,
+      token,
+      query,
+    );
+    try {
+      return await this.apiService.request(config);
+    } catch (error) {
+      throw error;
+    }
+  }
 }

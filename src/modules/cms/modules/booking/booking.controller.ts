@@ -3,14 +3,21 @@ import { CustomRequest } from "src/shared/custom-interface";
 import { DateDto } from "./booking.dto";
 import { BookingService } from "./booking.service";
 
-@Controller("cms/booking")
+@Controller("cms/bookableresourcebookings")
 export class BookingController {
   constructor(private bookingService: BookingService) { }
 
   @Get("")
-  async getTasksOfDay(@Req() req: CustomRequest, @Query() { date }: DateDto): Promise<any> {
+  async getTasksOfDay(@Req() req: CustomRequest): Promise<any> {
+    const { env, query } = req;
+    return await this.bookingService.getTasksOfDay(env?.token, env?.base_url, query);
+  }
+
+  @Get("/booking-count")
+  async getTaskCount(@Req() req: CustomRequest): Promise<any> {
     const { env, user } = req;
-    return await this.bookingService.getTasksOfDay(env.token, env.base_url, user.bookableresourceid, date);
+    console.log("🚀 ~ BookingController ~ getTaskCount ~ user:", user?.bookableresourceid)
+    return await this.bookingService.getTaskCount(env?.token, env?.base_url, user?.bookableresourceid);
   }
 
   @Get("all")

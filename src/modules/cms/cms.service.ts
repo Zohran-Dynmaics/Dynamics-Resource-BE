@@ -66,14 +66,8 @@ export class CmsService {
     }
   }
 
-  async getBookableResources(token: string): Promise<any> {
-    const config: AxiosRequestConfig = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      method: "GET",
-      url: `${process.env.RESOURCE}/api/data/v9.1/bookableresources?$select=cafm_username,cafm_password`,
-    };
+  async getBookableResources(token: string, base_url: string): Promise<any> {
+    const config: AxiosRequestConfig = this.apiService.getConfig(`${base_url}/api/data/v9.1/bookableresources?$select=name,plus_username,plus_password`, HTTPS_METHODS.GET, token);
     try {
       return await this.apiService.request(config);
     } catch (error) {

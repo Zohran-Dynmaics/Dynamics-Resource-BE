@@ -37,7 +37,6 @@ export class GetCrmTokenResponseDto {
   access_token?: string;
 }
 
-
 export class UpdateBookableResourceDto {
   @IsNotEmpty()
   @IsString()
