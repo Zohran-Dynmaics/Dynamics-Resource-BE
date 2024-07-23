@@ -8,15 +8,14 @@ export class BookingController {
   constructor(private bookingService: BookingService) { }
 
   @Get("")
-  async getTasksOfDay(@Req() req: CustomRequest): Promise<any> {
-    const { env, query } = req;
-    return await this.bookingService.getTasksOfDay(env?.token, env?.base_url, query);
+  async getTasksOfDay(@Req() req: CustomRequest, @Query() { date }: DateDto): Promise<any> {
+    const { env, user } = req;
+    return await this.bookingService.getTasksOfDay(env?.token, env?.base_url, user?.bookableresourceid, date);
   }
 
   @Get("/booking-count")
   async getTaskCount(@Req() req: CustomRequest): Promise<any> {
     const { env, user } = req;
-    console.log("🚀 ~ BookingController ~ getTaskCount ~ user:", user?.bookableresourceid)
     return await this.bookingService.getTaskCount(env?.token, env?.base_url, user?.bookableresourceid);
   }
 

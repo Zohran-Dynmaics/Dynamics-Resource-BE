@@ -32,16 +32,35 @@ export class BookingService {
   async getTasksOfDay(
     token: string,
     base_url: string,
-    query: any,
+    resource_id: string,
+    date: Date | string,
   ): Promise<any> {
+    const { endpoint, query } = URLS_AND_QUERY_PARAMS?.BOOKING?.GET?.TASKS_OF_DAY;
     const config: AxiosRequestConfig = this.apiService.getConfig(
-      `${base_url}api/data/v9.1/bookableresourcebookings`,
+      `${endpoint(base_url)}${query(date, resource_id)}`,
       HTTPS_METHODS.GET,
       token,
-      query
     );
     try {
-      return await this.apiService.request(config);
+      const { value }: any = await this.apiService.request(config);
+
+      const responseData: Array<{ ticket_no: string, title: string, location: string, building: string, start_time: string, end_time: string, estimated_travel_time: string }> = []
+
+      value.forEach((booking: any) => {
+        const { cafm_Case } = booking;
+        responseData.push({
+          ticket_no: cafm_Case?.ticketnumber,
+          title: cafm_Case?.title,
+          location: cafm_Case?.msdyn_FunctionalLocation?.msdyn_name,
+          building: cafm_Case?.cafm_Building?.cafm_name,
+          start_time: booking?.starttime,
+          end_time: booking?.endtime,
+          estimated_travel_time: booking?.msdyn_estimatedtravelduration
+        })
+      });
+
+      return responseData;
+
     } catch (error) {
       throw error;
     }
