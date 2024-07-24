@@ -10,12 +10,13 @@ export class AuthController {
 
   @Get('azure-auth')
   async azureAuth(@Req() query: Request, @Res() res: Response): Promise<any> {
+
     return res.redirect("https://www.google.com");
   }
 
   @Post("sign-in")
   async signin(@Body() signinDto: SignInDto): Promise<any> {
-    console.log('here')
+    console.log("🚀 ~ AuthController ~ signin ~ signinDto:", signinDto)
     return await this.authService.signin(signinDto)
   }
 

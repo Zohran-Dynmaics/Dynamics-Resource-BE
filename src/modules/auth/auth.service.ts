@@ -62,7 +62,6 @@ export class AuthService {
       let user: any = await this.usersService.findByUsername(
         username.toLowerCase()
       );
-      console.log("🚀 ~ AuthService ~ signin ~ user:", user)
       if (!user) {
         user = await this.signup(singinDto);
       }
@@ -179,7 +178,6 @@ export class AuthService {
       );
       const access_token = env?.token ?? (await this.cmsService.getCrmToken(env)).access_token;
       const { value } = await this.cmsService.getBookableResources(access_token, env?.base_url);
-      console.log("🚀 ~ AuthService ~ verifyUserOnCrm ~ value:", value)
       const userValidation = value.find(
         (user) => {
           return username === user.plus_username && user.plus_password === password;

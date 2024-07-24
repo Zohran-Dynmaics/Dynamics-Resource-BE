@@ -38,7 +38,6 @@ export class UsersService {
         await this.cmsService.updateBookaableResource(access_token, env?.base_url, user?.resourceId, { cafm_password: password });
 
       }
-      // TODO: update User on crm here.
       return await this.userModel.findByIdAndUpdate(_id, { ...updateUserDto }, { new: true }).exec();
     } catch (error) {
       throw error;

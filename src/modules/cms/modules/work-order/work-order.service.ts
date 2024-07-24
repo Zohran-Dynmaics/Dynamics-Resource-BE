@@ -9,7 +9,7 @@ export class WorkOrderService {
 
     async getWorkOrderTypes(token: string, base_url: string): Promise<any> {
         const config: AxiosRequestConfig = this.apiService.getConfig(
-            `${base_url}api/data/v9.1/msdyn_workordertypes`,
+            `${base_url}api/data/v9.1/msdyn_workordertypes?$select=msdyn_name`,
             HTTPS_METHODS.GET,
             token
         );

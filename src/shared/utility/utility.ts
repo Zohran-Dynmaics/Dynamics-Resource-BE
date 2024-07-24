@@ -17,9 +17,9 @@ export const createFormData = (data: Record<string, string>): FormData => {
 
 const getErrorMessage = (error: any): string => {
   return (
+     error?.response?.statusText ||
     error?.response?.data?.error?.message ||
     error?.response?.error?.message ||
-    error?.response?.statusText ||
     "Unknown error"
   );
 };
