@@ -20,7 +20,7 @@ export class CmsService {
     getCrmTokenDto: GetCrmTokenDto,
   ): Promise<GetCrmTokenResponseDto> {
     const { base_url, client_id, client_secret, tenant_id } = getCrmTokenDto;
-    console.log("🚀 ~ CmsService ~ base_url:", base_url)
+    //("🚀 ~ CmsService ~ base_url:", base_url)
     const env = await this.envService.findByBaseUrl(base_url);
     if (!env) {
       throw new Error("Environment not found");
@@ -35,7 +35,7 @@ export class CmsService {
     const config: AxiosRequestConfig = {
       data,
       method: "POST",
-      url: `${env?.base_url}/${tenant_id}/oauth2/token`,
+      url: `${process.env.MICROSOFT_LOGIN_BASE_URL}${tenant_id}/oauth2/token`,
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -68,8 +68,9 @@ export class CmsService {
   }
 
   async getBookableResources(token: string, base_url: string): Promise<any> {
-    const config: AxiosRequestConfig = this.apiService.getConfig(`${base_url}/api/data/v9.1/bookableresources?$select=name,cafm_password, cafm_username`, HTTPS_METHODS.GET, token);
+    const config: AxiosRequestConfig = this.apiService.getConfig(`${base_url}/api/data/v9.1/bookableresources?$select=name,plus_password,plus_username`, HTTPS_METHODS.GET, token);
     try {
+      //("🚀 ~ CmsService ~ getBookableResources ~ config:", config)
       return await this.apiService.request(config);
     } catch (error) {
       throw error;
@@ -94,7 +95,9 @@ export class CmsService {
   async refreshCrmToken(expiredToken: string): Promise<string> {
     try {
       const decodedToken: any = jwtDecode(expiredToken);
+      //("🚀 ~ CmsService ~ refreshCrmToken ~ decodedToken:", decodedToken)
       const env = await this.envService.findByBaseUrl(decodedToken.aud);
+      //("🚀 ~ CmsService ~ refreshCrmToken ~ env:", env)
       return (await this.getCrmToken(env)).access_token;
     } catch (error) {
       throw error;

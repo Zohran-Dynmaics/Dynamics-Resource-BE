@@ -70,7 +70,7 @@ export class IncidentController {
         updateIncidentDto,
       );
     } catch (error) {
-      console.log("🚀 ~ IncidentController ~ error:", error)
+      //("🚀 ~ IncidentController ~ error:", error)
       throw error;
     }
   }

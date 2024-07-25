@@ -28,6 +28,7 @@ export const countBookings = (bookings) => {
 }
 
 export const FormatDataForCalender = (value: any): CalenderDataObjectType => {
+    //("🚀 ~ FormatDataForCalender ~ value:", value)
     const calenderDataObjectType = new CalenderDataObjectType();
     if (value.length == 0) return calenderDataObjectType;
     const responseData = {}
@@ -36,7 +37,7 @@ export const FormatDataForCalender = (value: any): CalenderDataObjectType => {
 
 
     value.forEach((booking: any) => {
-        console.log("🚀 ~ value.forEach ~ booking:", booking?.starttime)
+        //("🚀 ~ value.forEach ~ booking:", booking?.starttime)
 
         const calenderDtoObject = new CalenderDataDto();
         key = moment(booking?.starttime).format('YYYY-MM-DD');
@@ -44,8 +45,8 @@ export const FormatDataForCalender = (value: any): CalenderDataObjectType => {
 
         let duration = booking?.duration;
         while (duration > 0) {
-            console.log("🚀 ~ value.forEach ~ count:", count, "--", duration)
-            // console.log(moment(booking?.starttime).format('H'), "--", moment(booking?.starttime).add(count, 'hours').format('H'))
+            //("🚀 ~ value.forEach ~ count:", count, "--", duration)
+            // //(moment(booking?.starttime).format('H'), "--", moment(booking?.starttime).add(count, 'hours').format('H'))
             calenderDtoObject.hour = moment(booking?.starttime).add(count, 'hours').format('H');
             calenderDtoObject.bookingId = booking?.bookableresourcebookingid;
             calenderDtoObject.title = booking?.msdyn_workorder?.msdyn_serviceaccount?.name;
