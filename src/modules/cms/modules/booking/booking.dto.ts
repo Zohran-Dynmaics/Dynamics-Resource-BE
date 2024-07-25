@@ -111,3 +111,7 @@ export class TasksCountDto {
     @IsNotEmpty()
     week: number = 0;
 }
+
+export class CalenderDataObjectType {
+    [key: string]: Array<CalenderDataDto>;
+};

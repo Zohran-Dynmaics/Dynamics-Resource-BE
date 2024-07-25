@@ -4,7 +4,7 @@ import { ApiService } from "src/modules/api/api.service";
 import { URLS_AND_QUERY_PARAMS } from "src/shared/constant";
 import { HTTPS_METHODS } from "src/shared/enum";
 import { countBookings, FormatDataForCalender, FormateDataForTasks } from "./utility";
-import { TasksCountDto } from "./booking.dto";
+import { CalenderDataObjectType, TasksCountDto, TasksDataDto } from "./booking.dto";
 
 @Injectable()
 export class BookingService {
@@ -33,7 +33,7 @@ export class BookingService {
     base_url: string,
     resource_id: string,
     params: any,
-  ): Promise<any> {
+  ): Promise<Array<TasksDataDto>> {
     const { endpoint, query } = URLS_AND_QUERY_PARAMS?.BOOKING?.GET?.BOOKINGS;
     const config: AxiosRequestConfig = this.apiService.getConfig(
       `${endpoint(base_url)}${query(params, resource_id)}`,
@@ -43,7 +43,6 @@ export class BookingService {
     try {
       const { value }: any = await this.apiService.request(config);
       return FormateDataForTasks(value);
-
     } catch (error) {
       throw error;
     }
@@ -72,7 +71,7 @@ export class BookingService {
     base_url: string,
     resource_id: string,
     date: Date | string,
-  ): Promise<any> {
+  ): Promise<CalenderDataObjectType> {
     const { endpoint, query } = URLS_AND_QUERY_PARAMS?.BOOKING?.GET?.BOOKINGS_FOR_CALENDER;
     const config: AxiosRequestConfig = this.apiService.getConfig(
       `${endpoint(base_url)}${query(date, resource_id)}`,

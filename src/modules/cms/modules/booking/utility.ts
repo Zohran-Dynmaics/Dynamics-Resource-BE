@@ -1,5 +1,5 @@
 import * as moment from "moment";
-import { CalenderDataDto, TasksCountDto, TasksDataDto } from "./booking.dto";
+import { CalenderDataDto, TasksCountDto, TasksDataDto, CalenderDataObjectType } from "./booking.dto";
 
 export const countBookings = (bookings) => {
     const today = moment(new Date());
@@ -27,10 +27,12 @@ export const countBookings = (bookings) => {
     return taskCountDto;
 }
 
-export const FormatDataForCalender = (value: any) => {
-    if (value.length == 0) return [];
+export const FormatDataForCalender = (value: any): CalenderDataObjectType => {
+    const calenderDataObjectType = new CalenderDataObjectType();
+    if (value.length == 0) return calenderDataObjectType;
     const responseData = {}
     let key;
+
 
     value.forEach((booking: any) => {
         const calenderDtoObject = new CalenderDataDto();
@@ -56,14 +58,15 @@ export const FormatDataForCalender = (value: any) => {
         reponseType: null,
         time: null,
         connectedToPrevious: false,
-    })); -0 -
+    }));
 
-        responseData[key].forEach(booking => {
-            const hourIndex = parseInt(booking.hour, 10);
-            allHours[hourIndex] = { ...booking };
-        });
+    responseData[key].forEach(booking => {
+        const hourIndex = parseInt(booking.hour, 10);
+        allHours[hourIndex] = { ...booking };
+    });
 
-    return allHours;
+    calenderDataObjectType[key] = allHours;
+    return calenderDataObjectType;
 }
 
 export const FormateDataForTasks = (value: any) => {
