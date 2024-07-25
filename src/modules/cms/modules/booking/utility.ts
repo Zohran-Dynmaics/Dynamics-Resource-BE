@@ -64,15 +64,22 @@ export const FormatDataForCalender = (value: any): CalenderDataObjectType => {
 
     });
 
-    const allHours = Array.from({ length: 24 }, (_, index) => ({
-        hour: index.toString(),
-        bookingId: null,
-        title: null,
-        bookingStatus: null,
-        reponseType: null,
-        time: null,
-        connectedToPrevious: false,
-    }));
+    const allHours = Array.from({ length: 24 }, (_, index) => {
+
+        let period = index < 12 ? 'AM' : 'PM';
+        let hour = index % 12;
+        hour = hour === 0 ? 12 : hour;
+
+        return ({
+            hour: index.toString(),
+            bookingId: null,
+            title: null,
+            bookingStatus: null,
+            reponseType: null,
+            time: `${hour}${period}`,
+            connectedToPrevious: false,
+        })
+    });
 
     responseData[key].forEach(booking => {
         const hourIndex = parseInt(booking.hour, 10);
