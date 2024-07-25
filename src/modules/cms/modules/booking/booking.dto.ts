@@ -51,8 +51,17 @@ export class CalenderDataDto {
     bookingStatus: string;
 
     @IsString()
+    @IsNotEmpty()
+    duration: string;
+
+
+    @IsString()
     @IsOptional()
     reponseType: null;
+
+    @IsString()
+    @IsNotEmpty()
+    location: string;
 
     @IsString()
     @IsNotEmpty()

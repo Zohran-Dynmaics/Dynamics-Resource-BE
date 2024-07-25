@@ -37,7 +37,7 @@ export const FormatDataForCalender = (value: any): CalenderDataObjectType => {
 
 
     value.forEach((booking: any) => {
-        //("🚀 ~ value.forEach ~ booking:", booking?.starttime)
+        console.log("🚀 ~ value.forEach ~ booking:", booking?.msdyn_workorder)
 
         const calenderDtoObject = new CalenderDataDto();
         key = moment(booking?.starttime).format('YYYY-MM-DD');
@@ -45,15 +45,15 @@ export const FormatDataForCalender = (value: any): CalenderDataObjectType => {
 
         let duration = booking?.duration;
         while (duration > 0) {
-            //("🚀 ~ value.forEach ~ count:", count, "--", duration)
-            // //(moment(booking?.starttime).format('H'), "--", moment(booking?.starttime).add(count, 'hours').format('H'))
             calenderDtoObject.hour = moment(booking?.starttime).add(count, 'hours').format('H');
-            calenderDtoObject.bookingId = booking?.bookableresourcebookingid;
-            calenderDtoObject.title = booking?.msdyn_workorder?.msdyn_serviceaccount?.name;
-            calenderDtoObject.bookingStatus = booking?.BookingStatus?.name;
-            calenderDtoObject.reponseType = booking?.msdyn_workorder?.msdyn_workordertype?.msdyn_name;
+            calenderDtoObject.bookingId = booking?.bookableresourcebookingid || null;
+            calenderDtoObject.title = booking?.msdyn_workorder?.msdyn_serviceaccount?.name || null;
+            calenderDtoObject.bookingStatus = booking?.BookingStatus?.name || null;
+            calenderDtoObject.reponseType = booking?.msdyn_workorder?.msdyn_workordertype?.msdyn_name || null;
+            calenderDtoObject.location = booking?.msdyn_workorder?.msdyn_FunctionalLocation?.msdyn_name || null;
+            calenderDtoObject.duration = booking?.duration || null;
             calenderDtoObject.time = moment(booking?.starttime).format('HA');
-            calenderDtoObject.connectedToPrevious = count ? false : true;
+            calenderDtoObject.connectedToPrevious = count == 0 ? false : true;
             if (!responseData[key]) {
                 responseData[key] = [];
             }
@@ -78,6 +78,8 @@ export const FormatDataForCalender = (value: any): CalenderDataObjectType => {
             reponseType: null,
             time: `${hour}${period}`,
             connectedToPrevious: false,
+            duration: null,
+            location: null,
         })
     });
 
