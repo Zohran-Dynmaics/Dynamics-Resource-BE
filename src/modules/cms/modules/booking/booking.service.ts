@@ -3,12 +3,21 @@ import { AxiosRequestConfig } from "axios";
 import { ApiService } from "src/modules/api/api.service";
 import { URLS_AND_QUERY_PARAMS } from "src/shared/constant";
 import { HTTPS_METHODS } from "src/shared/enum";
-import { countBookings, FormatDataForCalender, FormateDataForTasks } from "./utility";
-import { CalenderDataObjectType, TaskFilterDto, TasksCountDto, TasksDataDto } from "./booking.dto";
+import {
+  countBookings,
+  FormatDataForCalender,
+  FormateDataForTasks,
+} from "./utility";
+import {
+  CalenderDataObjectType,
+  TaskFilterDto,
+  TasksCountDto,
+  TasksDataDto,
+} from "./booking.dto";
 
 @Injectable()
 export class BookingService {
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
   async getAllBooking(
     token: string,
@@ -72,7 +81,8 @@ export class BookingService {
     resource_id: string,
     date: Date | string,
   ): Promise<CalenderDataObjectType> {
-    const { endpoint, query } = URLS_AND_QUERY_PARAMS?.BOOKING?.GET?.BOOKINGS_FOR_CALENDER;
+    const { endpoint, query } =
+      URLS_AND_QUERY_PARAMS?.BOOKING?.GET?.BOOKINGS_FOR_CALENDER;
     const config: AxiosRequestConfig = this.apiService.getConfig(
       `${endpoint(base_url)}${query(date, resource_id)}`,
       HTTPS_METHODS.GET,

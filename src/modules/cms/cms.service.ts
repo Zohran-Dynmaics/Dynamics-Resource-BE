@@ -6,7 +6,11 @@ import { HTTPS_METHODS } from "src/shared/enum";
 import { createFormData } from "src/shared/utility/utility";
 import { ApiService } from "../api/api.service";
 import { EnvironmentService } from "../environment/environment.service";
-import { GetCrmTokenDto, GetCrmTokenResponseDto, UpdateBookableResourceDto } from "./cms.dto";
+import {
+  GetCrmTokenDto,
+  GetCrmTokenResponseDto,
+  UpdateBookableResourceDto,
+} from "./cms.dto";
 import { GRANT_TYPES } from "./constants";
 
 @Injectable()
@@ -14,7 +18,7 @@ export class CmsService {
   constructor(
     @Inject(forwardRef(() => ApiService)) private apiService: ApiService,
     private envService: EnvironmentService,
-  ) { }
+  ) {}
 
   async getCrmToken(
     getCrmTokenDto: GetCrmTokenDto,
@@ -43,7 +47,11 @@ export class CmsService {
 
     try {
       const response: any = await this.apiService.request(config);
-      await this.envService.update({ _id: env?._id, env_name: env?.env_name.toLowerCase(), token: response?.access_token })
+      await this.envService.update({
+        _id: env?._id,
+        env_name: env?.env_name.toLowerCase(),
+        token: response?.access_token,
+      });
       return response as GetCrmTokenResponseDto;
     } catch (error) {
       throw error;
@@ -68,7 +76,11 @@ export class CmsService {
   }
 
   async getBookableResources(token: string, base_url: string): Promise<any> {
-    const config: AxiosRequestConfig = this.apiService.getConfig(`${base_url}/api/data/v9.1/bookableresources?$select=name,plus_password,plus_username`, HTTPS_METHODS.GET, token);
+    const config: AxiosRequestConfig = this.apiService.getConfig(
+      `${base_url}/api/data/v9.1/bookableresources?$select=name,plus_password,plus_username`,
+      HTTPS_METHODS.GET,
+      token,
+    );
     try {
       //("🚀 ~ CmsService ~ getBookableResources ~ config:", config)
       return await this.apiService.request(config);
@@ -77,13 +89,18 @@ export class CmsService {
     }
   }
 
-  async updateBookaableResource(token: string, base_url: string, resourceId: string, updateBookableResourceDto: UpdateBookableResourceDto): Promise<any> {
+  async updateBookaableResource(
+    token: string,
+    base_url: string,
+    resourceId: string,
+    updateBookableResourceDto: UpdateBookableResourceDto,
+  ): Promise<any> {
     const config: AxiosRequestConfig = this.apiService.getConfig(
       `${base_url}api/data/v9.1/bookableresources(${resourceId}) `,
       HTTPS_METHODS.PATCH,
       token,
       null,
-      updateBookableResourceDto
+      updateBookableResourceDto,
     );
     try {
       return await this.apiService.request(config);

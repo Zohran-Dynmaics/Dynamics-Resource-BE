@@ -8,7 +8,7 @@ import { CreateEnvironmentDto, UpdateEnvironmentDto } from "./environment.dto";
 export class EnvironmentService {
   constructor(
     @InjectModel(Environment.name) private envModel: Model<Environment>,
-  ) { }
+  ) {}
 
   async create(createEnvDto: CreateEnvironmentDto): Promise<Environment> {
     try {

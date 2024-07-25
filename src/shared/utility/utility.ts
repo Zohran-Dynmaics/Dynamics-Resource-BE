@@ -1,7 +1,7 @@
 import * as bcrypt from "bcrypt";
 import { HASH_SALT } from "../constant";
 import { HttpException, HttpStatus } from "@nestjs/common";
-const moment = require('moment');
+const moment = require("moment");
 
 export const generateHash = async (input: string): Promise<string> => {
   return await bcrypt.hash(input, HASH_SALT);
@@ -17,7 +17,6 @@ export const createFormData = (data: Record<string, string>): FormData => {
 
 const getErrorMessage = (error: any): string => {
   return (
-
     error?.response?.data?.error?.message ||
     error?.response?.error?.message ||
     error?.response?.statusText ||
@@ -38,29 +37,26 @@ export const formatCrmError = (
   };
 };
 
-
-
-export const getDayBoundaries = (date: Date | string): { startOfDay: string, endOfDay: string } => {
+export const getDayBoundaries = (
+  date: Date | string,
+): { startOfDay: string; endOfDay: string } => {
   try {
-    const startOfDay = moment(date).startOf('day').toISOString();
-    const endOfDay = moment(date).endOf('day').toISOString();
+    const startOfDay = moment(date).startOf("day").toISOString();
+    const endOfDay = moment(date).endOf("day").toISOString();
     return { startOfDay, endOfDay };
   } catch (error) {
     throw error;
   }
-}
+};
 
 export const getEnvironmentNameFromEmail = (email: string): string => {
   try {
     const env = email.split("@")[1].split(".")[0];
     if (!env) {
-      throw new HttpException(
-        "Environment not found.",
-        HttpStatus.BAD_REQUEST
-      );
+      throw new HttpException("Environment not found.", HttpStatus.BAD_REQUEST);
     }
     return env;
   } catch (error) {
     throw error;
   }
-}
+};

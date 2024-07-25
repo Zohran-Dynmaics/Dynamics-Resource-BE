@@ -23,7 +23,7 @@ export class User {
   resourceId: string;
 
   @Prop({ type: String, required: false })
-  project?: string
+  project?: string;
 
   @Prop({ type: Boolean, default: false })
   resetPasswordRequested?: boolean;
@@ -42,4 +42,4 @@ export const UserSchema = SchemaFactory.createForClass(User);
 
 // TODO [1]: 1. Add Token Field to environments entity 2.Check the token in SignIn api whether a token is available against environment or not 3. If token is available then skip this step else generate a new token store it environment table for that environment. 4. Get the users of that environment using token 5. Verify user 6. if Valid user -> Store in User table along with the role (technician)
 
-// TODO [2]: Update the auth middleware to update the token. 
+// TODO [2]: Update the auth middleware to update the token.

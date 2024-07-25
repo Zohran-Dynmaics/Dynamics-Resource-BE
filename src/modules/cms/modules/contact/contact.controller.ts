@@ -4,7 +4,7 @@ import { CustomRequest } from "src/shared/custom-interface";
 
 @Controller("cms/contacts")
 export class ContactController {
-  constructor(private readonly contactService: ContactService) { }
+  constructor(private readonly contactService: ContactService) {}
 
   @Get("")
   async getAllContacts(@Req() req: CustomRequest): Promise<any> {
@@ -12,7 +12,7 @@ export class ContactController {
     return await this.contactService.getAllContacts(
       env.token,
       env.base_url,
-      query
+      query,
     );
   }
   @Get(":contact_id")
@@ -25,7 +25,4 @@ export class ContactController {
       query,
     );
   }
-
-
-
 }

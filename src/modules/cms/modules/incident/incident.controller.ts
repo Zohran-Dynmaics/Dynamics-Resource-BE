@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Patch, Post, Req, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Patch,
+  Post,
+  Req,
+  UseGuards,
+} from "@nestjs/common";
 
 import { CustomRequest } from "src/shared/custom-interface";
 import { IncidentService } from "./incident.service";
@@ -6,8 +14,7 @@ import { CreateIncidentDto } from "./incident.dto";
 
 @Controller("cms/incidents")
 export class IncidentController {
-  constructor(private incidentService: IncidentService) { }
-
+  constructor(private incidentService: IncidentService) {}
 
   @Get("")
   async getIncidents(@Req() req: CustomRequest): Promise<any> {
@@ -22,7 +29,6 @@ export class IncidentController {
       throw error;
     }
   }
-
 
   @Get(":incident_id")
   async getIncidentWithId(@Req() req: CustomRequest): Promise<any> {

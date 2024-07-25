@@ -15,13 +15,11 @@ export class SignUpDto extends UpdatePasswordRequestDto {
   env_name: string;
 }
 
-export class SignInDto extends SignUpDto { }
+export class SignInDto extends SignUpDto {}
 
-export class ResponseSignUpDto extends User {
-}
+export class ResponseSignUpDto extends User {}
 
-export class UpdatePasswordDto extends SignUpDto {
-}
+export class UpdatePasswordDto extends SignUpDto {}
 
 export class VerifyOtpDto extends UpdatePasswordRequestDto {
   @IsNotEmpty({ message: "OTP should not be empty." })

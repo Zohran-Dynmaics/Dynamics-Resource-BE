@@ -5,7 +5,7 @@ import { GetResourceSlotsDto } from "./resource.dto";
 
 @Controller("cms")
 export class ResourceController {
-  constructor(private resourceService: ResourceService) { }
+  constructor(private resourceService: ResourceService) {}
 
   @Get("bookableresources")
   async getBookableResource(@Req() req: CustomRequest) {
@@ -39,7 +39,7 @@ export class ResourceController {
   @Get("cafm_AvailableResourceSlot")
   async getAvailableResourceSlots(
     @Req() req: CustomRequest,
-    @Body() getResourceSlot: GetResourceSlotsDto
+    @Body() getResourceSlot: GetResourceSlotsDto,
   ) {
     const { env, query } = req;
     return await this.resourceService.getAvailableResourceSlots(

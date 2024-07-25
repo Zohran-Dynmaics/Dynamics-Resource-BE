@@ -6,7 +6,7 @@ import { CustomRequest } from "src/shared/custom-interface";
 
 @Controller("cms")
 export class CmsController {
-  constructor(private cmsService: CmsService) { }
+  constructor(private cmsService: CmsService) {}
   /**
    *
    * TODO:

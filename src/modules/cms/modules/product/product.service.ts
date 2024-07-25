@@ -5,7 +5,7 @@ import { HTTPS_METHODS } from "src/shared/enum";
 
 @Injectable()
 export class ProductService {
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
   async inventoryProducts(
     token: string,
@@ -24,11 +24,7 @@ export class ProductService {
       throw error;
     }
   }
-  async getProduct(
-    token: string,
-    base_url: string,
-    query?: any,
-  ): Promise<any> {
+  async getProduct(token: string, base_url: string, query?: any): Promise<any> {
     const config: AxiosRequestConfig = this.apiService.getConfig(
       `${base_url}api/data/v9.1/products?`,
       HTTPS_METHODS.GET,
@@ -79,7 +75,6 @@ export class ProductService {
     }
   }
 
-
   async productPriceLevelsWithId(
     token: string,
     base_url: string,
@@ -98,5 +93,4 @@ export class ProductService {
       throw error;
     }
   }
-
 }

@@ -5,8 +5,7 @@ import { CustomRequest } from "src/shared/custom-interface";
 
 @Controller("cms")
 export class ProductController {
-  constructor(private productService: ProductService) { }
-
+  constructor(private productService: ProductService) {}
 
   @Get("products")
   async getProduct(@Req() req: CustomRequest): Promise<any> {
@@ -17,7 +16,6 @@ export class ProductController {
       query,
     );
   }
-
 
   @Get("products/:product_id")
   async getProductWithId(@Req() req: CustomRequest): Promise<any> {
@@ -36,7 +34,7 @@ export class ProductController {
     return await this.productService.productPriceLevels(
       env?.token,
       env?.base_url,
-      query
+      query,
     );
   }
 
@@ -47,8 +45,7 @@ export class ProductController {
       env?.token,
       env?.base_url,
       params?.product_id,
-      query
+      query,
     );
   }
-
 }

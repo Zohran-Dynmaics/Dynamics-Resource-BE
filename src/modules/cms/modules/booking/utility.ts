@@ -1,31 +1,35 @@
 import * as moment from "moment";
-import { CalenderDataDto, TasksCountDto, TasksDataDto, CalenderDataObjectType } from "./booking.dto";
+import {
+    CalenderDataDto,
+    TasksCountDto,
+    TasksDataDto,
+    CalenderDataObjectType,
+} from "./booking.dto";
 
 export const countBookings = (bookings) => {
     const today = moment(new Date());
-    const tomorrow = moment(today).add(1, 'day');
-    const endOfWeek = moment(today).endOf('week');
+    const tomorrow = moment(today).add(1, "day");
+    const endOfWeek = moment(today).endOf("week");
 
     const taskCountDto = new TasksCountDto();
-    taskCountDto.total = bookings?.['@odata.count']
-
+    taskCountDto.total = bookings?.["@odata.count"];
 
     for (const booking of bookings?.value) {
         const bookingDate = moment(new Date(booking.starttime));
 
-        if (bookingDate.isSame(today, 'day')) {
+        if (bookingDate.isSame(today, "day")) {
             taskCountDto.today++;
             taskCountDto.week++;
-        } else if (bookingDate.isSame(tomorrow, 'day')) {
+        } else if (bookingDate.isSame(tomorrow, "day")) {
             taskCountDto.tomorrow++;
             taskCountDto.week++;
-        } else if (bookingDate.isBetween(today, endOfWeek, null, '[]')) {
+        } else if (bookingDate.isBetween(today, endOfWeek, null, "[]")) {
             taskCountDto.week++;
         }
     }
 
     return taskCountDto;
-}
+};
 
 export const FormatDataForCalender = (value: any, date?: Date | string): CalenderDataObjectType => {
 
@@ -67,14 +71,19 @@ export const FormatDataForCalender = (value: any, date?: Date | string): Calende
 
         let duration = booking?.duration;
         while (duration > 0) {
-            calenderDtoObject.hour = moment(booking?.starttime).add(count, 'hours').format('H');
+            calenderDtoObject.hour = moment(booking?.starttime)
+                .add(count, "hours")
+                .format("H");
             calenderDtoObject.bookingId = booking?.bookableresourcebookingid || null;
-            calenderDtoObject.title = booking?.msdyn_workorder?.msdyn_serviceaccount?.name || null;
+            calenderDtoObject.title =
+                booking?.msdyn_workorder?.msdyn_serviceaccount?.name || null;
             calenderDtoObject.bookingStatus = booking?.BookingStatus?.name || null;
-            calenderDtoObject.reponseType = booking?.msdyn_workorder?.msdyn_workordertype?.msdyn_name || null;
-            calenderDtoObject.location = booking?.msdyn_workorder?.msdyn_FunctionalLocation?.msdyn_name || null;
+            calenderDtoObject.reponseType =
+                booking?.msdyn_workorder?.msdyn_workordertype?.msdyn_name || null;
+            calenderDtoObject.location =
+                booking?.msdyn_workorder?.msdyn_FunctionalLocation?.msdyn_name || null;
             calenderDtoObject.duration = booking?.duration || null;
-            calenderDtoObject.time = moment(booking?.starttime).format('HA');
+            calenderDtoObject.time = moment(booking?.starttime).format("HA");
             calenderDtoObject.connectedToPrevious = count == 0 ? false : true;
             if (!responseData[key]) {
                 responseData[key] = [];
@@ -83,7 +92,6 @@ export const FormatDataForCalender = (value: any, date?: Date | string): Calende
             duration = Math.floor(duration / 60);
             count++;
         }
-
     });
 
 
@@ -97,10 +105,10 @@ export const FormatDataForCalender = (value: any, date?: Date | string): Calende
 
     calenderDataObjectType[key] = allHours;
     return calenderDataObjectType;
-}
+};
 
 export const FormateDataForTasks = (value: any) => {
-    const responseData: Array<TasksDataDto> = []
+    const responseData: Array<TasksDataDto> = [];
 
     value.forEach((booking: any) => {
         const { cafm_Case = null, msdyn_workorder } = booking;
@@ -115,8 +123,8 @@ export const FormateDataForTasks = (value: any) => {
             estimated_travel_time: booking?.msdyn_estimatedtravelduration,
             total_time: booking?.duration,
             responseType: msdyn_workorder?.msdyn_workordertype?.msdyn_name,
-        })
+        });
     });
 
     return responseData;
-}
+};

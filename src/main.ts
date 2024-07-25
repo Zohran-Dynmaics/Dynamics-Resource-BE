@@ -18,13 +18,12 @@ async function bootstrap() {
     }),
   );
 
-  app.use(cookieParser())
+  app.use(cookieParser());
 
   app.useGlobalInterceptors(new ResponseInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter());
   app.enableCors();
-  app.setGlobalPrefix("api/v0")
-
+  app.setGlobalPrefix("api/v0");
 
   const port = configService.get("APP_PORT") || 3000;
   await app.listen(port, () => {

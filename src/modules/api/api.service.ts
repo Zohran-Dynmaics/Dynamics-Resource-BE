@@ -8,8 +8,8 @@ import { formatCrmError } from "src/shared/utility/utility";
 export class ApiService {
   constructor(
     @Inject(forwardRef(() => CmsService))
-    private readonly cmsService: CmsService
-  ) { }
+    private readonly cmsService: CmsService,
+  ) {}
 
   isTokenExpired(error: any) {
     return (
@@ -27,11 +27,11 @@ export class ApiService {
       });
     } catch (error) {
       if (this.isTokenExpired(error)) {
-        console.log("here")
+        console.log("here");
         const expiredToken = await this.cmsService.refreshCrmToken(
-          error.config.headers.Authorization.split(" ")[1]
+          error.config.headers.Authorization.split(" ")[1],
         );
-        console.log("🚀 ~ ApiService ~ request ~ expiredToken:", expiredToken)
+        console.log("🚀 ~ ApiService ~ request ~ expiredToken:", expiredToken);
         config.headers.Authorization = `Bearer ${expiredToken}`;
         response = await axios.request(config).then((res) => {
           return res.data;
@@ -49,16 +49,16 @@ export class ApiService {
     method: HTTPS_METHODS,
     token: string,
     params?: string,
-    data?: any
+    data?: any,
   ): AxiosRequestConfig {
     const config: AxiosRequestConfig = {
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
       method,
       url,
       params,
-      data
+      data,
     };
     return config;
   }
