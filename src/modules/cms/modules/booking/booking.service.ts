@@ -80,7 +80,7 @@ export class BookingService {
     );
     try {
       const { value }: any = await this.apiService.request(config);
-      return FormatDataForCalender(value);
+      return FormatDataForCalender(value, date);
     } catch (error) {
       throw error;
     }

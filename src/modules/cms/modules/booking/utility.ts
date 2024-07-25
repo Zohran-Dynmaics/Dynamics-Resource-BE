@@ -27,20 +27,42 @@ export const countBookings = (bookings) => {
     return taskCountDto;
 }
 
-export const FormatDataForCalender = (value: any): CalenderDataObjectType => {
-    //("🚀 ~ FormatDataForCalender ~ value:", value)
-    const calenderDataObjectType = new CalenderDataObjectType();
-    if (value.length == 0) return calenderDataObjectType;
-    const responseData = {}
-    let key;
+export const FormatDataForCalender = (value: any, date?: Date | string): CalenderDataObjectType => {
 
+    const allHours = Array.from({ length: 24 }, (_, index) => {
+
+        let period = index < 12 ? 'AM' : 'PM';
+        let hour = index % 12;
+        hour = hour === 0 ? 12 : hour;
+
+        return ({
+            hour: index.toString(),
+            bookingId: null,
+            title: null,
+            bookingStatus: null,
+            reponseType: null,
+            time: `${hour}${period}`,
+            connectedToPrevious: false,
+            duration: null,
+            location: null,
+        })
+    });
+
+
+    const calenderDataObjectType = new CalenderDataObjectType();
+
+    const responseData = {}
+    let key = moment(date).format('YYYY-MM-DD');
+    if (value.length == 0) {
+        calenderDataObjectType[key] = allHours;
+        return calenderDataObjectType;
+    }
 
 
     value.forEach((booking: any) => {
-        console.log("🚀 ~ value.forEach ~ booking:", booking?.msdyn_workorder)
 
         const calenderDtoObject = new CalenderDataDto();
-        key = moment(booking?.starttime).format('YYYY-MM-DD');
+
         let count = 0;
 
         let duration = booking?.duration;
@@ -64,29 +86,14 @@ export const FormatDataForCalender = (value: any): CalenderDataObjectType => {
 
     });
 
-    const allHours = Array.from({ length: 24 }, (_, index) => {
 
-        let period = index < 12 ? 'AM' : 'PM';
-        let hour = index % 12;
-        hour = hour === 0 ? 12 : hour;
 
-        return ({
-            hour: index.toString(),
-            bookingId: null,
-            title: null,
-            bookingStatus: null,
-            reponseType: null,
-            time: `${hour}${period}`,
-            connectedToPrevious: false,
-            duration: null,
-            location: null,
-        })
-    });
-
-    responseData[key].forEach(booking => {
-        const hourIndex = parseInt(booking.hour, 10);
-        allHours[hourIndex] = { ...booking };
-    });
+    if (value.length !== 0) {
+        responseData[key].forEach(booking => {
+            const hourIndex = parseInt(booking.hour, 10);
+            allHours[hourIndex] = { ...booking };
+        });
+    }
 
     calenderDataObjectType[key] = allHours;
     return calenderDataObjectType;
