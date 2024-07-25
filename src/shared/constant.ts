@@ -1,5 +1,6 @@
 import * as moment from "moment";
 import { getDayBoundaries } from "./utility/utility";
+import { TaskFilterDto } from "src/modules/cms/modules/booking/booking.dto";
 
 export const HASH_SALT = 10;
 export const CRM_VERSION = "v9.1";
@@ -58,7 +59,7 @@ export const URLS_AND_QUERY_PARAMS = {
         GET: {
             BOOKINGS: {
                 endpoint: (base_url: string): string => `${base_url}${END_POINTS.BOOKABALE_RESOURCE_BOOKINGS}`,
-                query: (query: any | null, resourceId: string) => buildQueryParams(query, resourceId)
+                query: (query: TaskFilterDto | null, resourceId: string) => buildQueryParams(query, resourceId)
             },
             BOOKINGS_FOR_CALENDER: {
                 endpoint: (base_url: string): string => `${base_url}${END_POINTS.BOOKABALE_RESOURCE_BOOKINGS}`,

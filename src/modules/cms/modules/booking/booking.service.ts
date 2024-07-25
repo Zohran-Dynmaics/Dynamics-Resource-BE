@@ -4,7 +4,7 @@ import { ApiService } from "src/modules/api/api.service";
 import { URLS_AND_QUERY_PARAMS } from "src/shared/constant";
 import { HTTPS_METHODS } from "src/shared/enum";
 import { countBookings, FormatDataForCalender, FormateDataForTasks } from "./utility";
-import { CalenderDataObjectType, TasksCountDto, TasksDataDto } from "./booking.dto";
+import { CalenderDataObjectType, TaskFilterDto, TasksCountDto, TasksDataDto } from "./booking.dto";
 
 @Injectable()
 export class BookingService {
@@ -32,7 +32,7 @@ export class BookingService {
     token: string,
     base_url: string,
     resource_id: string,
-    params: any,
+    params: TaskFilterDto,
   ): Promise<Array<TasksDataDto>> {
     const { endpoint, query } = URLS_AND_QUERY_PARAMS?.BOOKING?.GET?.BOOKINGS;
     const config: AxiosRequestConfig = this.apiService.getConfig(

@@ -1,8 +1,19 @@
 import { IsString, IsOptional, isString, IsNotEmpty, IsEnum, IsBoolean, IsNumber } from "class-validator";
 
-export class DateDto {
+
+
+export class BaseDateDto {
     @IsString()
+    date: Date | string;
+}
+
+export class OptionalDateDto extends BaseDateDto {
     @IsOptional()
+    date: Date | string;
+}
+
+export class RequiredDateDto extends BaseDateDto {
+    @IsNotEmpty()
     date: Date | string;
 }
 
@@ -18,7 +29,7 @@ export class TaskFilterDto {
     filter: FilterType;
 
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     workordertype?: string;
 }
 

@@ -28,6 +28,7 @@ export const countBookings = (bookings) => {
 }
 
 export const FormatDataForCalender = (value: any): CalenderDataObjectType => {
+    console.log("🚀 ~ FormatDataForCalender ~ value:", value)
     const calenderDataObjectType = new CalenderDataObjectType();
     if (value.length == 0) return calenderDataObjectType;
     const responseData = {}
