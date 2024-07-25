@@ -1,12 +1,11 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable
-} from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
 import { sendMail } from "src/shared/utility/mail.util";
-import { generateHash, getEnvironmentNameFromEmail } from "src/shared/utility/utility";
+import {
+  generateHash,
+  getEnvironmentNameFromEmail,
+} from "src/shared/utility/utility";
 import { EnvironmentService } from "../environment/environment.service";
 import { User } from "../users/users.entity";
 import { UsersService } from "../users/users.service";
@@ -18,10 +17,10 @@ import {
   TokenPayloadDto,
   UpdatePasswordDto,
   UpdatePasswordRequestDto,
-  VerifyOtpDto
+  VerifyOtpDto,
 } from "./auth.dto";
 import { OTP_EMAIL_TEMPLATE } from "./constants";
-const otpGenerator = require('otp-generator')
+const otpGenerator = require("otp-generator");
 
 @Injectable()
 export class AuthService {
@@ -29,27 +28,33 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private cmsService: CmsService,
-    private envService: EnvironmentService
-  ) { }
+    private envService: EnvironmentService,
+  ) {}
 
   async signup(signupDto: SignUpDto): Promise<ResponseSignUpDto> {
     try {
       const { username, password, env_name } = signupDto;
-      const user = await this.usersService.findByUsername(username.toLowerCase());
+      const user = await this.usersService.findByUsername(
+        username.toLowerCase(),
+      );
       if (user) {
         throw new HttpException("User already exists.", HttpStatus.BAD_REQUEST);
       }
-      const { userValidation } = await this.verifyUserOnCrm(username, password, env_name);
+      const { userValidation } = await this.verifyUserOnCrm(
+        username,
+        password,
+        env_name,
+      );
       if (!userValidation)
         throw new HttpException(
           "Not verified by CRM. Signup with CRM credentials.",
-          HttpStatus.BAD_REQUEST
+          HttpStatus.BAD_REQUEST,
         );
       const hashedPassword: string = await generateHash(password);
       return await this.usersService.create(
         username.toLowerCase(),
         hashedPassword,
-        userValidation.bookableresourceid
+        userValidation.bookableresourceid,
       );
     } catch (error) {
       throw error;
@@ -60,7 +65,7 @@ export class AuthService {
     try {
       const { username, password, env_name } = singinDto;
       let user: any = await this.usersService.findByUsername(
-        username.toLowerCase()
+        username.toLowerCase(),
       );
       if (!user) {
         user = await this.signup(singinDto);
@@ -69,7 +74,11 @@ export class AuthService {
       if (!isMatch) {
         throw new HttpException("Invalid credentials", HttpStatus.BAD_REQUEST);
       }
-      const { userValidation, env } = await this.verifyUserOnCrm(username, password, env_name);
+      const { userValidation, env } = await this.verifyUserOnCrm(
+        username,
+        password,
+        env_name,
+      );
       if (!userValidation)
         throw new HttpException("Not verified by CRM.", HttpStatus.BAD_REQUEST);
       const payload: TokenPayloadDto = {
@@ -82,8 +91,8 @@ export class AuthService {
         env: {
           _id: env?._id,
           base_url: env?.base_url,
-          name: env?.env_name
-        }
+          name: env?.env_name,
+        },
       };
       return { token: await this.generateToken(payload) };
     } catch (error) {
@@ -92,7 +101,9 @@ export class AuthService {
     }
   }
 
-  async updatePasswordRequest(updatePasswordReqDto: UpdatePasswordRequestDto): Promise<{ message: string }> {
+  async updatePasswordRequest(
+    updatePasswordReqDto: UpdatePasswordRequestDto,
+  ): Promise<{ message: string }> {
     try {
       const { username } = updatePasswordReqDto;
       const user = await this.usersService.findByEmail(username.toLowerCase());
@@ -100,10 +111,18 @@ export class AuthService {
         throw new HttpException("User not found.", HttpStatus.UNAUTHORIZED);
       }
 
-      const resetPasswordOtp = otpGenerator.generate(6, { upperCaseAlphabets: false, lowerCaseAlphabets: false, specialChars: false });
-      const resetPasswordOtpExpiry = new Date().setMinutes(new Date().getMinutes() + 5);
+      const resetPasswordOtp = otpGenerator.generate(6, {
+        upperCaseAlphabets: false,
+        lowerCaseAlphabets: false,
+        specialChars: false,
+      });
+      const resetPasswordOtpExpiry = new Date().setMinutes(
+        new Date().getMinutes() + 5,
+      );
 
-      await sendMail(OTP_EMAIL_TEMPLATE("zeerasheed97@gmail.com", resetPasswordOtp));
+      await sendMail(
+        OTP_EMAIL_TEMPLATE("zeerasheed97@gmail.com", resetPasswordOtp),
+      );
 
       user.resetPasswordOtp = resetPasswordOtp;
       user.resetPasswordOtpExpiry = new Date(resetPasswordOtpExpiry);
@@ -132,7 +151,9 @@ export class AuthService {
       user.resetPasswordOtp = null;
       user.resetPasswordOtpExpiry = null;
       await user.save();
-      return { message: "OTP verified successfully. You can change your password now." };
+      return {
+        message: "OTP verified successfully. You can change your password now.",
+      };
     } catch (error) {
       throw error;
     }
@@ -144,18 +165,22 @@ export class AuthService {
       const user = await this.usersService.findByEmail(username);
       if (!user) {
         throw new HttpException("User not found.", HttpStatus.UNAUTHORIZED);
-      }
-      else if (!user.resetPasswordRequested) {
-        throw new HttpException("You have not requested update password yet. Please follow the password reset flow first.", HttpStatus.BAD_REQUEST);
-      }
-      else if (user.resetPasswordRequested && user.resetPasswordOtp) {
-        throw new HttpException("Please verify your otp first.", HttpStatus.UNAUTHORIZED);
+      } else if (!user.resetPasswordRequested) {
+        throw new HttpException(
+          "You have not requested update password yet. Please follow the password reset flow first.",
+          HttpStatus.BAD_REQUEST,
+        );
+      } else if (user.resetPasswordRequested && user.resetPasswordOtp) {
+        throw new HttpException(
+          "Please verify your otp first.",
+          HttpStatus.UNAUTHORIZED,
+        );
       }
 
       return await this.usersService.update({
         _id: user._id,
         password,
-        resetPasswordRequested: false
+        resetPasswordRequested: false,
       });
     } catch (error) {
       throw error;
@@ -164,7 +189,7 @@ export class AuthService {
 
   async comparePasswords(
     password: string,
-    hashedPassword: string
+    hashedPassword: string,
   ): Promise<boolean> {
     return await bcrypt.compare(password, hashedPassword);
   }
@@ -172,24 +197,30 @@ export class AuthService {
   async generateToken(payload: any): Promise<string> {
     return await this.jwtService.signAsync(payload);
   }
-  async verifyUserOnCrm(username: string, password: string, env_name: string): Promise<any> {
+  async verifyUserOnCrm(
+    username: string,
+    password: string,
+    env_name: string,
+  ): Promise<any> {
     try {
-      const env = await this.envService.findByName(
-        env_name
-      );
-      const access_token = env?.token ?? (await this.cmsService.getCrmToken(env)).access_token;
+      const env = await this.envService.findByName(env_name);
+      const access_token =
+        env?.token ?? (await this.cmsService.getCrmToken(env)).access_token;
       //("🚀 ~ AuthService ~ verifyUserOnCrm ~ access_token:", access_token)
-      const { value } = await this.cmsService.getBookableResources(access_token, env?.base_url);
-      //("🚀 ~ AuthService ~ verifyUserOnCrm ~ value:", value)
-      const userValidation = value.find(
-        (user) => {
-          return username === user.plus_username && user.plus_password === password;
-        }
+      const { value } = await this.cmsService.getBookableResources(
+        access_token,
+        env?.base_url,
       );
+      //("🚀 ~ AuthService ~ verifyUserOnCrm ~ value:", value)
+      const userValidation = value.find((user) => {
+        return (
+          username === user.plus_username && user.plus_password === password
+        );
+      });
       if (!userValidation)
         throw new HttpException(
           "Not verified by CRM. SignUp/SignIn with CRM credentials.",
-          HttpStatus.BAD_REQUEST
+          HttpStatus.BAD_REQUEST,
         );
       return { userValidation, env };
     } catch (error) {
@@ -197,5 +228,4 @@ export class AuthService {
       throw error;
     }
   }
-
 }

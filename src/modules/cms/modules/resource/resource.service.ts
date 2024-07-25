@@ -6,7 +6,7 @@ import { mapGetResourceSlotsDtoToApiObject } from "./resource.mapper";
 
 @Injectable()
 export class ResourceService {
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
   async getBookableResource(
     token: string,

@@ -2,11 +2,14 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
-  NotFoundException
+  NotFoundException,
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
-import { generateHash, getEnvironmentNameFromEmail } from "src/shared/utility/utility";
+import {
+  generateHash,
+  getEnvironmentNameFromEmail,
+} from "src/shared/utility/utility";
 import { CmsService } from "../cms/cms.service";
 import { EnvironmentService } from "../environment/environment.service";
 import { SearchUserDto, UpdateUserDto } from "./users.dto";
@@ -14,7 +17,11 @@ import { User } from "./users.entity";
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>, private envService: EnvironmentService, private cmsService: CmsService) { }
+  constructor(
+    @InjectModel(User.name) private userModel: Model<User>,
+    private envService: EnvironmentService,
+    private cmsService: CmsService,
+  ) {}
 
   async create(username: string, password: string, resourceId: string) {
     return await this.userModel.create({ username, password, resourceId });
@@ -31,14 +38,21 @@ export class UsersService {
         updateUserDto.password = await generateHash(password);
 
         const env = await this.envService.findByName(
-          getEnvironmentNameFromEmail(user?.username)
+          getEnvironmentNameFromEmail(user?.username),
         );
-        const access_token = env?.token ?? (await this.cmsService.getCrmToken(env)).access_token;
+        const access_token =
+          env?.token ?? (await this.cmsService.getCrmToken(env)).access_token;
 
-        await this.cmsService.updateBookaableResource(access_token, env?.base_url, user?.resourceId, { cafm_password: password });
-
+        await this.cmsService.updateBookaableResource(
+          access_token,
+          env?.base_url,
+          user?.resourceId,
+          { cafm_password: password },
+        );
       }
-      return await this.userModel.findByIdAndUpdate(_id, { ...updateUserDto }, { new: true }).exec();
+      return await this.userModel
+        .findByIdAndUpdate(_id, { ...updateUserDto }, { new: true })
+        .exec();
     } catch (error) {
       throw error;
     }
@@ -51,7 +65,7 @@ export class UsersService {
         throw new NotFoundException(`User ${_id} not found`);
       }
       await this.userModel.findByIdAndDelete(_id).exec();
-      return true
+      return true;
     } catch (error) {
       throw error;
     }
@@ -74,7 +88,7 @@ export class UsersService {
       if (!Object.keys(searchUserDto).length) {
         throw new HttpException(
           "At least one search parameter should be provided. (_id, email, project)",
-          HttpStatus.BAD_REQUEST
+          HttpStatus.BAD_REQUEST,
         );
       }
 

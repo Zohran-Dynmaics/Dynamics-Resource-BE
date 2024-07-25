@@ -16,8 +16,7 @@ export class AuthMiddleware implements NestMiddleware {
     private jwtService: JwtService,
     private envService: EnvironmentService,
     private cmsService: CmsService,
-  ) { }
-
+  ) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
     try {
@@ -26,12 +25,13 @@ export class AuthMiddleware implements NestMiddleware {
         throw new HttpException("Token not found.", HttpStatus.BAD_REQUEST);
       }
       const token = authHeader.split(" ")[1];
-      const decodedToken: any = this.jwtService.verify(token)
+      const decodedToken: any = this.jwtService.verify(token);
       if (!decodedToken) {
         throw new HttpException("Invalid token", HttpStatus.UNAUTHORIZED);
       }
-      const env = await this.envService.findById(decodedToken?.env?._id)
-      const crmToken = env?.token ?? (await this.cmsService.getCrmToken(env)).access_token;
+      const env = await this.envService.findById(decodedToken?.env?._id);
+      const crmToken =
+        env?.token ?? (await this.cmsService.getCrmToken(env)).access_token;
       req["user"] = decodedToken.user;
       req["env"] = { ...decodedToken.env, token: crmToken };
       next();

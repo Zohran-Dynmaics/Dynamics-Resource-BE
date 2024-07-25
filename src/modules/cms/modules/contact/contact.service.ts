@@ -5,7 +5,7 @@ import { HTTPS_METHODS } from "src/shared/enum";
 
 @Injectable()
 export class ContactService {
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
   async getContact(
     token: string,

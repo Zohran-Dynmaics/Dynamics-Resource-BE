@@ -2,7 +2,7 @@ import {
   MiddlewareConsumer,
   Module,
   NestModule,
-  RequestMethod
+  RequestMethod,
 } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { MongooseModule } from "@nestjs/mongoose";
@@ -22,14 +22,14 @@ import { AuthMiddleware } from "./middleares/auth.middleware";
     UsersModule,
     ApiModule,
     CmsModule,
-    EnvironmentModule
-  ]
+    EnvironmentModule,
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
-      .exclude({ path: 'auth/(.*)', method: RequestMethod.ALL })
-      .forRoutes('*');
+      .exclude({ path: "auth/(.*)", method: RequestMethod.ALL })
+      .forRoutes("*");
   }
 }
