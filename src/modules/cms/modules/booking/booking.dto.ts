@@ -51,3 +51,45 @@ export class CalenderDataDto {
     @IsOptional()
     connectedToPrevious?: boolean = false;
 }
+
+export class TasksDataDto {
+    @IsString()
+    @IsNotEmpty()
+    ticket_no: string;
+
+    @IsString()
+    @IsNotEmpty()
+    title: string;
+
+    @IsString()
+    @IsNotEmpty()
+    priority: string;
+
+    @IsString()
+    @IsNotEmpty()
+    location: string;
+
+    @IsString()
+    @IsNotEmpty()
+    responseType: string;
+
+    @IsString()
+    @IsNotEmpty()
+    building: string;
+
+    @IsString()
+    @IsNotEmpty()
+    start_time: string;
+
+    @IsString()
+    @IsNotEmpty()
+    end_time: string;
+
+    @IsString()
+    @IsNotEmpty()
+    estimated_travel_time: string;
+
+    @IsString()
+    @IsNotEmpty()
+    total_time: string
+}
