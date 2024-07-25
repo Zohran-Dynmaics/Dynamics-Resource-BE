@@ -10,7 +10,7 @@ export const countBookings = (bookings) => {
     taskCountDto.total = bookings?.['@odata.count']
 
 
-    for (const booking of bookings) {
+    for (const booking of bookings?.value) {
         const bookingDate = moment(new Date(booking.starttime));
 
         if (bookingDate.isSame(today, 'day')) {
