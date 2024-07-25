@@ -28,27 +28,39 @@ export const countBookings = (bookings) => {
 }
 
 export const FormatDataForCalender = (value: any): CalenderDataObjectType => {
-    console.log("🚀 ~ FormatDataForCalender ~ value:", value)
     const calenderDataObjectType = new CalenderDataObjectType();
     if (value.length == 0) return calenderDataObjectType;
     const responseData = {}
     let key;
 
 
+
     value.forEach((booking: any) => {
+        console.log("🚀 ~ value.forEach ~ booking:", booking?.starttime)
+
         const calenderDtoObject = new CalenderDataDto();
-        calenderDtoObject.hour = moment(booking?.starttime).format('H');
-        calenderDtoObject.bookingId = booking?.bookableresourcebookingid;
-        calenderDtoObject.title = booking?.msdyn_workorder?.msdyn_serviceaccount?.name;
-        calenderDtoObject.bookingStatus = booking?.BookingStatus?.name;
-        calenderDtoObject.reponseType = booking?.msdyn_workorder?.msdyn_workordertype?.msdyn_name;
-        calenderDtoObject.time = moment(booking?.starttime).format('HH:mm A');
-        calenderDtoObject.connectedToPrevious = false;
         key = moment(booking?.starttime).format('YYYY-MM-DD');
-        if (!responseData[key]) {
-            responseData[key] = [];
+        let count = 0;
+
+        let duration = booking?.duration;
+        while (duration > 0) {
+            console.log("🚀 ~ value.forEach ~ count:", count, "--", duration)
+            // console.log(moment(booking?.starttime).format('H'), "--", moment(booking?.starttime).add(count, 'hours').format('H'))
+            calenderDtoObject.hour = moment(booking?.starttime).add(count, 'hours').format('H');
+            calenderDtoObject.bookingId = booking?.bookableresourcebookingid;
+            calenderDtoObject.title = booking?.msdyn_workorder?.msdyn_serviceaccount?.name;
+            calenderDtoObject.bookingStatus = booking?.BookingStatus?.name;
+            calenderDtoObject.reponseType = booking?.msdyn_workorder?.msdyn_workordertype?.msdyn_name;
+            calenderDtoObject.time = moment(booking?.starttime).format('HA');
+            calenderDtoObject.connectedToPrevious = count ? false : true;
+            if (!responseData[key]) {
+                responseData[key] = [];
+            }
+            responseData[key].push(calenderDtoObject);
+            duration = Math.floor(duration / 60);
+            count++;
         }
-        responseData[key].push(calenderDtoObject);
+
     });
 
     const allHours = Array.from({ length: 24 }, (_, index) => ({

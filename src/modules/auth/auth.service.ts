@@ -62,10 +62,12 @@ export class AuthService {
       let user: any = await this.usersService.findByUsername(
         username.toLowerCase()
       );
+      console.log("🚀 ~ AuthService ~ signin ~ user:", user)
       if (!user) {
         user = await this.signup(singinDto);
       }
       const isMatch = await this.comparePasswords(password, user.password);
+      console.log("🚀 ~ AuthService ~ signin ~ isMatch:", isMatch)
       if (!isMatch) {
         throw new HttpException("Invalid credentials", HttpStatus.BAD_REQUEST);
       }
@@ -87,6 +89,7 @@ export class AuthService {
       };
       return { token: await this.generateToken(payload) };
     } catch (error) {
+      console.log("🚀 ~ AuthService ~ signin ~ error:", error)
       throw error;
     }
   }
@@ -177,10 +180,12 @@ export class AuthService {
         env_name
       );
       const access_token = env?.token ?? (await this.cmsService.getCrmToken(env)).access_token;
+      console.log("🚀 ~ AuthService ~ verifyUserOnCrm ~ access_token:", access_token)
       const { value } = await this.cmsService.getBookableResources(access_token, env?.base_url);
+      console.log("🚀 ~ AuthService ~ verifyUserOnCrm ~ value:", value)
       const userValidation = value.find(
         (user) => {
-          return username === user.plus_username && user.plus_password === password;
+          return username === user.cafm_username && user.cafm_password === password;
         }
       );
       if (!userValidation)
@@ -190,6 +195,7 @@ export class AuthService {
         );
       return { userValidation, env };
     } catch (error) {
+      console.log("🚀 ~ AuthService ~ verifyUserOnCrm ~ error:", error)
       throw error;
     }
   }
