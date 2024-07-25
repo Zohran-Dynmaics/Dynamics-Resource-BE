@@ -2,7 +2,6 @@ import * as moment from "moment";
 import { CalenderDataDto, TasksDataDto } from "./booking.dto";
 
 export const countBookings = (bookings) => {
-    // '2024-05-16T00:00:00Z'
     const today = moment(new Date());
     const tomorrow = moment(today).add(1, 'day');
     const endOfWeek = moment(today).endOf('week');

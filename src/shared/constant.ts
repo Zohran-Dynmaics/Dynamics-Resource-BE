@@ -12,7 +12,7 @@ const DATES = {
     today: (date: Date) => getDayBoundaries(new Date(date).toISOString()),
     tomorrow: (date: Date) => {
         const tomorrow = new Date(date);
-        tomorrow.setDate(date.getDate() + 7);
+        tomorrow.setDate(date.getDate() + 1);
         return getDayBoundaries(tomorrow);
     },
     week: (date: Date) => {
