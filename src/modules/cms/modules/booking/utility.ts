@@ -1,5 +1,5 @@
 import * as moment from "moment";
-import { CalenderDataDto } from "./booking.dto";
+import { CalenderDataDto, TasksDataDto } from "./booking.dto";
 
 export const countBookings = (bookings) => {
     // '2024-05-16T00:00:00Z'
@@ -63,4 +63,26 @@ export const FormatDataForCalender = (value: any) => {
         });
 
     return allHours;
+}
+
+export const FormateDataForTasks = (value: any) => {
+    const responseData: Array<TasksDataDto> = []
+
+    value.forEach((booking: any) => {
+        const { cafm_Case = null, msdyn_workorder } = booking;
+        responseData.push({
+            ticket_no: cafm_Case?.ticketnumber || null,
+            title: cafm_Case?.title || null,
+            priority: cafm_Case?.priority || null,
+            location: msdyn_workorder?.msdyn_FunctionalLocation?.msdyn_name,
+            building: msdyn_workorder?.cafm_Building?.cafm_name,
+            start_time: booking?.starttime,
+            end_time: booking?.endtime,
+            estimated_travel_time: booking?.msdyn_estimatedtravelduration,
+            total_time: booking?.duration,
+            responseType: msdyn_workorder?.msdyn_workordertype?.msdyn_name,
+        })
+    });
+
+    return responseData;
 }
