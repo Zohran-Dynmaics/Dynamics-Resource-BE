@@ -4,6 +4,7 @@ import { ApiService } from "src/modules/api/api.service";
 import { URLS_AND_QUERY_PARAMS } from "src/shared/constant";
 import { HTTPS_METHODS } from "src/shared/enum";
 import { countBookings, FormatDataForCalender, FormateDataForTasks } from "./utility";
+import { TasksCountDto } from "./booking.dto";
 
 @Injectable()
 export class BookingService {
@@ -52,7 +53,7 @@ export class BookingService {
     token: string,
     base_url: string,
     resource_id: string,
-  ): Promise<any> {
+  ): Promise<TasksCountDto> {
     try {
       const config: AxiosRequestConfig = this.apiService.getConfig(
         `${base_url}api/data/v9.1/bookableresourcebookings?$filter=_resource_value eq ${resource_id}&$count=true`,
@@ -60,7 +61,7 @@ export class BookingService {
         token,
       );
       const apiRespnse: any = await this.apiService.request(config);
-      return { total: apiRespnse?.['@odata.count'], ...countBookings(apiRespnse?.value) };
+      return countBookings(apiRespnse);
     } catch (error) {
       throw error;
     }

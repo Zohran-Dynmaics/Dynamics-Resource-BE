@@ -1,4 +1,4 @@
-import { IsString, IsOptional, isString, IsNotEmpty, IsEnum, IsBoolean } from "class-validator";
+import { IsString, IsOptional, isString, IsNotEmpty, IsEnum, IsBoolean, IsNumber } from "class-validator";
 
 export class DateDto {
     @IsString()
@@ -92,4 +92,22 @@ export class TasksDataDto {
     @IsString()
     @IsNotEmpty()
     total_time: string
+}
+
+export class TasksCountDto {
+    @IsNumber()
+    @IsNotEmpty()
+    total: number = 0;
+
+    @IsNumber()
+    @IsNotEmpty()
+    today: number = 0;
+
+    @IsNumber()
+    @IsNotEmpty()
+    tomorrow: number = 0;
+
+    @IsNumber()
+    @IsNotEmpty()
+    week: number = 0;
 }

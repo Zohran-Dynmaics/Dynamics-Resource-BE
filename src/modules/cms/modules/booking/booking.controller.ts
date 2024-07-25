@@ -1,6 +1,6 @@
 import { Controller, Get, Query, Req } from "@nestjs/common";
 import { CustomRequest } from "src/shared/custom-interface";
-import { CalenderDataDto, DateDto, TaskFilterDto } from "./booking.dto";
+import { CalenderDataDto, DateDto, TaskFilterDto, TasksCountDto } from "./booking.dto";
 import { BookingService } from "./booking.service";
 
 @Controller("cms/bookableresourcebookings")
@@ -14,7 +14,7 @@ export class BookingController {
   }
 
   @Get("/booking-count")
-  async getTaskCount(@Req() req: CustomRequest): Promise<any> {
+  async getTaskCount(@Req() req: CustomRequest): Promise<TasksCountDto> {
     const { env, user } = req;
     return await this.bookingService.getTaskCount(env?.token, env?.base_url, user?.bookableresourceid);
   }
