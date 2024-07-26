@@ -21,7 +21,7 @@ export class UsersService {
     @InjectModel(User.name) private userModel: Model<User>,
     private envService: EnvironmentService,
     private cmsService: CmsService,
-  ) {}
+  ) { }
 
   async create(username: string, password: string, resourceId: string) {
     return await this.userModel.create({ username, password, resourceId });
@@ -47,7 +47,7 @@ export class UsersService {
           access_token,
           env?.base_url,
           user?.resourceId,
-          { cafm_password: password },
+          { plus_password: password },
         );
       }
       return await this.userModel

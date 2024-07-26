@@ -40,5 +40,5 @@ export class GetCrmTokenResponseDto {
 export class UpdateBookableResourceDto {
   @IsNotEmpty()
   @IsString()
-  cafm_password: string;
+  plus_password: string;
 }
