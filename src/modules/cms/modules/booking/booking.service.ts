@@ -94,7 +94,6 @@ export class BookingService {
     resource_id: string,
     date: Date | string,
   ): Promise<CalenderDataObjectType> {
-    console.log("endpoint(base_url)")
     const { endpoint, query } =
       URLS_AND_QUERY_PARAMS?.BOOKING?.GET?.BOOKINGS_FOR_CALENDER;
 

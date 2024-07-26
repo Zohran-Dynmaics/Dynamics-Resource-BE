@@ -146,7 +146,7 @@ export class TaskDetailDto {
 
     @IsString()
     @IsNotEmpty()
-    bookingId: string;
+    ticketId: string;
 
     @IsString()
     @IsNotEmpty()

@@ -105,7 +105,7 @@ export const FormatDataForTasks = (value: any) => {
         const { plus_case = null, msdyn_workorder } = booking;
 
         return {
-            bookingId: booking?.bookableresourcebookingid,
+            ticketId: booking?.bookableresourcebookingid,
             ticketNumber: plus_case?.ticketnumber || null,
             title: plus_case?.title || null,
             priority: plus_case?.prioritycode || null,
@@ -123,7 +123,7 @@ export const FormatDataForTasks = (value: any) => {
 export const FormateDataForTaskDetail = (value: any) => {
     const taskDetailDto = new TaskDetailDto();
 
-    taskDetailDto.bookingId = value?.bookableresourcebookingid || null;
+    taskDetailDto.ticketId = value?.bookableresourcebookingid || null;
     taskDetailDto.ticketNumber = value?.plus_case?.ticketnumber || null;
     taskDetailDto.title = value?.plus_case?.title || null;
     taskDetailDto.priority = value?.plus_case?.prioritycode || null;
