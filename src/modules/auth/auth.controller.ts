@@ -23,7 +23,7 @@ import { Response } from "express";
 
 @Controller("auth")
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
   @Get("azure-auth")
   async azureAuth(@Req() query: Request, @Res() res: Response): Promise<any> {
@@ -32,7 +32,6 @@ export class AuthController {
 
   @Post("sign-in")
   async signin(@Body() signinDto: SignInDto): Promise<any> {
-    console.log("🚀 ~ AuthController ~ signin ~ signinDto:", signinDto);
     return await this.authService.signin(signinDto);
   }
 

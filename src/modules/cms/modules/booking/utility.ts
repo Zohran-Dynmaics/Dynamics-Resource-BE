@@ -32,7 +32,6 @@ export const countBookings = (bookings) => {
 };
 
 export const FormatDataForCalender = (value: any, date?: Date | string): CalenderDataObjectType => {
-
     const allHours = Array.from({ length: 24 }, (_, index) => {
         let period = index < 12 ? 'AM' : 'PM';
         let hour = index % 12;
@@ -66,16 +65,15 @@ export const FormatDataForCalender = (value: any, date?: Date | string): Calende
 
         while (duration > 0) {
             const calenderDtoObject = new CalenderDataDto();
-
             const connectedToPrevious = count == 0 ? false : true;
             calenderDtoObject.hour = moment(booking?.starttime).add(count, "hours").format("H");
-            calenderDtoObject.bookingId = booking?.bookableresourcebookingid || null;
+            calenderDtoObject.bookingId = booking?.msdyn_workorder?.msdyn_name || null;
             calenderDtoObject.title = booking?.msdyn_workorder?.msdyn_serviceaccount?.name || null;
             calenderDtoObject.bookingStatus = booking?.BookingStatus?.name || null;
             calenderDtoObject.reponseType = booking?.msdyn_workorder?.msdyn_workordertype?.msdyn_name || null;
             calenderDtoObject.location = booking?.msdyn_workorder?.msdyn_FunctionalLocation?.msdyn_name || null;
             calenderDtoObject.duration = booking?.duration || null;
-            calenderDtoObject.time = moment(booking?.starttime).format("HA");
+            calenderDtoObject.time = moment(booking?.starttime).add(count, 'hours').format("hA");
             calenderDtoObject.connectedToPrevious = connectedToPrevious;
 
             if (!responseData[key]) {

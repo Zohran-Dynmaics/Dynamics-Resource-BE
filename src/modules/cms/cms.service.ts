@@ -18,7 +18,7 @@ export class CmsService {
   constructor(
     @Inject(forwardRef(() => ApiService)) private apiService: ApiService,
     private envService: EnvironmentService,
-  ) {}
+  ) { }
 
   async getCrmToken(
     getCrmTokenDto: GetCrmTokenDto,
@@ -112,9 +112,7 @@ export class CmsService {
   async refreshCrmToken(expiredToken: string): Promise<string> {
     try {
       const decodedToken: any = jwtDecode(expiredToken);
-      //("🚀 ~ CmsService ~ refreshCrmToken ~ decodedToken:", decodedToken)
       const env = await this.envService.findByBaseUrl(decodedToken.aud);
-      //("🚀 ~ CmsService ~ refreshCrmToken ~ env:", env)
       return (await this.getCrmToken(env)).access_token;
     } catch (error) {
       throw error;
