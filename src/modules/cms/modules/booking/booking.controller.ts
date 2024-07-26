@@ -5,6 +5,7 @@ import {
   CalenderDataObjectType,
   OptionalDateDto,
   RequiredDateDto,
+  TaskDetailDto,
   TaskFilterDto,
   TasksCountDto,
   TasksDataDto,
@@ -13,21 +14,8 @@ import { BookingService } from "./booking.service";
 
 @Controller("cms/bookableresourcebookings")
 export class BookingController {
-  constructor(private bookingService: BookingService) {}
+  constructor(private bookingService: BookingService) { }
 
-  @Get("")
-  async getTasksOfDay(
-    @Req() req: CustomRequest,
-    @Query() query: TaskFilterDto,
-  ): Promise<Array<TasksDataDto>> {
-    const { env, user } = req;
-    return await this.bookingService.getTasksOfDay(
-      env?.token,
-      env?.base_url,
-      user?.bookableresourceid,
-      query,
-    );
-  }
 
   @Get("/booking-count")
   async getTaskCount(@Req() req: CustomRequest): Promise<TasksCountDto> {
@@ -50,6 +38,30 @@ export class BookingController {
       env?.base_url,
       user?.bookableresourceid,
       date,
+    );
+  }
+
+  @Get("")
+  async getTasksOfDay(
+    @Req() req: CustomRequest,
+    @Query() query: TaskFilterDto,
+  ): Promise<Array<TasksDataDto>> {
+    const { env, user } = req;
+    return await this.bookingService.getTasksOfDay(
+      env?.token,
+      env?.base_url,
+      user?.bookableresourceid,
+      query,
+    );
+  }
+
+  @Get("/:id")
+  async getTaskById(@Req() req: CustomRequest): Promise<TaskDetailDto> {
+    const { env, params } = req;
+    return await this.bookingService.getTaskById(
+      env?.token,
+      env?.base_url,
+      params.id,
     );
   }
 

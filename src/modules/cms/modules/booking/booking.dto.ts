@@ -72,12 +72,17 @@ export class CalenderDataDto {
     @IsNotEmpty()
     time: string;
 
+
     @IsBoolean()
     @IsOptional()
     connectedToPrevious?: boolean;
 }
 
 export class TasksDataDto {
+    @IsString()
+    @IsNotEmpty()
+    task_id: string;
+
     @IsString()
     @IsNotEmpty()
     ticket_no: string;
@@ -135,6 +140,63 @@ export class TasksCountDto {
     @IsNumber()
     @IsNotEmpty()
     week: number = 0;
+}
+
+export class TaskDetailDto {
+
+    @IsString()
+    @IsNotEmpty()
+    bookingId: string;
+
+    @IsString()
+    @IsNotEmpty()
+    ticketNumber: string;
+
+    @IsString()
+    @IsNotEmpty()
+    title: string;
+
+    @IsString()
+    @IsNotEmpty()
+    priority: string;
+
+    @IsString()
+    @IsNotEmpty()
+    startTime: string;
+
+    @IsString()
+    @IsNotEmpty()
+    endTime: string;
+
+    @IsString()
+    @IsNotEmpty()
+    estimatedTravelTime: string;
+
+    @IsString()
+    @IsNotEmpty()
+    duration: string;
+
+    @IsString()
+    @IsNotEmpty()
+    workOrder: string;
+
+
+    @IsString()
+    @IsNotEmpty()
+    customerName: string;
+
+    @IsString()
+    @IsNotEmpty()
+    location: string;
+
+    @IsString()
+    @IsNotEmpty()
+    issue: string;
+
+
+    @IsString()
+    @IsNotEmpty()
+    description: string;
 }
 
 export class CalenderDataObjectType {

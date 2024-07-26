@@ -6,10 +6,12 @@ import { HTTPS_METHODS } from "src/shared/enum";
 import {
   countBookings,
   FormatDataForCalender,
-  FormateDataForTasks,
+  FormateDataForTaskDetail,
+  FormatDataForTasks,
 } from "./utility";
 import {
   CalenderDataObjectType,
+  TaskDetailDto,
   TaskFilterDto,
   TasksCountDto,
   TasksDataDto,
@@ -17,7 +19,7 @@ import {
 
 @Injectable()
 export class BookingService {
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService) { }
 
   async getAllBooking(
     token: string,
@@ -51,7 +53,18 @@ export class BookingService {
     );
     try {
       const { value }: any = await this.apiService.request(config);
-      return FormateDataForTasks(value);
+      return FormatDataForTasks(value);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getTaskById(token: string, base_url: string, task_id: string): Promise<TaskDetailDto> {
+    try {
+      const { endpoint, query } = URLS_AND_QUERY_PARAMS?.BOOKING?.GET?.BOOKING_DETAIL;
+      const config: AxiosRequestConfig = this.apiService.getConfig(`${endpoint(base_url, task_id)}${query()}`, HTTPS_METHODS.GET, token)
+      const apiResponse: any = await this.apiService.request(config);
+      return FormateDataForTaskDetail(apiResponse);
     } catch (error) {
       throw error;
     }
@@ -81,8 +94,10 @@ export class BookingService {
     resource_id: string,
     date: Date | string,
   ): Promise<CalenderDataObjectType> {
+    console.log("endpoint(base_url)")
     const { endpoint, query } =
       URLS_AND_QUERY_PARAMS?.BOOKING?.GET?.BOOKINGS_FOR_CALENDER;
+
     const config: AxiosRequestConfig = this.apiService.getConfig(
       `${endpoint(base_url)}${query(date, resource_id)}`,
       HTTPS_METHODS.GET,
