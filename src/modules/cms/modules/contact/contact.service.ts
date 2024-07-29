@@ -2,10 +2,11 @@ import { HttpException, Injectable } from "@nestjs/common";
 import { AxiosRequestConfig } from "axios";
 import { ApiService } from "src/modules/api/api.service";
 import { HTTPS_METHODS } from "src/shared/enum";
+import { formatContactList } from "./utility";
 
 @Injectable()
 export class ContactService {
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService) { }
 
   async getContact(
     token: string,
@@ -38,7 +39,8 @@ export class ContactService {
       query,
     );
     try {
-      return await this.apiService.request(config);
+      const { value }: any = await this.apiService.request(config);
+      return formatContactList(value);
     } catch (error) {
       throw error;
     }

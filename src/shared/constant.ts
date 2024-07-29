@@ -4,7 +4,7 @@ import { TaskFilterDto } from "src/modules/cms/modules/booking/booking.dto";
 
 export const HASH_SALT = 10;
 export const CRM_VERSION = "v9.1";
-const COMMON_URL = `api/data/${CRM_VERSION}`;
+export const COMMON_URL = `api/data/${CRM_VERSION}`;
 const END_POINTS = {
   BOOKABALE_RESOURCE_BOOKINGS: {
     endpoint: `${COMMON_URL}/bookableresourcebookings`,
