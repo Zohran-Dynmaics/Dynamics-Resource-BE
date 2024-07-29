@@ -32,7 +32,12 @@ export const countBookings = (bookings) => {
     return taskCountDto;
 };
 
-export const FormatDataForCalender = (value: any, date?: Date | string): CalenderDataObjectType => {
+
+function getRemainingMinutesInCurrentHour(time) {
+    return 60 - time.minutes();
+}
+
+function DummyCalenderDataForHours(): any {
     const allHours = Array.from({ length: 24 }, (_, index) => {
         const period = index < 12 ? 'AM' : 'PM';
         const hour = index % 12 || 12;
@@ -45,10 +50,18 @@ export const FormatDataForCalender = (value: any, date?: Date | string): Calende
             reponseType: null,
             time: `${hour}${period}`,
             connectedToPrevious: false,
+            startTime: null,
+            endTime: null,
             duration: null,
             location: null,
         };
     });
+
+    return allHours;
+}
+
+export const FormatDataForCalender = (value: any, date?: Date | string): CalenderDataObjectType => {
+    const allHours = DummyCalenderDataForHours();
 
 
     const calenderDataObjectType = new CalenderDataObjectType();
@@ -63,20 +76,37 @@ export const FormatDataForCalender = (value: any, date?: Date | string): Calende
     value.forEach((booking) => {
         let count = 0;
         let duration = booking?.duration;
+        const startTime = moment(booking?.starttime, "HH:mm");
+
+        let remainingMinutesInCurrentHour = getRemainingMinutesInCurrentHour(startTime);
+        let currentHour = startTime.hour();
 
         while (duration > 0) {
+
+            let durationPerHour;
+            if (remainingMinutesInCurrentHour >= duration) {
+                durationPerHour = duration;
+                duration = 0;
+            } else {
+                durationPerHour = remainingMinutesInCurrentHour;
+                duration -= remainingMinutesInCurrentHour;
+                currentHour++;
+                remainingMinutesInCurrentHour = 60;
+            }
+
             const calenderDtoObject = new CalenderDataDto();
             const connectedToPrevious = count !== 0;
 
             calenderDtoObject.hour = moment(booking?.starttime).add(count, "hours").format("H");
-            calenderDtoObject.bookingId = booking?.msdyn_workorder?.msdyn_name || null; // bookingId is work-order-no.
+            calenderDtoObject.bookingId = booking?.msdyn_workorder?.msdyn_name || null;
             calenderDtoObject.title = booking?.msdyn_workorder?.msdyn_serviceaccount?.name || null;
             calenderDtoObject.bookingStatus = booking?.BookingStatus?.name || null;
+            calenderDtoObject.startTime = moment(booking?.starttime).format("h:mmA");
+            calenderDtoObject.endTime = moment(booking?.endtime).format("h:mmA");
             calenderDtoObject.reponseType = booking?.msdyn_workorder?.msdyn_workordertype?.msdyn_name || null;
             calenderDtoObject.location = booking?.msdyn_workorder?.msdyn_FunctionalLocation?.msdyn_name || null;
-            calenderDtoObject.duration = booking?.duration || null;
+            calenderDtoObject.duration = durationPerHour || null;
             calenderDtoObject.time = moment(booking?.starttime).add(count, 'hours').format("hA");
-            calenderDtoObject.bookingStatus = booking?.BookingStatus?.name;
             calenderDtoObject.connectedToPrevious = connectedToPrevious;
 
             if (!responseData[key]) {
@@ -84,7 +114,6 @@ export const FormatDataForCalender = (value: any, date?: Date | string): Calende
             }
             responseData[key].push(calenderDtoObject);
 
-            duration -= 60;
             count++;
         }
     });
