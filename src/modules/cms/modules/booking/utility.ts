@@ -149,7 +149,7 @@ export const FormatDataForTasks = (value: any) => {
     });
 };
 
-export const FormateDataForTaskDetail = (value: any) => {
+export const FormatDataForTaskDetail = (value: any) => {
     const taskDetailDto = new TaskDetailDto();
 
     taskDetailDto.ticketId = value?.bookableresourcebookingid || null;

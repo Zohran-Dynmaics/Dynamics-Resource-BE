@@ -56,9 +56,9 @@ export class CalenderDataDto {
     @IsNotEmpty()
     bookingStatus: string;
 
-    @IsString()
+    @IsNumber()
     @IsNotEmpty()
-    duration: string;
+    duration: number;
 
     @IsString()
     @IsOptional()

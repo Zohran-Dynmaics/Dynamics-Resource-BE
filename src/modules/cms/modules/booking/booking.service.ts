@@ -6,7 +6,7 @@ import { HTTPS_METHODS } from "src/shared/enum";
 import {
   countBookings,
   FormatDataForCalender,
-  FormateDataForTaskDetail,
+  FormatDataForTaskDetail,
   FormatDataForTasks,
 } from "./utility";
 import {
@@ -64,7 +64,7 @@ export class BookingService {
       const { endpoint, query } = URLS_AND_QUERY_PARAMS?.BOOKING?.GET?.BOOKING_DETAIL;
       const config: AxiosRequestConfig = this.apiService.getConfig(`${endpoint(base_url, task_id)}${query()}`, HTTPS_METHODS.GET, token)
       const apiResponse: any = await this.apiService.request(config);
-      return FormateDataForTaskDetail(apiResponse);
+      return FormatDataForTaskDetail(apiResponse);
     } catch (error) {
       throw error;
     }
