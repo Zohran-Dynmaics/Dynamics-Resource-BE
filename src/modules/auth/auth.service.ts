@@ -29,7 +29,7 @@ export class AuthService {
     private jwtService: JwtService,
     private cmsService: CmsService,
     private envService: EnvironmentService,
-  ) {}
+  ) { }
 
   async signup(signupDto: SignUpDto): Promise<ResponseSignUpDto> {
     try {
@@ -94,7 +94,7 @@ export class AuthService {
           name: env?.env_name,
         },
       };
-      return { token: await this.generateToken(payload) };
+      return { token: await this.generateToken(payload), user };
     } catch (error) {
       //("🚀 ~ AuthService ~ signin ~ error:", error)
       throw error;
