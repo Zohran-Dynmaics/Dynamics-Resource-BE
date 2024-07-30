@@ -7,7 +7,8 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
     transform: (doc, ret) => {
       delete ret.password;
       delete ret.__v;
-      delete ret.resourceId;
+      delete ret.resetPasswordRequested;
+      delete ret.roles;
       return ret;
     },
   },
