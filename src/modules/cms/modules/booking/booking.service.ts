@@ -105,8 +105,7 @@ export class BookingService {
     );
     try {
       const apiResponse: any = await this.apiService.request(config);
-      const response = FormatDataForCalender(apiResponse, date)
-      return response;
+      return FormatDataForCalender(apiResponse, date);
     } catch (error) {
       throw error;
     }

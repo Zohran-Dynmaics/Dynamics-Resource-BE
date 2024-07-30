@@ -66,6 +66,7 @@ export const FormatDataForCalender = (apiResponse: any, date?: Date | string): a
 
     const calenderDataObjectType = new CalenderDataObjectType();
     const responseData = [];
+
     const key = moment(date).format('YYYY-MM-DD');
 
     if (value.length === 0) {
@@ -76,12 +77,11 @@ export const FormatDataForCalender = (apiResponse: any, date?: Date | string): a
     value.forEach((booking) => {
         let count = 0;
         let duration = booking?.duration;
-        const startTime = moment(booking?.starttime, "HH:mm");
-
+        const startTime = moment(booking.starttime).utc();
         let remainingMinutesInCurrentHour = getRemainingMinutesInCurrentHour(startTime);
         let currentHour = startTime.hour();
-
         while (duration > 0) {
+
 
             let durationPerHour;
             if (remainingMinutesInCurrentHour >= duration) {
@@ -97,16 +97,16 @@ export const FormatDataForCalender = (apiResponse: any, date?: Date | string): a
             const calenderDtoObject = new CalenderDataDto();
             const connectedToPrevious = count !== 0;
 
-            calenderDtoObject.hour = moment(booking?.starttime).add(count, "hours").format("H");
+            calenderDtoObject.hour = moment(booking?.starttime).utc().add(count, "hours").format("H");
             calenderDtoObject.bookingId = booking?.msdyn_workorder?.msdyn_name || null;
             calenderDtoObject.title = booking?.msdyn_workorder?.msdyn_serviceaccount?.name || null;
             calenderDtoObject.bookingStatus = booking?.BookingStatus?.name || null;
-            calenderDtoObject.startTime = moment(booking?.starttime).format("h:mmA");
-            calenderDtoObject.endTime = moment(booking?.endtime).format("h:mmA");
+            calenderDtoObject.startTime = moment(booking?.starttime).utc().format("h:mmA");
+            calenderDtoObject.endTime = moment(booking?.endtime).utc().format("h:mmA");
             calenderDtoObject.reponseType = booking?.msdyn_workorder?.msdyn_workordertype?.msdyn_name || null;
             calenderDtoObject.location = booking?.msdyn_workorder?.msdyn_FunctionalLocation?.msdyn_name || null;
             calenderDtoObject.duration = durationPerHour || null;
-            calenderDtoObject.time = moment(booking?.starttime).add(count, 'hours').format("hA");
+            calenderDtoObject.time = moment(booking?.starttime).utc().add(count, "hours").format("hA");
             calenderDtoObject.connectedToPrevious = connectedToPrevious;
 
             if (!responseData[key]) {
