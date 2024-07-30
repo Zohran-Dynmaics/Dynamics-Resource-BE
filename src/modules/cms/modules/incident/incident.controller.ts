@@ -14,7 +14,7 @@ import { CreateIncidentDto } from "./incident.dto";
 
 @Controller("cms/incidents")
 export class IncidentController {
-  constructor(private incidentService: IncidentService) {}
+  constructor(private incidentService: IncidentService) { }
 
   @Get("")
   async getIncidents(@Req() req: CustomRequest): Promise<any> {
@@ -69,14 +69,13 @@ export class IncidentController {
   ): Promise<any> {
     try {
       const { env, params } = req;
-      return await this.incidentService.updateIncident(
+      return await this.incidentService.patchIncident(
         env.token,
         env.base_url,
         params.incident_id,
         updateIncidentDto,
       );
     } catch (error) {
-      //("🚀 ~ IncidentController ~ error:", error)
       throw error;
     }
   }
