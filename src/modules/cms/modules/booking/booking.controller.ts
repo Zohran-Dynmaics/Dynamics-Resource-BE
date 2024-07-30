@@ -19,11 +19,12 @@ export class BookingController {
 
   @Get("/booking-count")
   async getTaskCount(@Req() req: CustomRequest): Promise<TasksCountDto> {
-    const { env, user } = req;
+    const { env, user, query } = req;
     return await this.bookingService.getTaskCount(
       env?.token,
       env?.base_url,
       user?.bookableresourceid,
+      query
     );
   }
 

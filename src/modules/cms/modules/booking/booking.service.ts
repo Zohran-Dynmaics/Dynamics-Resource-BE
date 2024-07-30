@@ -16,6 +16,7 @@ import {
   TasksCountDto,
   TasksDataDto,
 } from "./booking.dto";
+import { BOOKING_ENDPOINTS } from "./contant";
 
 @Injectable()
 export class BookingService {
@@ -26,11 +27,12 @@ export class BookingService {
     base_url: string,
     query?: any,
   ): Promise<any> {
+    const { endpoint, searchQuery } = BOOKING_ENDPOINTS.ALL_BOOKINGS;
     const config: AxiosRequestConfig = this.apiService.getConfig(
-      `${base_url}api/data/v9.1/bookableresourcebookings?`,
+      `${endpoint(base_url)}`,
       HTTPS_METHODS.GET,
       token,
-      query,
+      searchQuery(query) as string
     );
     try {
       return await this.apiService.request(config);
@@ -45,11 +47,12 @@ export class BookingService {
     resource_id: string,
     params: TaskFilterDto,
   ): Promise<Array<TasksDataDto>> {
-    const { endpoint, query } = URLS_AND_QUERY_PARAMS?.BOOKING?.GET?.BOOKINGS;
+    const { endpoint, searchQuery } = BOOKING_ENDPOINTS.ALL_BOOKINGS;
     const config: AxiosRequestConfig = this.apiService.getConfig(
-      `${endpoint(base_url)}${query(params, resource_id)}`,
+      `${endpoint(base_url)}`,
       HTTPS_METHODS.GET,
       token,
+      searchQuery({ $filter: `_resource_value eq ${resource_id}` }) as string
     );
     try {
       const { value }: any = await this.apiService.request(config);
@@ -59,10 +62,10 @@ export class BookingService {
     }
   }
 
-  async getTaskById(token: string, base_url: string, task_id: string): Promise<TaskDetailDto> {
+  async getTaskById(token: string, base_url: string, task_id: string, query?: any): Promise<TaskDetailDto> {
     try {
-      const { endpoint, query } = URLS_AND_QUERY_PARAMS?.BOOKING?.GET?.BOOKING_DETAIL;
-      const config: AxiosRequestConfig = this.apiService.getConfig(`${endpoint(base_url, task_id)}${query()}`, HTTPS_METHODS.GET, token)
+      const { endpoint, searchQuery } = BOOKING_ENDPOINTS.BOOKING;
+      const config: AxiosRequestConfig = this.apiService.getConfig(`${endpoint(base_url, task_id)}`, HTTPS_METHODS.GET, token, searchQuery(query) as string)
       const apiResponse: any = await this.apiService.request(config);
       return FormatDataForTaskDetail(apiResponse);
     } catch (error) {
@@ -74,12 +77,15 @@ export class BookingService {
     token: string,
     base_url: string,
     resource_id: string,
+    query?: any
   ): Promise<TasksCountDto> {
     try {
+      const { endpoint, searchQuery } = BOOKING_ENDPOINTS.ALL_BOOKINGS;
       const config: AxiosRequestConfig = this.apiService.getConfig(
-        `${base_url}api/data/v9.1/bookableresourcebookings?$filter=_resource_value eq ${resource_id}&$count=true`,
+        `${endpoint(base_url)}`,
         HTTPS_METHODS.GET,
         token,
+        searchQuery({ $filter: `_resource_value eq ${resource_id}` }) as string
       );
       const apiRespnse: any = await this.apiService.request(config);
       return countBookings(apiRespnse);

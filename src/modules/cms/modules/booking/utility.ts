@@ -13,7 +13,7 @@ export const countBookings = (bookings) => {
     const endOfWeek = moment(today).endOf("week");
 
     const taskCountDto = new TasksCountDto();
-    taskCountDto.total = bookings?.["@odata.count"];
+
 
     bookings?.value.forEach((booking) => {
         const bookingDate = moment(new Date(booking.starttime));
@@ -28,6 +28,7 @@ export const countBookings = (bookings) => {
             taskCountDto.week++;
         }
     });
+    taskCountDto.total = taskCountDto?.today + taskCountDto?.tomorrow + taskCountDto?.week;
 
     return taskCountDto;
 };

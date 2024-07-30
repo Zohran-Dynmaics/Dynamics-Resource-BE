@@ -1,6 +1,7 @@
 import * as bcrypt from "bcrypt";
 import { HASH_SALT } from "../constant";
 import { HttpException, HttpStatus } from "@nestjs/common";
+import { ParamsDto } from "src/modules/cms/cms.dto";
 const moment = require("moment");
 
 export const generateHash = async (input: string): Promise<string> => {
@@ -60,3 +61,82 @@ export const getEnvironmentNameFromEmail = (email: string): string => {
     throw error;
   }
 };
+
+
+export const mergeParams = (initial: ParamsDto, params: ParamsDto): ParamsDto => {
+  const mergedParams: ParamsDto = { ...initial };
+
+  if (params.$filter) {
+    mergedParams.$filter = initial.$filter ? `${initial.$filter},${params.$filter}` : params.$filter;
+  }
+
+  if (params.$select) {
+    mergedParams.$select = initial.$select ? `${initial.$select},${params.$select}` : params.$select;
+  }
+
+  if (params.$expand) {
+    const initialExpands = parseExpands(initial.$expand || "");
+    const paramExpands = parseExpands(params.$expand || "");
+
+    const mergedExpands = mergeExpands(initialExpands, paramExpands);
+    mergedParams.$expand = formatExpands(mergedExpands);
+  }
+
+  if (typeof params.$count !== 'undefined') {
+    mergedParams.$count = params.$count;
+  }
+
+  if (params.$top) {
+    mergedParams.$top = params.$top;
+  }
+
+  return mergedParams;
+}
+
+const parseExpands = (expand: string): { [key: string]: string[] } => {
+  const expandObj: { [key: string]: string[] } = {};
+  const expands = expand.split(',');
+
+  expands.forEach(e => {
+    const [entity, details] = e.split('($select=');
+    if (details) {
+      const [fields, nested] = details.split(';$expand=');
+      expandObj[entity] = fields.replace(')', '').split(',');
+
+      if (nested) {
+        expandObj[entity + ".$expand"] = nested.replace(')', '').split(';').map(x => x.split('=')[1]);
+      }
+    }
+  });
+
+  return expandObj;
+}
+
+const mergeExpands = (initial: { [key: string]: string[] }, params: { [key: string]: string[] }): { [key: string]: string[] } => {
+  const merged: { [key: string]: string[] } = { ...initial };
+
+  for (const key in params) {
+    if (merged[key]) {
+      merged[key] = Array.from(new Set([...merged[key], ...params[key]]));
+    } else {
+      merged[key] = params[key];
+    }
+  }
+
+  return merged;
+}
+
+const formatExpands = (expands: { [key: string]: string[] }): string => {
+  let formatted = "";
+
+  for (const entity in expands) {
+    if (entity.includes(".$expand")) {
+      const mainEntity = entity.split(".$expand")[0];
+      formatted = formatted.replace(mainEntity + ')', mainEntity + `;$expand=${expands[entity].join(',')})`);
+    } else {
+      formatted += `${entity}($select=${expands[entity].join(',')}),`;
+    }
+  }
+
+  return formatted.slice(0, -1);
+}
