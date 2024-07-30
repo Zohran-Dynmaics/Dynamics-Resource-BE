@@ -4,7 +4,7 @@ import { CustomRequest } from "src/shared/custom-interface";
 
 @Controller("cms/contacts")
 export class ContactController {
-  constructor(private readonly contactService: ContactService) {}
+  constructor(private readonly contactService: ContactService) { }
 
   @Get("")
   async getAllContacts(@Req() req: CustomRequest): Promise<any> {

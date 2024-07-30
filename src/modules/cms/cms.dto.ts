@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class GetCrmTokenDto {
   @IsNotEmpty({ message: "Tenant Id is required" })
@@ -41,4 +41,27 @@ export class UpdateBookableResourceDto {
   @IsNotEmpty()
   @IsString()
   plus_password: string;
+}
+
+
+export class ParamsDto {
+  @IsOptional()
+  @IsString()
+  $filter?: string;
+
+  @IsOptional()
+  @IsString()
+  $select?: string;
+
+  @IsOptional()
+  @IsString()
+  $expand?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  $count?: boolean;
+
+  @IsOptional()
+  @IsNumber()
+  $top?: number;
 }
