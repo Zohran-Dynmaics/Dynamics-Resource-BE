@@ -60,9 +60,9 @@ function DummyCalenderDataForHours(): any {
     return allHours;
 }
 
-export const FormatDataForCalender = (value: any, date?: Date | string): CalenderDataObjectType => {
+export const FormatDataForCalender = (apiResponse: any, date?: Date | string): any => {
     const allHours = DummyCalenderDataForHours();
-
+    const value: any = apiResponse?.value;
 
     const calenderDataObjectType = new CalenderDataObjectType();
     const responseData = [];
@@ -70,7 +70,7 @@ export const FormatDataForCalender = (value: any, date?: Date | string): Calende
 
     if (value.length === 0) {
         calenderDataObjectType[key] = allHours;
-        return calenderDataObjectType;
+        return { totalTasks: 0, ...calenderDataObjectType };
     }
 
     value.forEach((booking) => {
@@ -124,7 +124,8 @@ export const FormatDataForCalender = (value: any, date?: Date | string): Calende
     });
 
     calenderDataObjectType[key] = allHours;
-    return calenderDataObjectType;
+
+    return { totalTasks: apiResponse?.['@odata.count'], ...calenderDataObjectType };
 };
 
 export const FormatDataForTasks = (value: any) => {

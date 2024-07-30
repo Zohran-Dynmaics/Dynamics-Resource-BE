@@ -16,6 +16,7 @@ import {
   TasksCountDto,
   TasksDataDto,
 } from "./booking.dto";
+import { response } from "express";
 
 @Injectable()
 export class BookingService {
@@ -93,7 +94,7 @@ export class BookingService {
     base_url: string,
     resource_id: string,
     date: Date | string,
-  ): Promise<CalenderDataObjectType> {
+  ): Promise<any> {
     const { endpoint, query } =
       URLS_AND_QUERY_PARAMS?.BOOKING?.GET?.BOOKINGS_FOR_CALENDER;
 
@@ -103,8 +104,9 @@ export class BookingService {
       token,
     );
     try {
-      const { value }: any = await this.apiService.request(config);
-      return FormatDataForCalender(value, date);
+      const apiResponse: any = await this.apiService.request(config);
+      const response = FormatDataForCalender(apiResponse, date)
+      return response;
     } catch (error) {
       throw error;
     }
