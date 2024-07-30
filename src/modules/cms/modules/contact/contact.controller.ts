@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Patch, Req, UseGuards } from "@nestjs/common";
 import { ContactService } from "./contact.service";
 import { CustomRequest } from "src/shared/custom-interface";
 
@@ -23,6 +23,17 @@ export class ContactController {
       env.base_url,
       params.contact_id,
       query,
+    );
+  }
+
+  @Patch(":contact_id")
+  async patchContact(@Req() req: CustomRequest, @Body() body: any): Promise<any> {
+    const { env, params, query } = req;
+    return await this.contactService.patchContact(
+      env.token,
+      env.base_url,
+      params.contact_id,
+      body,
     );
   }
 }

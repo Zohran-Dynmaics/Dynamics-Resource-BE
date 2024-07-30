@@ -18,10 +18,10 @@ export const CONTACTS_ENDPOINTS = {
         endpoint: (baseUrl: string) => URL(baseUrl),
         searchQuery: query,
     },
-    CONTACT_DETAIL: {
+    CONTACT: {
         endpoint: (baseUrl: string, contactId: string) => `${URL(baseUrl)}(${contactId})`,
         searchQuery: query,
-    }
+    },
 }
 
 

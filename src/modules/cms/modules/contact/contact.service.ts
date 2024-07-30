@@ -15,7 +15,7 @@ export class ContactService {
     contact_id: string,
     query?: any,
   ): Promise<any> {
-    const { endpoint, searchQuery } = CONTACTS_ENDPOINTS.CONTACT_DETAIL;
+    const { endpoint, searchQuery } = CONTACTS_ENDPOINTS.CONTACT;
     const config: AxiosRequestConfig = this.apiService.getConfig(
       `${endpoint(base_url, contact_id)}`,
       HTTPS_METHODS.GET,
@@ -45,6 +45,30 @@ export class ContactService {
       const value: any = await this.apiService.request(config);
       return formatContactList(value?.value);
       // return value;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async patchContact(
+    token: string,
+    base_url: string,
+    contact_id: string,
+    data: any,
+  ): Promise<any> {
+
+    const { endpoint } = CONTACTS_ENDPOINTS.CONTACT;
+
+    const config: AxiosRequestConfig = this.apiService.getConfig(
+      `${endpoint(base_url, contact_id)}`,
+      HTTPS_METHODS.GET,
+      token,
+      null,
+      data,
+    );
+
+    try {
+      return await this.apiService.request(config);
     } catch (error) {
       throw error;
     }
