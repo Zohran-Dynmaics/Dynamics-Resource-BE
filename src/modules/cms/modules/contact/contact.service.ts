@@ -2,8 +2,8 @@ import { HttpException, Injectable } from "@nestjs/common";
 import { AxiosRequestConfig } from "axios";
 import { ApiService } from "src/modules/api/api.service";
 import { HTTPS_METHODS } from "src/shared/enum";
-import { formatContactList } from "./utility";
-import { CONTACTS_ENDPOINTS } from "./constant";
+import { formatContactList } from "./contact.utility";
+import { CONTACTS_ENDPOINTS } from "./contact.constant";
 
 @Injectable()
 export class ContactService {

@@ -9,7 +9,7 @@ import {
   FormatDataForTaskDetail,
   FormatDataForTasks,
   TaskOfDayFilter,
-} from "./utility";
+} from "./booking.utility";
 import {
   CalenderDataObjectType,
   TaskDetailDto,
@@ -17,7 +17,7 @@ import {
   TasksCountDto,
   TasksDataDto,
 } from "./booking.dto";
-import { BOOKING_ENDPOINTS } from "./contant";
+import { BOOKING_ENDPOINTS } from "./booking.constant";
 
 @Injectable()
 export class BookingService {
