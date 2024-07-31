@@ -209,4 +209,5 @@ export class TaskDetailDto {
 
 export class CalenderDataObjectType {
     [key: string]: Array<CalenderDataDto>;
+
 }
