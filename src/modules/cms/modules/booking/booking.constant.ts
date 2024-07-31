@@ -4,7 +4,8 @@ import { mergeParams } from "src/shared/utility/utility";
 import { Param } from '@nestjs/common';
 
 const initialQuery: ParamsDto = {
-    $expand: "msdyn_workorder($expand=msdyn_workordertype($select=msdyn_name),msdyn_FunctionalLocation($select=msdyn_name),msdyn_serviceaccount),BookingStatus($select=name),plus_case($expand=primarycontactid($select=fullname),msdyn_FunctionalLocation($select=msdyn_name))",
+    $select: "starttime,duration,endtime,msdyn_estimatedtravelduration",
+    $expand: "msdyn_workorder($select=msdyn_name;$expand=msdyn_workordertype($select=msdyn_name),msdyn_FunctionalLocation($select=msdyn_name),msdyn_serviceaccount($select=name)),BookingStatus($select=name),plus_case($select=ticketnumber,title,prioritycode;$expand=primarycontactid($select=fullname),msdyn_FunctionalLocation($select=msdyn_name),plus_problemissues($select=plus_name))",
     $count: true,
 }
 

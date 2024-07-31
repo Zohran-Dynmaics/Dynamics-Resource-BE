@@ -166,7 +166,7 @@ export const FormatDataForTaskDetail = (value: any) => {
     taskDetailDto.location = value?.plus_case?.msdyn_FunctionalLocation?.msdyn_name;
     taskDetailDto.workOrder = value?.msdyn_workorder?.msdyn_name || null;
     taskDetailDto.customerName = value?.plus_case?.primarycontactid?.fullname || null;
-    taskDetailDto.issue = "AC not working [HARD CODED VALUE]";
+    taskDetailDto.issue = value?.plus_case?.plus_problemissues?.plus_name;
     taskDetailDto.description = "AC is not working since last week [HARD CODED VALUE]"
 
     return taskDetailDto;
