@@ -6,6 +6,7 @@ import {
     CalenderDataObjectType,
     TaskDetailDto,
 } from "./booking.dto";
+import { DATES } from "src/shared/constant";
 
 export const countBookings = (bookings) => {
     const today = moment(new Date());
@@ -132,7 +133,7 @@ export const FormatDataForTasks = (value: any) => {
     if (!value.length) return [];
 
     return value.map((booking) => {
-        const { plus_case = null, msdyn_workorder } = booking;
+        const { plus_case, msdyn_workorder } = booking;
 
         return {
             ticketId: booking?.bookableresourcebookingid,
@@ -169,3 +170,22 @@ export const FormatDataForTaskDetail = (value: any) => {
 
     return taskDetailDto;
 };
+
+
+export const TaskOfDayFilter = (resource_id: string, filter?: string, workordertype?: string) => {
+
+
+    let queryString: string = `_resource_value eq ${resource_id}`;
+
+    if (workordertype) {
+        queryString +=
+            ` and msdyn_workorder/_msdyn_workordertype_value eq ${workordertype}`;
+    }
+    if (filter) {
+        const { startOfDay, endOfDay } = DATES[filter]();
+        queryString +=
+            ` and starttime ge ${startOfDay} and starttime lt ${endOfDay}`;
+    }
+
+    return queryString;
+}

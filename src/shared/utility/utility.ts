@@ -66,28 +66,25 @@ export const getEnvironmentNameFromEmail = (email: string): string => {
 export const mergeParams = (initial: ParamsDto, params: ParamsDto): ParamsDto => {
   const mergedParams: ParamsDto = { ...initial };
 
-  if (params.$filter) {
+
+  if (params?.$filter) {
     mergedParams.$filter = initial.$filter ? `${initial.$filter},${params.$filter}` : params.$filter;
   }
 
-  if (params.$select) {
+  if (params?.$select) {
     mergedParams.$select = initial.$select ? `${initial.$select},${params.$select}` : params.$select;
   }
 
-  if (params.$expand) {
-    const initialExpands = parseExpands(initial.$expand || "");
-    const paramExpands = parseExpands(params.$expand || "");
-
-    const mergedExpands = mergeExpands(initialExpands, paramExpands);
-    mergedParams.$expand = formatExpands(mergedExpands);
+  if (params?.$expand) {
+    mergedParams.$expand = params.$expand ?? initial?.$expand;
   }
 
-  if (typeof params.$count !== 'undefined') {
-    mergedParams.$count = params.$count;
+  if (typeof params?.$count !== 'undefined') {
+    mergedParams.$count = params?.$count;
   }
 
-  if (params.$top) {
-    mergedParams.$top = params.$top;
+  if (params?.$top) {
+    mergedParams.$top = params?.$top;
   }
 
   return mergedParams;

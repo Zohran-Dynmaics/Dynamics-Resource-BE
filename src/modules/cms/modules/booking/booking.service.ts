@@ -8,6 +8,7 @@ import {
   FormatDataForCalender,
   FormatDataForTaskDetail,
   FormatDataForTasks,
+  TaskOfDayFilter,
 } from "./utility";
 import {
   CalenderDataObjectType,
@@ -41,18 +42,21 @@ export class BookingService {
     }
   }
 
+
+
   async getTasksOfDay(
     token: string,
     base_url: string,
     resource_id: string,
-    params: TaskFilterDto,
+    taskFilterDto?: TaskFilterDto,
+    query?: any
   ): Promise<Array<TasksDataDto>> {
     const { endpoint, searchQuery } = BOOKING_ENDPOINTS.ALL_BOOKINGS;
     const config: AxiosRequestConfig = this.apiService.getConfig(
       `${endpoint(base_url)}`,
       HTTPS_METHODS.GET,
       token,
-      searchQuery({ $filter: `_resource_value eq ${resource_id}` }) as string
+      searchQuery({ $filter: TaskOfDayFilter(resource_id, taskFilterDto?.filter, taskFilterDto?.workordertype), ...query }) as string
     );
     try {
       const { value }: any = await this.apiService.request(config);
@@ -65,9 +69,9 @@ export class BookingService {
   async getTaskById(token: string, base_url: string, task_id: string, query?: any): Promise<TaskDetailDto> {
     try {
       const { endpoint, searchQuery } = BOOKING_ENDPOINTS.BOOKING;
-      const config: AxiosRequestConfig = this.apiService.getConfig(`${endpoint(base_url, task_id)}`, HTTPS_METHODS.GET, token, searchQuery(query) as string)
+      const config: AxiosRequestConfig = this.apiService.getConfig(`${endpoint(base_url, task_id)}`, HTTPS_METHODS.GET, token, searchQuery(query) as string);
       const apiResponse: any = await this.apiService.request(config);
-      return FormatDataForTaskDetail(apiResponse);
+      return Object.keys(query) ? FormatDataForTaskDetail(apiResponse) : apiResponse;
     } catch (error) {
       throw error;
     }
@@ -85,7 +89,7 @@ export class BookingService {
         `${endpoint(base_url)}`,
         HTTPS_METHODS.GET,
         token,
-        searchQuery({ $filter: `_resource_value eq ${resource_id}` }) as string
+        searchQuery({ $filter: `_resource_value eq ${resource_id}`, ...query }) as string
       );
       const apiRespnse: any = await this.apiService.request(config);
       return countBookings(apiRespnse);

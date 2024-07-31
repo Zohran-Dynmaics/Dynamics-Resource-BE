@@ -15,17 +15,17 @@ const END_POINTS = {
   },
 };
 
-const DATES = {
-  today: (date: Date) => getDayBoundaries(new Date(date).toISOString()),
-  tomorrow: (date: Date) => {
-    const tomorrow = new Date(date);
-    tomorrow.setDate(date.getDate() + 1);
+export const DATES = {
+  today: () => getDayBoundaries(new Date().toISOString()),
+  tomorrow: () => {
+    const tomorrow = new Date();
+    tomorrow.setDate(new Date().getDate() + 1);
     return getDayBoundaries(tomorrow);
   },
-  week: (date: Date) => {
-    const { startOfDay } = getDayBoundaries(new Date(date).toISOString());
-    const nextWeekDate = new Date(date);
-    nextWeekDate.setDate(date.getDate() + 7);
+  week: () => {
+    const { startOfDay } = getDayBoundaries(new Date().toISOString());
+    const nextWeekDate = new Date();
+    nextWeekDate.setDate(new Date().getDate() + 7);
     const { endOfDay } = getDayBoundaries(nextWeekDate);
 
     return { startOfDay, endOfDay };
@@ -43,13 +43,7 @@ const buildQueryParams = (
     $count: "true",
   };
 
-  if (query?.filter) {
-    const { startOfDay, endOfDay } = DATES[query?.filter](
-      date ? new Date(date) : new Date(),
-    );
-    params["$filter"] +=
-      ` and starttime ge ${startOfDay} and starttime lt ${endOfDay}`;
-  }
+
 
   if (query?.workordertype) {
     params["$filter"] +=

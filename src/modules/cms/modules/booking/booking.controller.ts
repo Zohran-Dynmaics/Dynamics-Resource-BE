@@ -16,7 +16,6 @@ import { BookingService } from "./booking.service";
 export class BookingController {
   constructor(private bookingService: BookingService) { }
 
-
   @Get("/booking-count")
   async getTaskCount(@Req() req: CustomRequest): Promise<TasksCountDto> {
     const { env, user, query } = req;
@@ -45,24 +44,26 @@ export class BookingController {
   @Get("")
   async getTasksOfDay(
     @Req() req: CustomRequest,
-    @Query() query: TaskFilterDto,
+    @Query() taskFilterDto: TaskFilterDto,
   ): Promise<Array<TasksDataDto>> {
-    const { env, user } = req;
+    const { env, user, query } = req;
     return await this.bookingService.getTasksOfDay(
       env?.token,
       env?.base_url,
       user?.bookableresourceid,
-      query,
+      taskFilterDto,
+      query
     );
   }
 
   @Get("/:id")
   async getTaskById(@Req() req: CustomRequest): Promise<TaskDetailDto> {
-    const { env, params } = req;
+    const { env, params, query } = req;
     return await this.bookingService.getTaskById(
       env?.token,
       env?.base_url,
       params.id,
+      query
     );
   }
 
