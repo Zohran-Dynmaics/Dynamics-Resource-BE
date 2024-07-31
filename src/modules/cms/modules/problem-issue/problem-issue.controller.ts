@@ -5,9 +5,9 @@ import { CustomRequest } from "src/shared/custom-interface";
 
 @Controller("cms")
 export class ProblemIssueController {
-  constructor(private problemIssueService: ProblemIssueService) {}
+  constructor(private problemIssueService: ProblemIssueService) { }
 
-  @Get("cafm_problemissues")
+  @Get("plus_problemissues")
   getAllProblemIssues(@Req() req: CustomRequest): Promise<any> {
     const { env, query } = req;
     return this.problemIssueService.getAllProblemIssues(
