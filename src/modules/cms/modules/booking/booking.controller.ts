@@ -9,6 +9,7 @@ import {
   TaskFilterDto,
   TasksCountDto,
   TasksDataDto,
+  TaskUpdateDto,
 } from "./booking.dto";
 import { BookingService } from "./booking.service";
 
@@ -78,7 +79,7 @@ export class BookingController {
   }
 
   @Patch("/:id")
-  async updateTask(@Req() req: CustomRequest, @Body() updateTaskDto: any): Promise<any> {
+  async updateTask(@Req() req: CustomRequest, @Body() updateTaskDto: TaskUpdateDto): Promise<any> {
     const { env, params } = req;
     return await this.bookingService.updateTask(
       env?.token,
@@ -87,4 +88,6 @@ export class BookingController {
       updateTaskDto,
     );
   }
+
+
 }

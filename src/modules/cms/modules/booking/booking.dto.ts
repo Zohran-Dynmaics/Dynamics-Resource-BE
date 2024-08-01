@@ -211,3 +211,9 @@ export class CalenderDataObjectType {
     [key: string]: Array<CalenderDataDto>;
 
 }
+
+export class TaskUpdateDto {
+    @IsString()
+    @IsOptional()
+    'BookingStatus@odata.bind': string;
+}

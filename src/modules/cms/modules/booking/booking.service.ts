@@ -8,7 +8,8 @@ import {
   TaskDetailDto,
   TaskFilterDto,
   TasksCountDto,
-  TasksDataDto
+  TasksDataDto,
+  TaskUpdateDto
 } from "./booking.dto";
 import {
   countBookings,
@@ -119,7 +120,7 @@ export class BookingService {
     }
   }
 
-  async updateTask(token: string, base_url: string, task_id: string, updateTaskDto: any): Promise<any> {
+  async updateTask(token: string, base_url: string, task_id: string, updateTaskDto: TaskUpdateDto): Promise<any> {
     try {
       const { endpoint } = BOOKING_ENDPOINTS.BOOKING;
       const config: AxiosRequestConfig = this.apiService.getConfig(
