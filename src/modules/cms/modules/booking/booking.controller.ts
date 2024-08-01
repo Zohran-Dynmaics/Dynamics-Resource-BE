@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Req } from "@nestjs/common";
+import { Body, Controller, Get, Patch, Query, Req } from "@nestjs/common";
 import { CustomRequest } from "src/shared/custom-interface";
 import {
   CalenderDataDto,
@@ -74,6 +74,17 @@ export class BookingController {
       env.token,
       env.base_url,
       query,
+    );
+  }
+
+  @Patch("/:id")
+  async updateTask(@Req() req: CustomRequest, @Body() updateTaskDto: any): Promise<any> {
+    const { env, params } = req;
+    return await this.bookingService.updateTask(
+      env?.token,
+      env?.base_url,
+      params?.id,
+      updateTaskDto,
     );
   }
 }

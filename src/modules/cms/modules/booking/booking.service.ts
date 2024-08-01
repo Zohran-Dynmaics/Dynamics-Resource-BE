@@ -3,6 +3,13 @@ import { AxiosRequestConfig } from "axios";
 import { ApiService } from "src/modules/api/api.service";
 import { URLS_AND_QUERY_PARAMS } from "src/shared/constant";
 import { HTTPS_METHODS } from "src/shared/enum";
+import { BOOKING_ENDPOINTS } from "./booking.constant";
+import {
+  TaskDetailDto,
+  TaskFilterDto,
+  TasksCountDto,
+  TasksDataDto
+} from "./booking.dto";
 import {
   countBookings,
   FormatDataForCalender,
@@ -10,14 +17,6 @@ import {
   FormatDataForTasks,
   TaskOfDayFilter,
 } from "./booking.utility";
-import {
-  CalenderDataObjectType,
-  TaskDetailDto,
-  TaskFilterDto,
-  TasksCountDto,
-  TasksDataDto,
-} from "./booking.dto";
-import { BOOKING_ENDPOINTS } from "./booking.constant";
 
 @Injectable()
 export class BookingService {
@@ -115,6 +114,23 @@ export class BookingService {
     try {
       const apiResponse: any = await this.apiService.request(config);
       return FormatDataForCalender(apiResponse, date);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateTask(token: string, base_url: string, task_id: string, updateTaskDto: any): Promise<any> {
+    try {
+      const { endpoint } = BOOKING_ENDPOINTS.BOOKING;
+      const config: AxiosRequestConfig = this.apiService.getConfig(
+        `${endpoint(base_url, task_id)}`,
+        HTTPS_METHODS.PATCH,
+        token,
+        null,
+        updateTaskDto
+      );
+      await this.apiService.request(config);
+      return new Date();
     } catch (error) {
       throw error;
     }

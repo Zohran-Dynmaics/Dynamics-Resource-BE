@@ -4,7 +4,7 @@ import { CustomRequest } from "src/shared/custom-interface";
 
 @Controller("cms")
 export class WorkOrderController {
-  constructor(private workOrderService: WorkOrderService) {}
+  constructor(private workOrderService: WorkOrderService) { }
 
   @Get("msdyn_workordertypes")
   async getWorkOrderTypes(@Req() req: CustomRequest) {
@@ -13,5 +13,11 @@ export class WorkOrderController {
       env?.token,
       env?.base_url,
     );
+  }
+
+  @Get("msdyn_workorderproducts")
+  async getWorkOrderProducts(@Req() req: CustomRequest) {
+    const { env } = req;
+    return await this.workOrderService.getWorkOrderProducts(env?.token, env?.base_url);
   }
 }

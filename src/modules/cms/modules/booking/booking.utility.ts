@@ -158,7 +158,7 @@ export const FormatDataForTaskDetail = (value: any) => {
     taskDetailDto.ticketId = value?.bookableresourcebookingid || null;
     taskDetailDto.ticketNumber = value?.plus_case?.ticketnumber || null;
     taskDetailDto.title = value?.plus_case?.title || null;
-    taskDetailDto.priority = value?.plus_case?.prioritycode || null;
+    taskDetailDto.priority = value?.msdyn_workorder?.msdyn_priority?.msdyn_name || null;
     taskDetailDto.startTime = value?.starttime || null;
     taskDetailDto.endTime = value?.endtime || null;
     taskDetailDto.estimatedTravelTime = value?.msdyn_estimatedtravelduration || null;
@@ -167,7 +167,7 @@ export const FormatDataForTaskDetail = (value: any) => {
     taskDetailDto.workOrder = value?.msdyn_workorder?.msdyn_name || null;
     taskDetailDto.customerName = value?.plus_case?.primarycontactid?.fullname || null;
     taskDetailDto.issue = value?.plus_case?.plus_problemissues?.plus_name;
-    taskDetailDto.description = "AC is not working since last week [HARD CODED VALUE]"
+    taskDetailDto.description = value?.BookingStatus?.description ?? "BookingStatus description not available";
 
     return taskDetailDto;
 };
