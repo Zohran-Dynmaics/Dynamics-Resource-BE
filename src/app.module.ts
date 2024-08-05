@@ -14,6 +14,7 @@ import { EnvironmentModule } from "./modules/environment/environment.module";
 import { EnvironmentService } from "./modules/environment/environment.service";
 import { CmsService } from "./modules/cms/cms.service";
 import { AuthMiddleware } from "./middleares/auth.middleware";
+import { OpenaiModule } from './modules/openai/openai.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -23,6 +24,7 @@ import { AuthMiddleware } from "./middleares/auth.middleware";
     ApiModule,
     CmsModule,
     EnvironmentModule,
+    OpenaiModule,
   ],
 })
 export class AppModule implements NestModule {

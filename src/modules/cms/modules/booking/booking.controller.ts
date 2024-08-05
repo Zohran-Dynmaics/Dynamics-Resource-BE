@@ -34,7 +34,7 @@ export class BookingController {
     @Query() { date }: RequiredDateDto,
   ): Promise<CalenderDataObjectType> {
     const { env, user } = req;
-    return await this.bookingService.getBookingsForCalender(
+    return await this.bookingService.get_bookings_for_calender(
       env?.token,
       env?.base_url,
       user?.bookableresourceid,
@@ -43,12 +43,12 @@ export class BookingController {
   }
 
   @Get("")
-  async getTasksOfDay(
+  async get_tasks_of_day(
     @Req() req: CustomRequest,
     @Query() taskFilterDto: TaskFilterDto,
   ): Promise<Array<TasksDataDto>> {
     const { env, user, query } = req;
-    return await this.bookingService.getTasksOfDay(
+    return await this.bookingService.get_tasks_of_day(
       env?.token,
       env?.base_url,
       user?.bookableresourceid,
@@ -71,7 +71,7 @@ export class BookingController {
   @Get("all")
   async getContact(@Req() req: CustomRequest): Promise<any> {
     const { env, query } = req;
-    return await this.bookingService.getAllBooking(
+    return await this.bookingService.get_all_bookings(
       env.token,
       env.base_url,
       query,

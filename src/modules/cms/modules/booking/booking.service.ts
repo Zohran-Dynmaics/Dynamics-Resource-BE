@@ -23,7 +23,7 @@ import {
 export class BookingService {
   constructor(private apiService: ApiService) { }
 
-  async getAllBooking(
+  async get_all_bookings(
     token: string,
     base_url: string,
     query?: any,
@@ -44,7 +44,7 @@ export class BookingService {
 
 
 
-  async getTasksOfDay(
+  async get_tasks_of_day(
     token: string,
     base_url: string,
     resource_id: string,
@@ -98,7 +98,7 @@ export class BookingService {
     }
   }
 
-  async getBookingsForCalender(
+  async get_bookings_for_calender(
     token: string,
     base_url: string,
     resource_id: string,
