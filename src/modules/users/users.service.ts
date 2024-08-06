@@ -43,7 +43,6 @@ export class UsersService {
         if (!env) {
           throw new NotFoundException(`Environment not found for  ${user?.email}`);
         }
-        console.log("🚀 ~ UsersService ~ update ~ env:", env)
         const access_token =
           env?.token ?? (await this.cmsService.getCrmToken(env)).access_token;
 

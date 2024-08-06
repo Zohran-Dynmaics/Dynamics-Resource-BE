@@ -3,21 +3,23 @@ import { ApiService } from "src/modules/api/api.service";
 import { HTTPS_METHODS } from "src/shared/enum";
 import { GetResourceSlotsDto } from "./resource.dto";
 import { mapGetResourceSlotsDtoToApiObject } from "./resource.mapper";
+import { RESOURCE_ENDPOINTS } from "./resource.constant";
 
 @Injectable()
 export class ResourceService {
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService) { }
 
   async getBookableResource(
     token: string,
     base_url: string,
     query?: any,
   ): Promise<any> {
+    const { endpoint, searchQuery } = RESOURCE_ENDPOINTS.ALL_RESOURCES;
     const config = this.apiService.getConfig(
-      `${base_url}/api/data/v9.1/bookableresources`,
+      `${endpoint(base_url)}`,
       HTTPS_METHODS.GET,
       token,
-      query,
+      searchQuery as string,
     );
     try {
       return await this.apiService.request(config);

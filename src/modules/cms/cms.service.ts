@@ -24,7 +24,6 @@ export class CmsService {
     getCrmTokenDto: GetCrmTokenDto,
   ): Promise<GetCrmTokenResponseDto> {
     const { base_url, client_id, client_secret, tenant_id } = getCrmTokenDto;
-    //("🚀 ~ CmsService ~ base_url:", base_url)
     const env = await this.envService.findByBaseUrl(base_url);
     if (!env) {
       throw new Error("Environment not found");
