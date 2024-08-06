@@ -4,10 +4,14 @@ import { TokenUserDto } from "../users/users.dto";
 import { TokenEnvironmentDto } from "../environment/environment.dto";
 
 export class UpdatePasswordRequestDto {
+  @IsNotEmpty({ message: "Email should not be empty." })
+  @IsEmail()
+  email: string;
+}
+export class SignUpDto {
   @IsNotEmpty({ message: "Username should not be empty." })
   username: string;
-}
-export class SignUpDto extends UpdatePasswordRequestDto {
+
   @IsNotEmpty({ message: "Password should not be empty." })
   password: string;
 
@@ -15,11 +19,14 @@ export class SignUpDto extends UpdatePasswordRequestDto {
   env_name: string;
 }
 
-export class SignInDto extends SignUpDto {}
+export class SignInDto extends SignUpDto { }
 
-export class ResponseSignUpDto extends User {}
+export class ResponseSignUpDto extends User { }
 
-export class UpdatePasswordDto extends SignUpDto {}
+export class UpdatePasswordDto extends UpdatePasswordRequestDto {
+  @IsNotEmpty({ message: "Password should not be empty." })
+  password: string;
+}
 
 export class VerifyOtpDto extends UpdatePasswordRequestDto {
   @IsNotEmpty({ message: "OTP should not be empty." })

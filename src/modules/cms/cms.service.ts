@@ -77,12 +77,11 @@ export class CmsService {
 
   async getBookableResources(token: string, base_url: string): Promise<any> {
     const config: AxiosRequestConfig = this.apiService.getConfig(
-      `${base_url}/api/data/v9.1/bookableresources?$select=name,plus_password,plus_username`,
+      `${base_url}/api/data/v9.1/bookableresources?$select=name,plus_password,plus_username&$expand=UserId($select=fullname,caltype,isintegrationuser,islicensed;$expand=defaultmailbox($select=emailaddress))`,
       HTTPS_METHODS.GET,
       token,
     );
     try {
-      //("🚀 ~ CmsService ~ getBookableResources ~ config:", config)
       return await this.apiService.request(config);
     } catch (error) {
       throw error;

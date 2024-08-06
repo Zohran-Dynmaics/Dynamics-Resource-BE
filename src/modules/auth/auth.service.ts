@@ -20,6 +20,7 @@ import {
   VerifyOtpDto,
 } from "./auth.dto";
 import { OTP_EMAIL_TEMPLATE } from "./constants";
+import moment from "moment";
 const otpGenerator = require("otp-generator");
 
 @Injectable()
@@ -51,10 +52,13 @@ export class AuthService {
           HttpStatus.BAD_REQUEST,
         );
       const hashedPassword: string = await generateHash(password);
+      console.log(userValidation?.UserId?.defaultmailbox?.emailaddress)
       return await this.usersService.create(
         username.toLowerCase(),
         hashedPassword,
+        userValidation?.UserId?.defaultmailbox?.emailaddress || 'zeerasheed97@gmail.com',
         userValidation.bookableresourceid,
+        env_name.toLowerCase(),
       );
     } catch (error) {
       throw error;
@@ -105,8 +109,8 @@ export class AuthService {
     updatePasswordReqDto: UpdatePasswordRequestDto,
   ): Promise<{ message: string }> {
     try {
-      const { username } = updatePasswordReqDto;
-      const user = await this.usersService.findByEmail(username.toLowerCase());
+      const { email } = updatePasswordReqDto;
+      const user = await this.usersService.findByEmail(email.toLowerCase());
       if (!user) {
         throw new HttpException("User not found.", HttpStatus.UNAUTHORIZED);
       }
@@ -121,7 +125,7 @@ export class AuthService {
       );
 
       await sendMail(
-        OTP_EMAIL_TEMPLATE("zeerasheed97@gmail.com", resetPasswordOtp),
+        OTP_EMAIL_TEMPLATE(email, resetPasswordOtp),
       );
 
       user.resetPasswordOtp = resetPasswordOtp;
@@ -136,17 +140,26 @@ export class AuthService {
 
   async verifyOtp(verifyOtpDto: VerifyOtpDto): Promise<{ message: string }> {
     try {
-      const { username, otp } = verifyOtpDto;
-      const user = await this.usersService.findByEmail(username.toLowerCase());
+      const { email, otp } = verifyOtpDto;
+      const user = await this.usersService.findByEmail(email.toLowerCase());
       if (!user) {
         throw new HttpException("User not found.", HttpStatus.UNAUTHORIZED);
       }
-      if (new Date().getTime() > user.resetPasswordOtpExpiry.getTime()) {
+
+      const { resetPasswordOtp, resetPasswordOtpExpiry } = user;
+
+      if (!resetPasswordOtp) {
+        throw new HttpException("You already verified OTP or not requested password update yet.", HttpStatus.BAD_REQUEST);
+      }
+
+      if (new Date().getTime() > resetPasswordOtpExpiry.getTime()) {
         throw new HttpException("OTP expired.", HttpStatus.BAD_REQUEST);
       }
-      if (user.resetPasswordOtp !== otp) {
+
+      if (resetPasswordOtp !== otp) {
         throw new HttpException("Invalid OTP.", HttpStatus.BAD_REQUEST);
       }
+
 
       user.resetPasswordOtp = null;
       user.resetPasswordOtpExpiry = null;
@@ -161,8 +174,9 @@ export class AuthService {
 
   async updatePassword(updatePasswordDto: UpdatePasswordDto): Promise<User> {
     try {
-      const { username, password } = updatePasswordDto;
-      const user = await this.usersService.findByEmail(username);
+      const { email, password } = updatePasswordDto;
+      const user = await this.usersService.findByEmail(email);
+
       if (!user) {
         throw new HttpException("User not found.", HttpStatus.UNAUTHORIZED);
       } else if (!user.resetPasswordRequested) {
@@ -206,12 +220,10 @@ export class AuthService {
       const env = await this.envService.findByName(env_name);
       const access_token =
         env?.token ?? (await this.cmsService.getCrmToken(env)).access_token;
-      //("🚀 ~ AuthService ~ verifyUserOnCrm ~ access_token:", access_token)
       const { value } = await this.cmsService.getBookableResources(
         access_token,
         env?.base_url,
       );
-      //("🚀 ~ AuthService ~ verifyUserOnCrm ~ value:", value)
       const userValidation = value.find((user) => {
         return (
           username === user.plus_username && user.plus_password === password
@@ -224,7 +236,6 @@ export class AuthService {
         );
       return { userValidation, env };
     } catch (error) {
-      //("🚀 ~ AuthService ~ verifyUserOnCrm ~ error:", error)
       throw error;
     }
   }

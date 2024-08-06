@@ -23,8 +23,8 @@ export class UsersService {
     private cmsService: CmsService,
   ) { }
 
-  async create(username: string, password: string, resourceId: string) {
-    return await this.userModel.create({ username, password, resourceId });
+  async create(username: string, password: string, email: string, resourceId: string, envName: string) {
+    return await this.userModel.create({ username, password, email, resourceId, envName });
   }
 
   async update(updateUserDto: UpdateUserDto, crmToken?: string): Promise<User> {
@@ -38,8 +38,12 @@ export class UsersService {
         updateUserDto.password = await generateHash(password);
 
         const env = await this.envService.findByName(
-          getEnvironmentNameFromEmail(user?.username),
+          user?.envName,
         );
+        if (!env) {
+          throw new NotFoundException(`Environment not found for  ${user?.email}`);
+        }
+        console.log("🚀 ~ UsersService ~ update ~ env:", env)
         const access_token =
           env?.token ?? (await this.cmsService.getCrmToken(env)).access_token;
 

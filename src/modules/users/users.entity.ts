@@ -8,7 +8,9 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
       delete ret.password;
       delete ret.__v;
       delete ret.resetPasswordRequested;
-      delete ret.roles;
+      delete ret.resetPasswordOtp,
+        delete ret.resetPasswordOtpExpiry,
+        delete ret.roles;
       return ret;
     },
   },
@@ -19,6 +21,9 @@ export class User {
 
   @Prop({ type: String, required: true })
   password: string;
+
+  @Prop({ type: String, required: true, IsEmail: true })
+  email: string;
 
   @Prop({ type: String, required: true })
   resourceId: string;
@@ -34,6 +39,9 @@ export class User {
 
   @Prop({ type: Date, required: false })
   resetPasswordOtpExpiry?: Date;
+
+  @Prop({ type: String, required: true })
+  envName: string;
 
   @Prop({ type: String, required: true, default: UserRole.TECHNICIAN })
   roles: [];
