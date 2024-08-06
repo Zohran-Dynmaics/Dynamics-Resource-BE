@@ -29,7 +29,7 @@ export const countBookings = (bookings) => {
             taskCountDto.week++;
         }
     });
-    taskCountDto.total = taskCountDto?.today + taskCountDto?.tomorrow + taskCountDto?.week;
+    taskCountDto.total = bookings['@odata.count'];
 
     return taskCountDto;
 };
