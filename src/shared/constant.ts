@@ -10,7 +10,7 @@ const END_POINTS = {
     endpoint: `${COMMON_URL}/bookableresourcebookings`,
     params: {
       $expand:
-        "msdyn_workorder($expand=msdyn_workordertype($select=msdyn_name),msdyn_FunctionalLocation($select=msdyn_name),msdyn_serviceaccount),BookingStatus($select=name),plus_case($expand=primarycontactid($select=fullname),msdyn_FunctionalLocation($select=msdyn_name))",
+        "msdyn_workorder($expand=msdyn_workordertype($select=msdyn_name),msdyn_priority($select=msdyn_name),msdyn_FunctionalLocation($select=msdyn_name),msdyn_serviceaccount),BookingStatus($select=name),plus_case($expand=primarycontactid($select=fullname),msdyn_FunctionalLocation($select=msdyn_name))",
     }
   },
 };

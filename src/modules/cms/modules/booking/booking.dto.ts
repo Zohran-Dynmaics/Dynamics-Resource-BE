@@ -84,6 +84,10 @@ export class CalenderDataDto {
     @IsBoolean()
     @IsOptional()
     connectedToPrevious?: boolean;
+
+    @IsBoolean()
+    @IsOptional()
+    priority?: boolean;
 }
 
 export class TasksDataDto {

@@ -56,6 +56,7 @@ function DummyCalenderDataForHours(): any {
             endTime: null,
             duration: null,
             location: null,
+            priority: null,
         };
     });
 
@@ -110,6 +111,7 @@ export const FormatDataForCalender = (apiResponse: any, date?: Date | string): a
             calenderDtoObject.duration = durationPerHour || null;
             calenderDtoObject.time = moment(booking?.starttime).utc().add(count, "hours").format("hA");
             calenderDtoObject.connectedToPrevious = connectedToPrevious;
+            calenderDtoObject.priority = booking?.msdyn_workorder?.msdyn_priority?.msdyn_name || 'No priority'
 
             if (!responseData[key]) {
                 responseData[key] = [];
