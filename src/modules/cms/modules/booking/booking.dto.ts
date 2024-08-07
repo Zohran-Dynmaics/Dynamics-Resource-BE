@@ -46,7 +46,7 @@ export class CalenderDataDto {
 
     @IsString()
     @IsNotEmpty()
-    bookingId: string;
+    workOrderId: string;
 
     @IsString()
     @IsNotEmpty()
@@ -66,7 +66,7 @@ export class CalenderDataDto {
 
     @IsString()
     @IsOptional()
-    reponseType: null;
+    workOrderType: null;
 
     @IsString()
     @IsNotEmpty()

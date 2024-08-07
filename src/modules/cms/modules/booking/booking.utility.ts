@@ -102,13 +102,13 @@ export const FormatDataForCalender = (apiResponse: any, date?: Date | string): a
             const connectedToPrevious = count !== 0;
 
             calenderDtoObject.hour = moment(booking?.starttime).utc().add(count, "hours").format("H");
-            calenderDtoObject.bookingId = booking?.msdyn_workorder?.msdyn_name || null; // bookingId = Work Order Id
+            calenderDtoObject.workOrderId = booking?.msdyn_workorder?.msdyn_name || null;
             calenderDtoObject.caseId = booking?.plus_case?.ticketnumber || null; // caseId = plusCase-> ticketnumber
             calenderDtoObject.title = booking?.msdyn_workorder?.msdyn_serviceaccount?.name || null;
             calenderDtoObject.bookingStatus = booking?.BookingStatus?.name || null;
             calenderDtoObject.startTime = moment(booking?.starttime).utc().format("h:mmA");
             calenderDtoObject.endTime = moment(booking?.endtime).utc().format("h:mmA");
-            calenderDtoObject.reponseType = booking?.msdyn_workorder?.msdyn_workordertype?.msdyn_name || null;
+            calenderDtoObject.workOrderType = booking?.msdyn_workorder?.msdyn_workordertype?.msdyn_name || null;
             calenderDtoObject.location = booking?.msdyn_workorder?.msdyn_FunctionalLocation?.msdyn_name || null;
             calenderDtoObject.duration = durationPerHour || null;
             calenderDtoObject.time = moment(booking?.starttime).utc().add(count, "hours").format("hA");
