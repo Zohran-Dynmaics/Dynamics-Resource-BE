@@ -47,6 +47,7 @@ function DummyCalenderDataForHours(): any {
         return {
             hour: index.toString(),
             bookingId: null,
+            caseId: null,
             title: null,
             bookingStatus: null,
             reponseType: null,
@@ -101,7 +102,8 @@ export const FormatDataForCalender = (apiResponse: any, date?: Date | string): a
             const connectedToPrevious = count !== 0;
 
             calenderDtoObject.hour = moment(booking?.starttime).utc().add(count, "hours").format("H");
-            calenderDtoObject.bookingId = booking?.msdyn_workorder?.msdyn_name || null;
+            calenderDtoObject.bookingId = booking?.msdyn_workorder?.msdyn_name || null; // bookingId = Work Order Id
+            calenderDtoObject.caseId = booking?.plus_case?.ticketnumber || null; // caseId = plusCase-> ticketnumber
             calenderDtoObject.title = booking?.msdyn_workorder?.msdyn_serviceaccount?.name || null;
             calenderDtoObject.bookingStatus = booking?.BookingStatus?.name || null;
             calenderDtoObject.startTime = moment(booking?.starttime).utc().format("h:mmA");

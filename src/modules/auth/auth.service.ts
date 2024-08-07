@@ -52,11 +52,10 @@ export class AuthService {
           HttpStatus.BAD_REQUEST,
         );
       const hashedPassword: string = await generateHash(password);
-      console.log(userValidation?.UserId?.defaultmailbox?.emailaddress)
       return await this.usersService.create(
         username.toLowerCase(),
         hashedPassword,
-        userValidation?.UserId?.defaultmailbox?.emailaddress || 'zeerasheed97@gmail.com',
+        userValidation?.UserId?.defaultmailbox?.emailaddress,
         userValidation.bookableresourceid,
         env_name.toLowerCase(),
       );

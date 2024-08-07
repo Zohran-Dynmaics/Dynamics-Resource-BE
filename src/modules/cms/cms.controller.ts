@@ -6,14 +6,7 @@ import { CustomRequest } from "src/shared/custom-interface";
 
 @Controller("cms")
 export class CmsController {
-  constructor(private cmsService: CmsService) {}
-  /**
-   *
-   * TODO:
-   * 1. When user logs in to out system, get its email and password and compare it with the environment's user's credentials.
-   * 2. If user is a valid User, get the token for that respective environment and send it in response of that user.
-   * 3. If user is not a valid user, send an error message in response.
-   */
+  constructor(private cmsService: CmsService) { }
 
   @Post("crm-token")
   async crmToken(

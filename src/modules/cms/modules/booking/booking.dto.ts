@@ -50,6 +50,10 @@ export class CalenderDataDto {
 
     @IsString()
     @IsNotEmpty()
+    caseId: string;
+
+    @IsString()
+    @IsNotEmpty()
     title: string;
 
     @IsString()
