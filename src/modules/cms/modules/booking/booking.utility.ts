@@ -86,6 +86,7 @@ export const FormatDataForCalender = (apiResponse: any, date?: Date | string): a
         let remainingMinutesInCurrentHour = getRemainingMinutesInCurrentHour(startTime);
         let currentHour = startTime.hour();
         while (duration > 0) {
+            console.log("🚀 ~ value.forEach ~ duration:", duration)
 
 
             let durationPerHour;
