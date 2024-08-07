@@ -53,6 +53,7 @@ function DummyCalenderDataForHours(): any {
             workOrderType: null,
             time: `${hour}${period}`,
             connectedToPrevious: false,
+            travelTime: null,
             startTime: null,
             endTime: null,
             duration: null,
@@ -106,13 +107,14 @@ export const FormatDataForCalender = (apiResponse: any, date?: Date | string): a
             calenderDtoObject.caseId = booking?.plus_case?.ticketnumber || null; // caseId = plusCase-> ticketnumber
             calenderDtoObject.title = booking?.msdyn_workorder?.msdyn_serviceaccount?.name || null;
             calenderDtoObject.bookingStatus = booking?.BookingStatus?.name || null;
-            calenderDtoObject.startTime = moment(booking?.starttime).utc().format("h:mmA");
+            calenderDtoObject.startTime = moment(booking?.starttime).add(-booking?.msdyn_estimatedtravelduration, "minutes").utc().format("h:mmA");
             calenderDtoObject.endTime = moment(booking?.endtime).utc().format("h:mmA");
             calenderDtoObject.workOrderType = booking?.msdyn_workorder?.msdyn_workordertype?.msdyn_name || null;
             calenderDtoObject.location = booking?.msdyn_workorder?.msdyn_FunctionalLocation?.msdyn_name || null;
             calenderDtoObject.duration = durationPerHour || null;
             calenderDtoObject.time = moment(booking?.starttime).utc().add(count, "hours").format("hA");
             calenderDtoObject.connectedToPrevious = connectedToPrevious;
+            calenderDtoObject.travelTime = !connectedToPrevious ? booking?.msdyn_estimatedtravelduration : 0;
             calenderDtoObject.priority = booking?.msdyn_workorder?.msdyn_priority?.msdyn_name || 'No priority'
 
             if (!responseData[key]) {
@@ -123,7 +125,6 @@ export const FormatDataForCalender = (apiResponse: any, date?: Date | string): a
             count++;
         }
     });
-
     responseData[key]?.forEach((booking) => {
         const hourIndex = parseInt(booking.hour, 10);
         allHours[hourIndex] = { ...booking };

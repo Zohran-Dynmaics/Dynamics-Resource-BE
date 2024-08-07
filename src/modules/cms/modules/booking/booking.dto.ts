@@ -78,6 +78,10 @@ export class CalenderDataDto {
 
     @IsString()
     @IsNotEmpty()
+    travelTime: number;
+
+    @IsString()
+    @IsNotEmpty()
     startTime: string;
 
     @IsString()
