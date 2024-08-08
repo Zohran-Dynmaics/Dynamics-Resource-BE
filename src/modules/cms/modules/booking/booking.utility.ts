@@ -179,7 +179,8 @@ export const FormatDataForTaskDetail = (value: any) => {
 
 
 export const TaskOfDayFilter = (resource_id: string, filter?: string, workordertype?: string, query?: any) => {
-    query = query?.split(';')?.map(pair => pair?.split('='))?.map(pair => { return { [pair[0]]: pair[1] } })[0];
+    console.log("🚀 ~ TaskOfDayFilter ~ query:", typeof query)
+    query = typeof query === "string" ? query?.split(';')?.map(pair => pair?.split('='))?.map(pair => { return { [pair[0]]: pair[1] } })[0] : query;
 
     let queryString: string = `_resource_value eq ${resource_id}`;
 
