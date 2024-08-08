@@ -86,7 +86,6 @@ export const FormatDataForCalender = (apiResponse: any, date?: Date | string): a
         let remainingMinutesInCurrentHour = getRemainingMinutesInCurrentHour(startTime);
         let currentHour = startTime.hour();
         while (duration > 0) {
-            console.log("🚀 ~ value.forEach ~ duration:", duration)
 
 
             let durationPerHour;
@@ -108,7 +107,7 @@ export const FormatDataForCalender = (apiResponse: any, date?: Date | string): a
             calenderDtoObject.caseId = booking?.plus_case?.ticketnumber || null; // caseId = plusCase-> ticketnumber
             calenderDtoObject.title = booking?.msdyn_workorder?.msdyn_serviceaccount?.name || null;
             calenderDtoObject.bookingStatus = booking?.BookingStatus?.name || null;
-            calenderDtoObject.startTime = moment(booking?.starttime).add(-booking?.msdyn_estimatedtravelduration, "minutes").utc().format("h:mmA");
+            calenderDtoObject.startTime = moment(booking?.starttime).utc().format("h:mmA");
             calenderDtoObject.endTime = moment(booking?.endtime).utc().format("h:mmA");
             calenderDtoObject.workOrderType = booking?.msdyn_workorder?.msdyn_workordertype?.msdyn_name || null;
             calenderDtoObject.location = booking?.msdyn_workorder?.msdyn_FunctionalLocation?.msdyn_name || null;
