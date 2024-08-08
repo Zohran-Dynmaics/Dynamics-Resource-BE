@@ -12,12 +12,17 @@ import {
   UpdateBookableResourceDto,
 } from "./cms.dto";
 import { GRANT_TYPES } from "./constants";
+import { TokenEnvironmentDto } from "../environment/environment.dto";
+import { TokenUserDto } from "../users/users.dto";
+import { BookingService } from "./modules/booking/booking.service";
+import { TaskFilterDto } from "./modules/booking/booking.dto";
 
 @Injectable()
 export class CmsService {
   constructor(
     @Inject(forwardRef(() => ApiService)) private apiService: ApiService,
     private envService: EnvironmentService,
+    private bookingService: BookingService,
   ) { }
 
   async getCrmToken(
@@ -112,6 +117,35 @@ export class CmsService {
       const decodedToken: any = jwtDecode(expiredToken);
       const env = await this.envService.findByBaseUrl(decodedToken.aud);
       return (await this.getCrmToken(env)).access_token;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getHomeScreenData(env: TokenEnvironmentDto, user: TokenUserDto): Promise<any> {
+    try {
+      const { token, base_url } = env;
+      const { bookableresourceid } = user;
+      const returnData: any = {
+        reactiveCount: 0,
+        ppmCount: 0,
+        taskCount: 0,
+        rating: 0
+      }
+
+      const [taskCount, reactiveCount]: any = await Promise.all([
+
+        this.bookingService.getTasksOfDay(token, base_url, bookableresourceid),
+        this.bookingService.getTasksOfDay(token, base_url, bookableresourceid, { workordertype: "bc8d5111-b548-ef11-a316-6045bd14a33f" } as TaskFilterDto)
+      ]);
+
+      returnData.reactiveCount = reactiveCount?.length ?? 0;
+      returnData.taskCount = taskCount?.length ?? 0;
+
+      // TODO: Add other data retrieval here, such as PPM count and rating based on the bookableresourceid and user.
+
+      return returnData;
+
     } catch (error) {
       throw error;
     }
