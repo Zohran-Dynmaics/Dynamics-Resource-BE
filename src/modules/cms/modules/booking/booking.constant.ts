@@ -13,12 +13,12 @@ export const URL = (baseUrl: string) => `${baseUrl}${COMMON_URL}/bookableresourc
 export const BOOKING_ENDPOINTS = {
     ALL_BOOKINGS: {
         endpoint: (baseUrl: string) => URL(baseUrl),
-        searchQuery: (query: ParamsDto) => mergeParams(initialQuery, query),
-    },
-    BOOKING: {
-        endpoint: (baseUrl: string, bookingId: string) => `${URL(baseUrl)}(${bookingId})`,
-        searchQuery: (query: ParamsDto) => mergeParams(initialQuery, query),
-    },
-}
+        searchQuery: (query: ParamsDto) => mergeParams(initialQuery, query)
+        },
+        BOOKING: {
+            endpoint: (baseUrl: string, bookingId: string) => `${URL(baseUrl)}(${bookingId})`,
+            searchQuery: (query: ParamsDto) => mergeParams(initialQuery, query),
+        },
+    }
 
 

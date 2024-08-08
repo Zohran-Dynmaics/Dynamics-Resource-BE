@@ -56,7 +56,7 @@ export class BookingService {
       `${endpoint(base_url)}`,
       HTTPS_METHODS.GET,
       token,
-      searchQuery({ $filter: TaskOfDayFilter(resource_id, taskFilterDto?.filter, taskFilterDto?.workordertype), ...query }) as string
+      searchQuery({ $filter: TaskOfDayFilter(resource_id, taskFilterDto?.filter, taskFilterDto?.workordertype, query), ...query }) as string
     );
     try {
       const { value }: any = await this.apiService.request(config);

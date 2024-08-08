@@ -15,7 +15,7 @@ import { GRANT_TYPES } from "./constants";
 import { TokenEnvironmentDto } from "../environment/environment.dto";
 import { TokenUserDto } from "../users/users.dto";
 import { BookingService } from "./modules/booking/booking.service";
-import { TaskFilterDto } from "./modules/booking/booking.dto";
+import { FilterType, TaskFilterDto } from "./modules/booking/booking.dto";
 
 @Injectable()
 export class CmsService {
@@ -128,19 +128,23 @@ export class CmsService {
       const { bookableresourceid } = user;
       const returnData: any = {
         reactiveCount: 0,
-        ppmCount: 0,
+        todayPpm: 0,
+        totalPpm: 0,
         taskCount: 0,
         rating: 0
       }
 
-      const [taskCount, reactiveCount]: any = await Promise.all([
-
+      const [taskCount, reactiveCount, todayPpm, totalPpm]: any = await Promise.all([
         this.bookingService.getTasksOfDay(token, base_url, bookableresourceid),
-        this.bookingService.getTasksOfDay(token, base_url, bookableresourceid, { workordertype: "bc8d5111-b548-ef11-a316-6045bd14a33f" } as TaskFilterDto)
+        this.bookingService.getTasksOfDay(token, base_url, bookableresourceid, { filter: FilterType.today, workordertype: "bc8d5111-b548-ef11-a316-6045bd14a33f" } as TaskFilterDto),
+        this.bookingService.getTasksOfDay(token, base_url, bookableresourceid, { filter: FilterType.today }, "$filter=_plus_case_value eq null"),
+        this.bookingService.getTasksOfDay(token, base_url, bookableresourceid, null, "$filter=_plus_case_value eq null")
       ]);
 
       returnData.reactiveCount = reactiveCount?.length ?? 0;
       returnData.taskCount = taskCount?.length ?? 0;
+      returnData.todayPpm = todayPpm?.length ?? 0;
+      returnData.totalPpm = totalPpm?.length ?? 0;
 
       // TODO: Add other data retrieval here, such as PPM count and rating based on the bookableresourceid and user.
 

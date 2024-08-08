@@ -68,6 +68,7 @@ export const mergeParams = (initial: ParamsDto, params: ParamsDto): ParamsDto =>
 
 
   if (params?.$filter) {
+
     mergedParams.$filter = initial.$filter ? `${initial.$filter},${params.$filter}` : params.$filter;
   }
 
