@@ -58,6 +58,7 @@ export class AuthService {
         userValidation?.UserId?.defaultmailbox?.emailaddress,
         userValidation.bookableresourceid,
         env_name.toLowerCase(),
+        userValidation?.UserId?.title
       );
     } catch (error) {
       throw error;

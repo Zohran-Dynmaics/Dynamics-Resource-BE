@@ -23,8 +23,8 @@ export class UsersService {
     private cmsService: CmsService,
   ) { }
 
-  async create(username: string, password: string, email: string, resourceId: string, envName: string) {
-    return await this.userModel.create({ username, password, email, resourceId, envName });
+  async create(username: string, password: string, email: string, resourceId: string, envName: string, role: string) {
+    return await this.userModel.create({ username, password, email, resourceId, envName, role });
   }
 
   async update(updateUserDto: UpdateUserDto, crmToken?: string): Promise<User> {

@@ -8,9 +8,8 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
       delete ret.password;
       delete ret.__v;
       delete ret.resetPasswordRequested;
-      delete ret.resetPasswordOtp,
-        delete ret.resetPasswordOtpExpiry,
-        delete ret.roles;
+      delete ret.resetPasswordOtp;
+      delete ret.resetPasswordOtpExpiry;
       return ret;
     },
   },
@@ -44,7 +43,7 @@ export class User {
   envName: string;
 
   @Prop({ type: String, required: true, default: UserRole.TECHNICIAN })
-  roles: [];
+  role: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
