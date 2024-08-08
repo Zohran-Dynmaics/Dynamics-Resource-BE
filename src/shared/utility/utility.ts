@@ -42,8 +42,8 @@ export const getDayBoundaries = (
   date: Date | string,
 ): { startOfDay: string; endOfDay: string } => {
   try {
-    const startOfDay = moment(date).startOf("day").toISOString();
-    const endOfDay = moment(date).endOf("day").toISOString();
+    const startOfDay = date.toLocaleString();
+    const endOfDay = new Date(new Date(date).setUTCHours(23, 59, 59, 999)).toISOString()
     return { startOfDay, endOfDay };
   } catch (error) {
     throw error;
