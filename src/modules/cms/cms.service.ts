@@ -146,7 +146,6 @@ export class CmsService {
       returnData.todayPpm = todayPpm?.length ?? 0;
       returnData.totalPpm = totalPpm?.length ?? 0;
 
-      // TODO: Add other data retrieval here, such as PPM count and rating based on the bookableresourceid and user.
 
       return returnData;
 

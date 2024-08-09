@@ -27,13 +27,11 @@ export class ApiService {
       });
     } catch (error) {
       if (this.isTokenExpired(error)) {
-        const expiredToken = await this.cmsService.refreshCrmToken(
+        const token = await this.cmsService.refreshCrmToken(
           config.headers.Authorization.split(" ")[1],
         );
-        config.headers.Authorization = `Bearer ${expiredToken}`;
-        response = await axios.request(config).then((res) => {
-          return res.data;
-        });
+        config = this.getConfig(config?.url, config?.method as HTTPS_METHODS, token, config?.params, config?.data)
+        this.request(config);
       }
       const { message, status } = formatCrmError(error);
       throw new HttpException(message, status);
