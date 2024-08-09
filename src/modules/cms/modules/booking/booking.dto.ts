@@ -86,7 +86,15 @@ export class CalenderDataDto {
 
     @IsString()
     @IsNotEmpty()
+    startDate: string;
+
+    @IsString()
+    @IsNotEmpty()
     endTime: string;
+
+    @IsString()
+    @IsNotEmpty()
+    endDate: string;
 
 
     @IsBoolean()

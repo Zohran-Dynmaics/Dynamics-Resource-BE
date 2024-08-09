@@ -54,7 +54,9 @@ function DummyCalenderDataForHours(): any {
             time: `${hour}${period}`,
             connectedToPrevious: false,
             travelTime: null,
+            startDate: null,
             startTime: null,
+            endDate: null,
             endTime: null,
             duration: null,
             location: null,
@@ -108,7 +110,9 @@ export const FormatDataForCalender = (apiResponse: any, date?: Date | string): a
             calenderDtoObject.title = booking?.msdyn_workorder?.msdyn_serviceaccount?.name || null;
             calenderDtoObject.bookingStatus = booking?.BookingStatus?.name || null;
             calenderDtoObject.startTime = moment(booking?.starttime).utc().format("h:mmA");
+            calenderDtoObject.startDate = booking?.starttime;
             calenderDtoObject.endTime = moment(booking?.endtime).utc().format("h:mmA");
+            calenderDtoObject.endDate = booking?.endtime;
             calenderDtoObject.workOrderType = booking?.msdyn_workorder?.msdyn_workordertype?.msdyn_name || null;
             calenderDtoObject.location = booking?.msdyn_workorder?.msdyn_FunctionalLocation?.msdyn_name || null;
             calenderDtoObject.duration = durationPerHour || null;
