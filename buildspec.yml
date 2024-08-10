@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 20 # Specify Node.js version
+      nodejs: 20 # Specify Node.js version 20
     commands:
       - npm install -g yarn # Install Yarn globally
       - yarn install # Install dependencies using Yarn
