@@ -1,0 +1,27 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20 # Specify Node.js version
+    commands:
+      - npm install -g yarn # Install Yarn globally
+      - yarn install # Install dependencies using Yarn
+
+  build:
+    commands:
+      - yarn build # Build the project using Yarn
+
+  post_build:
+    commands:
+      - pm2 stop all || true # Stop any running instances of the app
+      - pm2 start dist/main.js --name "my-app" -- start:prod # Start the app using Yarn in production mode
+
+artifacts:
+  files:
+    - '**/*'
+
+cache:
+  paths:
+    - node_modules/**/* # Cache the node_modules directory to speed up builds
+
