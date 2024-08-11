@@ -4,49 +4,36 @@ import {
   Injectable,
   NestMiddleware,
 } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
 import { NextFunction, Request, Response } from "express";
-import { jwtDecode } from "jwt-decode";
+import { ApiService } from "src/modules/api/api.service";
 import { CmsService } from "src/modules/cms/cms.service";
 import { EnvironmentService } from "src/modules/environment/environment.service";
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
   constructor(
+    private jwtService: JwtService,
     private envService: EnvironmentService,
     private cmsService: CmsService,
   ) { }
-
-  isTokenExpired(exp: any) {
-    const currentTime = Math.floor(Date.now() / 1000);
-    return exp < currentTime;
-  }
 
   async use(req: Request, res: Response, next: NextFunction) {
     try {
       const authHeader: any = req?.headers?.authorization;
       if (!authHeader) {
-        throw new HttpException("Token not found.", HttpStatus.BAD_REQUEST);
+        throw new HttpException("Token not found.", HttpStatus.UNAUTHORIZED);
       }
-      let token = authHeader.split(" ")[1];
-      const decodedToken: any = jwtDecode(token);
-      const env = await this.envService.findByBaseUrl(decodedToken.aud);
-
-      req["crmToken"] = token;
-      req["env"] = env;
-
-      if (this.isTokenExpired(decodedToken.exp)) {
-        const { access_token: token } = await this.cmsService.getCrmToken(env);
-        req.headers.authorization = `Bearer ${token}`;
-        req["crmToken"] = token;
+      const token = authHeader.split(" ")[1];
+      const decodedToken: any = this.jwtService.verify(token);
+      if (!decodedToken) {
+        throw new HttpException("Invalid token", HttpStatus.UNAUTHORIZED);
       }
-
-      if (!env) {
-        throw new HttpException(
-          "Environment not found",
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-
+      const env = await this.envService.findById(decodedToken?.env?._id);
+      const crmToken =
+        env?.token ?? (await this.cmsService.getCrmToken(env)).access_token;
+      req["user"] = decodedToken.user;
+      req["env"] = { ...decodedToken.env, token: crmToken };
       next();
     } catch (error) {
       throw error;

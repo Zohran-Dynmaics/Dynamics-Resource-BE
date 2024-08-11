@@ -3,47 +3,47 @@ import { ResourceService } from "./resource.service";
 import { CustomRequest } from "src/shared/custom-interface";
 import { GetResourceSlotsDto } from "./resource.dto";
 
-@Controller("resource")
+@Controller("cms")
 export class ResourceController {
   constructor(private resourceService: ResourceService) { }
 
-  @Get("")
+  @Get("bookableresources")
   async getBookableResource(@Req() req: CustomRequest) {
-    const { crmToken, env, query } = req;
+    const { env, query } = req;
     return await this.resourceService.getBookableResource(
-      crmToken,
-      env.base_url,
+      env?.token,
+      env?.base_url,
       query,
     );
   }
-  @Get("categories")
+  @Get("bookableresourcecategories")
   async getBookableResourceCategories(@Req() req: CustomRequest) {
-    const { crmToken, env, query } = req;
+    const { env, query } = req;
     return await this.resourceService.getBookableResourceCategories(
-      crmToken,
-      env.base_url,
+      env?.token,
+      env?.base_url,
       query,
     );
   }
 
-  @Get("characteristics")
+  @Get("bookableresourcecharacteristics")
   async getBookableResourceCharacteristics(@Req() req: CustomRequest) {
-    const { crmToken, env, query } = req;
+    const { env, query } = req;
     return await this.resourceService.getBookableResourceCharacteristics(
-      crmToken,
-      env.base_url,
+      env?.token,
+      env?.base_url,
       query,
     );
   }
 
-  @Get("available-resource-slots")
+  @Get("plus_AvailableResourceSlot")
   async getAvailableResourceSlots(
     @Req() req: CustomRequest,
-    @Body() getResourceSlot: GetResourceSlotsDto
+    @Body() getResourceSlot: GetResourceSlotsDto,
   ) {
-    const { crmToken, env, query } = req;
+    const { env, query } = req;
     return await this.resourceService.getAvailableResourceSlots(
-      crmToken,
+      env?.token,
       env.base_url,
       getResourceSlot,
       query,

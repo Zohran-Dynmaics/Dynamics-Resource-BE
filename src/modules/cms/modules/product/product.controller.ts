@@ -3,38 +3,48 @@ import { ProductService } from "./product.service";
 
 import { CustomRequest } from "src/shared/custom-interface";
 
-@Controller("product")
+@Controller("cms")
 export class ProductController {
   constructor(private productService: ProductService) {}
 
-  @Get("price-list/:product_id")
-  async getPriceList(@Req() req: CustomRequest): Promise<any> {
-    const { crmToken, env, params, query } = req;
-    return await this.productService.productRateList(
-      crmToken,
+  @Get("products")
+  async getProduct(@Req() req: CustomRequest): Promise<any> {
+    const { env, query } = req;
+    return await this.productService.getProduct(
+      env?.token,
       env?.base_url,
-      params.product_id,
       query,
     );
   }
 
-  @Get("price-level/:product_id")
-  async productPriceLevel(@Req() req: CustomRequest): Promise<any> {
-    const { crmToken, env, params, query } = req;
+  @Get("products/:product_id")
+  async getProductWithId(@Req() req: CustomRequest): Promise<any> {
+    const { env, params, query } = req;
+    return await this.productService.getProductWithId(
+      env?.token,
+      env?.base_url,
+      params?.product_id,
+      query,
+    );
+  }
+
+  @Get("productpricelevels")
+  async getProductPriceLevels(@Req() req: CustomRequest): Promise<any> {
+    const { env, query } = req;
     return await this.productService.productPriceLevels(
-      crmToken,
+      env?.token,
       env?.base_url,
-      params.product_id,
       query,
     );
   }
 
-  @Get("inventory-products")
-  async getInventoryProducts(@Req() req: CustomRequest): Promise<any> {
-    const { crmToken, env, query } = req;
-    return await this.productService.inventoryProducts(
-      crmToken,
+  @Get("productpricelevels/:product_id")
+  async getProductPriceLevelsWithId(@Req() req: CustomRequest): Promise<any> {
+    const { env, query, params } = req;
+    return await this.productService.productPriceLevelsWithId(
+      env?.token,
       env?.base_url,
+      params?.product_id,
       query,
     );
   }

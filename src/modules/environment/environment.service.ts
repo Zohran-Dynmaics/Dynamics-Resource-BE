@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Environment } from "./environment.entity";
-import { Model } from "mongoose";
+import { Model, Schema, Types } from "mongoose";
 import { CreateEnvironmentDto, UpdateEnvironmentDto } from "./environment.dto";
 
 @Injectable()
@@ -21,7 +21,6 @@ export class EnvironmentService {
           HttpStatus.BAD_REQUEST,
         );
       }
-
       return await this.envModel.create({
         ...createEnvDto,
         env_name: env_name.toLowerCase(),
@@ -34,23 +33,6 @@ export class EnvironmentService {
   async update(updateEnvDto: UpdateEnvironmentDto): Promise<Environment> {
     try {
       const { _id, env_name } = updateEnvDto;
-      const env = await this.findByName(env_name);
-
-      if (env) {
-        throw new HttpException(
-          "Environment with this name already exists",
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-
-      const tartgetEnv = await this.findById(_id);
-      if (!env) {
-        throw new HttpException(
-          "Environment with this name does not exist",
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-
       return await this.envModel.findByIdAndUpdate(
         _id,
         { ...updateEnvDto, env_name: env_name.toLowerCase() },
@@ -62,14 +44,21 @@ export class EnvironmentService {
   }
 
   async findByName(env_name: string): Promise<Environment> {
-    return this.envModel.findOne({ env_name }).exec();
+    const env = this.envModel.findOne({ env_name }).exec();
+    if (!env) {
+      throw new HttpException(
+        "Environment not found with name '" + env_name,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return env;
   }
 
-  async findByBaseUrl(base_url: string): Promise<Environment> {
+  async findByBaseUrl(base_url: string): Promise<any> {
     return this.envModel.findOne({ base_url }).exec();
   }
 
-  async findById(_id: string): Promise<Environment> {
+  async findById(_id: string | Types.ObjectId): Promise<Environment> {
     return this.envModel.findById(_id).exec();
   }
 }

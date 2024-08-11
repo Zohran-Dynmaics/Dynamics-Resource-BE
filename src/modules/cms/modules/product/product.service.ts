@@ -1,8 +1,7 @@
-import { HttpException, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { AxiosRequestConfig } from "axios";
 import { ApiService } from "src/modules/api/api.service";
 import { HTTPS_METHODS } from "src/shared/enum";
-import { formatCrmError } from "src/shared/utility";
 
 @Injectable()
 export class ProductService {
@@ -25,8 +24,21 @@ export class ProductService {
       throw error;
     }
   }
+  async getProduct(token: string, base_url: string, query?: any): Promise<any> {
+    const config: AxiosRequestConfig = this.apiService.getConfig(
+      `${base_url}api/data/v9.1/products?`,
+      HTTPS_METHODS.GET,
+      token,
+      query,
+    );
+    try {
+      return await this.apiService.request(config);
+    } catch (error) {
+      throw error;
+    }
+  }
 
-  async productRateList(
+  async getProductWithId(
     token: string,
     base_url: string,
     productId: string,
@@ -48,11 +60,29 @@ export class ProductService {
   async productPriceLevels(
     token: string,
     base_url: string,
-    productId: string,
     query?: any,
   ): Promise<any> {
     const config: AxiosRequestConfig = this.apiService.getConfig(
-      `${base_url}api/data/v9.1/productpricelevels(${productId})?`,
+      `${base_url}api/data/v9.1/productpricelevels?`,
+      HTTPS_METHODS.GET,
+      token,
+      query,
+    );
+    try {
+      return await this.apiService.request(config);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async productPriceLevelsWithId(
+    token: string,
+    base_url: string,
+    product_id: string,
+    query?: any,
+  ): Promise<any> {
+    const config: AxiosRequestConfig = this.apiService.getConfig(
+      `${base_url}api/data/v9.1/productpricelevels(${product_id})?`,
       HTTPS_METHODS.GET,
       token,
       query,

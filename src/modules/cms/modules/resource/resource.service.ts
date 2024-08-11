@@ -1,9 +1,9 @@
-import { HttpException, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { ApiService } from "src/modules/api/api.service";
 import { HTTPS_METHODS } from "src/shared/enum";
-import { formatCrmError } from "src/shared/utility";
 import { GetResourceSlotsDto } from "./resource.dto";
 import { mapGetResourceSlotsDtoToApiObject } from "./resource.mapper";
+import { RESOURCE_ENDPOINTS } from "./resource.constant";
 
 @Injectable()
 export class ResourceService {
@@ -14,11 +14,12 @@ export class ResourceService {
     base_url: string,
     query?: any,
   ): Promise<any> {
+    const { endpoint, searchQuery } = RESOURCE_ENDPOINTS.ALL_RESOURCES;
     const config = this.apiService.getConfig(
-      `${base_url}/api/data/v9.1/bookableresources`,
+      `${endpoint(base_url)}`,
       HTTPS_METHODS.GET,
       token,
-      query,
+      searchQuery as string,
     );
     try {
       return await this.apiService.request(config);

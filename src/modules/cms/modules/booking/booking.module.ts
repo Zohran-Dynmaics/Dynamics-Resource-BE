@@ -9,5 +9,6 @@ import { CmsModule } from "../../cms.module";
   imports: [ApiModule],
   controllers: [BookingController],
   providers: [BookingService],
+  exports: [BookingService]
 })
-export class BookingModule {}
+export class BookingModule { }
