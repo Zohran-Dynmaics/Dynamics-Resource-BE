@@ -42,7 +42,7 @@ export const getDayBoundaries = (
   date: Date | string,
 ): { startOfDay: string; endOfDay: string } => {
   try {
-    const startOfDay = date.toLocaleString();
+    const startOfDay = new Date(new Date(date).setUTCHours(0, 0, 0, 0)).toISOString();
     const endOfDay = new Date(new Date(date).setUTCHours(23, 59, 59, 999)).toISOString()
     return { startOfDay, endOfDay };
   } catch (error) {

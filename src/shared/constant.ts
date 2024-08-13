@@ -24,8 +24,7 @@ export const DATES = {
   },
   week: () => {
     const { startOfDay } = getDayBoundaries(new Date().toISOString());
-    const nextWeekDate = new Date();
-    nextWeekDate.setDate(new Date().getDate() + 7);
+    const nextWeekDate = moment().endOf('week').toDate();
     const { endOfDay } = getDayBoundaries(nextWeekDate);
 
     return { startOfDay, endOfDay };

@@ -91,6 +91,7 @@ export class BookingService {
         token,
         searchQuery({ $filter: `_resource_value eq ${resource_id}`, ...query }) as string
       );
+      console.log("🚀 ~ BookingService ~ config:", config)
       const apiRespnse: any = await this.apiService.request(config);
       return countBookings(apiRespnse);
     } catch (error) {

@@ -12,6 +12,7 @@ export const countBookings = (bookings) => {
     const today = moment(new Date());
     const tomorrow = moment(today).add(1, "day");
     const endOfWeek = moment(today).endOf("week");
+    console.log("🚀 ~ countBookings ~ endOfWeek:", endOfWeek)
 
     const taskCountDto = new TasksCountDto();
 
