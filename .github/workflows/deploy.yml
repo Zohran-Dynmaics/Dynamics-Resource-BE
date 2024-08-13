@@ -1,32 +1,25 @@
-name: Deploy
+name: Deploy Dynamics Resource BE to AWS
 
 on:
   push:
     branches:
-      - develop //branch
+      - master
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20'
-
-    - name: Install dependencies
+    - name: Deploy Dynamics Resource BE to AWS
+      env:
+        AWS_ACCESS_KEY_ID: ''
+        AWS_SECRET_ACCESS_KEY: ''
+        AWS_DEFAULT_REGION: eu-north-1  # Update with your region
+        DYNAMIC_AWS_PRIVATE_KEY: ''
       run: |
-        npm install -g yarn
-        yarn install
-
-    - name: Build the project
-      run: yarn build
-
-    - name: Deploy with PM2
-      run: |
-        pm2 stop all || true
-        pm2 start dist/main.js --name "my-app" -- start:prod
+        echo "$DYNAMIC_AWS_PRIVATE_KEY" > private_key.pem
+        chmod 400 private_key.pem
+        ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@ec2-13-60-193-104.eu-north-1.compute.amazonaws.com "sudo su && cd / && cd /home/ubuntu/Dynamics-Resource-BE && sudo sh deploy.sh"
