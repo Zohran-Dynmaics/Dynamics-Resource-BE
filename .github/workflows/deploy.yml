@@ -20,6 +20,6 @@ jobs:
         AWS_DEFAULT_REGION: eu-north-1  # Update with your region
         DYNAMIC_AWS_PRIVATE_KEY: ''
       run: |
-        echo "$DYNAMIC_AWS_PRIVATE_KEY" > private_key.pem
-        chmod 400 private_key.pem
-        ssh -o StrictHostKeyChecking=no -i private_key.pem  ubuntu@ec2-51-21-114-25.eu-north-1.compute.amazonaws.com "sudo su && cd / && cd /home/ubuntu/Dynamics-Resource-BE && sudo sh deploy.sh"
+        echo "$DYNAMIC_AWS_PRIVATE_KEY" > dynamic-resource.pem
+        chmod 400 dynamic-resource.pem
+        ssh -o StrictHostKeyChecking=no -i dynamic-resource.pem  ubuntu@ec2-51-21-114-25.eu-north-1.compute.amazonaws.com "sudo su && cd / && cd /home/ubuntu/Dynamics-Resource-BE && sudo sh deploy.sh"
