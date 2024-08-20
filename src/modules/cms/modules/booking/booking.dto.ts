@@ -194,6 +194,10 @@ export class TaskDetailDto {
 
     @IsString()
     @IsNotEmpty()
+    createByDesignation: string;
+
+    @IsString()
+    @IsNotEmpty()
     priority: string;
 
     @IsString()

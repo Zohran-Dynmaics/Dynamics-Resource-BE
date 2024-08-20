@@ -180,6 +180,7 @@ export const FormatDataForTaskDetail = (value: any) => {
     taskDetailDto.description = value?.BookingStatus?.description ?? "BookingStatus description not available";
     taskDetailDto.createdOn = value?.msdyn_workorder?.createdon;
     taskDetailDto.createByName = value?.msdyn_workorder?.createdby?.fullname || null;
+    taskDetailDto.createByDesignation = value?.msdyn_workorder?.createdby?.title || null;
 
     return taskDetailDto;
 };
