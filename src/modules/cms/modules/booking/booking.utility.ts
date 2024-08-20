@@ -12,7 +12,6 @@ export const countBookings = (bookings) => {
     const today = moment(new Date());
     const tomorrow = moment(today).add(1, "day");
     const endOfWeek = moment(today).endOf("week");
-    console.log("🚀 ~ countBookings ~ endOfWeek:", endOfWeek)
 
     const taskCountDto = new TasksCountDto();
 
@@ -150,14 +149,14 @@ export const FormatDataForTasks = (value: any) => {
             ticketId: booking?.bookableresourcebookingid,
             ticketNumber: plus_case?.ticketnumber || null,
             title: plus_case?.title || null,
-            priority: plus_case?.prioritycode || null,
+            priority: msdyn_workorder?.msdyn_priority?.msdyn_name || null,
             location: plus_case?.msdyn_FunctionalLocation?.msdyn_name,
             building: msdyn_workorder?.cafm_Building?.cafm_name,
             startTime: booking?.starttime,
             endTime: booking?.endtime,
             estimatedTravelTime: booking?.msdyn_estimatedtravelduration,
             duration: booking?.duration,
-            responseType: msdyn_workorder?.msdyn_workordertype?.msdyn_name,
+            workOrderType: msdyn_workorder?.msdyn_workordertype?.msdyn_name || null,
             workOrderTypeId: msdyn_workorder?.msdyn_workordertype?.msdyn_workordertypeid || null,
         };
     });
@@ -179,6 +178,8 @@ export const FormatDataForTaskDetail = (value: any) => {
     taskDetailDto.customerName = value?.plus_case?.primarycontactid?.fullname || null;
     taskDetailDto.issue = value?.plus_case?.plus_problemissues?.plus_name;
     taskDetailDto.description = value?.BookingStatus?.description ?? "BookingStatus description not available";
+    taskDetailDto.createdOn = value?.msdyn_workorder?.createdon;
+    taskDetailDto.createByName = value?.msdyn_workorder?.createdby?.fullname || null;
 
     return taskDetailDto;
 };
