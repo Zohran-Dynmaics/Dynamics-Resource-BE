@@ -158,6 +158,7 @@ export const FormatDataForTasks = (value: any) => {
             estimatedTravelTime: booking?.msdyn_estimatedtravelduration,
             duration: booking?.duration,
             responseType: msdyn_workorder?.msdyn_workordertype?.msdyn_name,
+            workOrderTypeId: msdyn_workorder?.msdyn_workordertype?.msdyn_workordertypeid || null,
         };
     });
 };
