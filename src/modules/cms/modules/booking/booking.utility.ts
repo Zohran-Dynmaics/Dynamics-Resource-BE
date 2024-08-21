@@ -142,24 +142,30 @@ export const FormatDataForCalender = (apiResponse: any, date?: Date | string): a
 export const FormatDataForTasks = (value: any) => {
     if (!value.length) return [];
 
-    return value.map((booking) => {
+    const returnData = [];
+
+    value.forEach((booking) => {
         const { plus_case, msdyn_workorder } = booking;
 
-        return {
-            ticketId: booking?.bookableresourcebookingid,
-            ticketNumber: plus_case?.ticketnumber || null,
-            title: plus_case?.title || null,
-            priority: msdyn_workorder?.msdyn_priority?.msdyn_name || null,
-            location: plus_case?.msdyn_FunctionalLocation?.msdyn_name,
-            building: msdyn_workorder?.cafm_Building?.cafm_name,
-            startTime: booking?.starttime,
-            endTime: booking?.endtime,
-            estimatedTravelTime: booking?.msdyn_estimatedtravelduration,
-            duration: booking?.duration,
-            workOrderType: msdyn_workorder?.msdyn_workordertype?.msdyn_name || null,
-            workOrderTypeId: msdyn_workorder?.msdyn_workordertype?.msdyn_workordertypeid || null,
-        };
+        if (msdyn_workorder?._msdyn_workordertype_value !== "5d3189f6-474e-ef11-a316-6045bd14a33f") {
+            returnData.push({
+                ticketId: booking?.bookableresourcebookingid,
+                ticketNumber: plus_case?.ticketnumber || msdyn_workorder?.msdyn_name,
+                title: plus_case?.title || msdyn_workorder?.msdyn_workordersummary,
+                priority: msdyn_workorder?.msdyn_priority?.msdyn_name || null,
+                location: plus_case?.msdyn_FunctionalLocation?.msdyn_name,
+                building: msdyn_workorder?.cafm_Building?.cafm_name,
+                startTime: booking?.starttime,
+                endTime: booking?.endtime,
+                estimatedTravelTime: booking?.msdyn_estimatedtravelduration,
+                duration: booking?.duration,
+                workOrderType: msdyn_workorder?.msdyn_workordertype?.msdyn_name || null,
+                workOrderTypeId: msdyn_workorder?.msdyn_workordertype?.msdyn_workordertypeid || null,
+            })
+        }
+
     });
+    return returnData;
 };
 
 export const FormatDataForTaskDetail = (value: any) => {
