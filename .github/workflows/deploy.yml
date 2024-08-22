@@ -1,0 +1,25 @@
+name: Deploy Dynamics Resource BE to AWS
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Deploy Dynamics Resource BE to AWS
+      env:
+        AWS_ACCESS_KEY_ID: ''
+        AWS_SECRET_ACCESS_KEY: ''
+        AWS_DEFAULT_REGION: eu-north-1  # Update with your region
+        DYNAMIC_AWS_PRIVATE_KEY: ''
+      run: |
+        echo "$DYNAMIC_AWS_PRIVATE_KEY" > api-dynamic-resource.pem
+        chmod 400 api-dynamic-resource.pem
+        ssh -o StrictHostKeyChecking=no -i api-dynamic-resource.pem  ubuntu@ec2-13-60-53-176.eu-north-1.compute.amazonaws.com "sudo su && cd / && cd /home/ubuntu/Dynamics-Resource-BE && sudo sh deploy.sh"
