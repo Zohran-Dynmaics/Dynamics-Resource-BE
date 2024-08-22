@@ -5,7 +5,7 @@ import { CreateEnvironmentDto } from "./environment.dto";
 
 @Controller("env")
 export class EnvironmentController {
-  constructor(private readonly environmentService: EnvironmentService) {}
+  constructor(private readonly environmentService: EnvironmentService) { }
 
   @Post("create")
   async create(@Body() createEnvDto: CreateEnvironmentDto) {

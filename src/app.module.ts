@@ -14,6 +14,7 @@ import { EnvironmentModule } from "./modules/environment/environment.module";
 import { EnvironmentService } from "./modules/environment/environment.service";
 import { CmsService } from "./modules/cms/cms.service";
 import { AuthMiddleware } from "./middleares/auth.middleware";
+import { AppController } from "./app.controller";
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -24,12 +25,13 @@ import { AuthMiddleware } from "./middleares/auth.middleware";
     CmsModule,
     EnvironmentModule,
   ],
+
+  controllers: [AppController]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
-      .exclude({ path: "auth/(.*)", method: RequestMethod.ALL })
-      .forRoutes("*");
+      .forRoutes("cms/(.*)");
   }
 }
