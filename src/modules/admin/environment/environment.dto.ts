@@ -1,5 +1,5 @@
 import { IsMongoId, IsNotEmpty, IsOptional, IsString } from "class-validator";
-import { GetCrmTokenDto } from "../cms/cms.dto";
+import { GetCrmTokenDto } from "../../cms/cms.dto";
 import { Schema, Types } from "mongoose";
 
 export class CreateEnvironmentDto extends GetCrmTokenDto {

@@ -2,7 +2,7 @@ import { Module, forwardRef } from "@nestjs/common";
 import { CmsController } from "./cms.controller";
 import { CmsService } from "./cms.service";
 import { ApiModule } from "../api/api.module";
-import { EnvironmentModule } from "../environment/environment.module";
+import { EnvironmentModule } from "../admin/environment/environment.module";
 import { ProductModule } from "./modules/product/product.module";
 import { ContactModule } from "./modules/contact/contact.module";
 import { BookingModule } from "./modules/booking/booking.module";
@@ -27,4 +27,4 @@ import { ProblemIssueModule } from "./modules/problem-issue/problem-issue.module
   providers: [CmsService],
   exports: [CmsService],
 })
-export class CmsModule {}
+export class CmsModule { }

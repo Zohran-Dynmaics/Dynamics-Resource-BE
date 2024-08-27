@@ -3,7 +3,7 @@ import { EnvironmentService } from "./environment.service";
 
 import { CreateEnvironmentDto } from "./environment.dto";
 
-@Controller("env")
+@Controller("admin/env")
 export class EnvironmentController {
   constructor(private readonly environmentService: EnvironmentService) { }
 

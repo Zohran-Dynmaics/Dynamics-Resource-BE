@@ -8,7 +8,7 @@ import { JwtService } from "@nestjs/jwt";
 import { NextFunction, Request, Response } from "express";
 import { ApiService } from "src/modules/api/api.service";
 import { CmsService } from "src/modules/cms/cms.service";
-import { EnvironmentService } from "src/modules/environment/environment.service";
+import { EnvironmentService } from "src/modules/admin/environment/environment.service";
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {

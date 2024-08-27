@@ -5,15 +5,15 @@ import { Types } from "mongoose";
 import { HTTPS_METHODS } from "src/shared/enum";
 import { createFormData } from "src/shared/utility/utility";
 import { ApiService } from "../api/api.service";
-import { EnvironmentService } from "../environment/environment.service";
+import { EnvironmentService } from "../admin/environment/environment.service";
 import {
   GetCrmTokenDto,
   GetCrmTokenResponseDto,
   UpdateBookableResourceDto,
 } from "./cms.dto";
 import { GRANT_TYPES } from "./constants";
-import { TokenEnvironmentDto } from "../environment/environment.dto";
-import { TokenUserDto } from "../users/users.dto";
+import { TokenEnvironmentDto } from "../admin/environment/environment.dto";
+import { TokenUserDto } from "../admin/users/users.dto";
 import { BookingService } from "./modules/booking/booking.service";
 import { FilterType, TaskFilterDto } from "./modules/booking/booking.dto";
 

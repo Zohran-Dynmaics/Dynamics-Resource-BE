@@ -1,7 +1,7 @@
 import { IsBoolean, IsEmail, IsNotEmpty } from "class-validator";
-import { User } from "../users/users.entity";
-import { TokenUserDto } from "../users/users.dto";
-import { TokenEnvironmentDto } from "../environment/environment.dto";
+import { User } from "../admin/users/users.entity";
+import { TokenUserDto } from "../admin/users/users.dto";
+import { TokenEnvironmentDto } from "../admin/environment/environment.dto";
 
 export class UpdatePasswordRequestDto {
   @IsNotEmpty({ message: "Email should not be empty." })

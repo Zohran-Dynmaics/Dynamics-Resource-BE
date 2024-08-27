@@ -18,7 +18,7 @@ import {
   UpdatePasswordRequestDto,
   VerifyOtpDto,
 } from "./auth.dto";
-import { User } from "../users/users.entity";
+import { User } from "../admin/users/users.entity";
 import { Response } from "express";
 
 @Controller("auth")

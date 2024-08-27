@@ -10,7 +10,7 @@ import {
   generateHash,
   getEnvironmentNameFromEmail,
 } from "src/shared/utility/utility";
-import { CmsService } from "../cms/cms.service";
+import { CmsService } from "../../cms/cms.service";
 import { EnvironmentService } from "../environment/environment.service";
 import { SearchUserDto, UpdateUserDto } from "./users.dto";
 import { User } from "./users.entity";

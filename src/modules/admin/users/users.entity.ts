@@ -1,5 +1,5 @@
 import { IsEmail, IsOptional } from "class-validator";
-import { UserRole } from "../../shared/enum";
+import { UserRole } from "../../../shared/enum";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 
 @Schema({

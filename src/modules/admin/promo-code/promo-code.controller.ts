@@ -4,7 +4,7 @@ import { CreatePromoCode } from './dto';
 import { PromoCode } from './promo-code.entity';
 import { CustomRequest } from 'src/shared/custom-interface';
 
-@Controller('promo-code')
+@Controller('admin/promo-code')
 export class PromoCodeController {
 
     constructor(private readonly promocodeService: PromoCodeService) { }

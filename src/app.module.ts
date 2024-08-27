@@ -1,20 +1,17 @@
 import {
   MiddlewareConsumer,
   Module,
-  NestModule,
-  RequestMethod,
+  NestModule
 } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { MongooseModule } from "@nestjs/mongoose";
-import { AuthModule } from "./modules/auth/auth.module";
-import { UsersModule } from "./modules/users/users.module";
-import { ApiModule } from "./modules/api/api.module";
-import { CmsModule } from "./modules/cms/cms.module";
-import { EnvironmentModule } from "./modules/environment/environment.module";
-import { EnvironmentService } from "./modules/environment/environment.service";
-import { CmsService } from "./modules/cms/cms.service";
-import { AuthMiddleware } from "./middleares/auth.middleware";
 import { AppController } from "./app.controller";
+import { AuthMiddleware } from "./middleware/auth.middleware";
+import { EnvironmentModule } from "./modules/admin/environment/environment.module";
+import { UsersModule } from "./modules/admin/users/users.module";
+import { ApiModule } from "./modules/api/api.module";
+import { AuthModule } from "./modules/auth/auth.module";
+import { CmsModule } from "./modules/cms/cms.module";
 @Module({
   imports: [
     ConfigModule.forRoot(),

@@ -6,9 +6,9 @@ import {
   generateHash,
   getEnvironmentNameFromEmail,
 } from "src/shared/utility/utility";
-import { EnvironmentService } from "../environment/environment.service";
-import { User } from "../users/users.entity";
-import { UsersService } from "../users/users.service";
+import { EnvironmentService } from "../admin/environment/environment.service";
+import { User } from "../admin/users/users.entity";
+import { UsersService } from "../admin/users/users.service";
 import { CmsService } from "./../cms/cms.service";
 import {
   ResponseSignUpDto,

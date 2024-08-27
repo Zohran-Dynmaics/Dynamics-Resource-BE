@@ -1,7 +1,7 @@
 import { Module, forwardRef } from "@nestjs/common";
 import { ApiService } from "./api.service";
 import { HttpModule as AxiosModule } from "@nestjs/axios";
-import { UsersModule } from "../users/users.module";
+import { UsersModule } from "../admin/users/users.module";
 import { CmsModule } from "../cms/cms.module";
 
 @Module({
@@ -9,4 +9,4 @@ import { CmsModule } from "../cms/cms.module";
   providers: [ApiService],
   exports: [ApiService],
 })
-export class ApiModule {}
+export class ApiModule { }
