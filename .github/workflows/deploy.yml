@@ -18,7 +18,7 @@ jobs:
         AWS_ACCESS_KEY_ID: ''
         AWS_SECRET_ACCESS_KEY: ''
         AWS_DEFAULT_REGION: eu-north-1  # Update with your region
-        DYNAMIC_AWS_PRIVATE_KEY: ''
+        DYNAMIC_AWS_PRIVATE_KEY: ${{ secrets.DYNAMIC_AWS_PRIVATE_KEY }}
       run: |
         echo "$DYNAMIC_AWS_PRIVATE_KEY" > api-dynamic-resource.pem
         chmod 400 api-dynamic-resource.pem
