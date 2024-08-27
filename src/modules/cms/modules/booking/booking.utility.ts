@@ -19,17 +19,20 @@ export const countBookings = (bookings) => {
     bookings?.value.forEach((booking) => {
         const bookingDate = moment(new Date(booking.starttime));
 
-        if (bookingDate.isSame(today, "day")) {
-            taskCountDto.today++;
-            taskCountDto.week++;
-        } else if (bookingDate.isSame(tomorrow, "day")) {
-            taskCountDto.tomorrow++;
-            taskCountDto.week++;
-        } else if (bookingDate.isBetween(today, endOfWeek, null, "[]")) {
-            taskCountDto.week++;
+        if (booking?.msdyn_workorder?._msdyn_workordertype_value !== "5d3189f6-474e-ef11-a316-6045bd14a33f") {
+            taskCountDto.total++;
+            if (bookingDate.isSame(today, "day")) {
+                taskCountDto.today++;
+                taskCountDto.week++;
+            } else if (bookingDate.isSame(tomorrow, "day")) {
+                taskCountDto.tomorrow++;
+                taskCountDto.week++;
+            } else if (bookingDate.isBetween(today, endOfWeek, null, "[]")) {
+                taskCountDto.week++;
+            }
         }
+
     });
-    taskCountDto.total = bookings['@odata.count'];
 
     return taskCountDto;
 };
@@ -153,7 +156,7 @@ export const FormatDataForTasks = (value: any) => {
                 ticketNumber: plus_case?.ticketnumber || msdyn_workorder?.msdyn_name,
                 title: plus_case?.title || msdyn_workorder?.msdyn_workordersummary,
                 priority: msdyn_workorder?.msdyn_priority?.msdyn_name || null,
-                location: plus_case?.msdyn_FunctionalLocation?.msdyn_name,
+                location: plus_case?.msdyn_FunctionalLocation?.msdyn_name || msdyn_workorder?.msdyn_FunctionalLocation?.msdyn_name,
                 building: msdyn_workorder?.cafm_Building?.cafm_name,
                 startTime: booking?.starttime,
                 endTime: booking?.endtime,
@@ -172,16 +175,16 @@ export const FormatDataForTaskDetail = (value: any) => {
     const taskDetailDto = new TaskDetailDto();
 
     taskDetailDto.ticketId = value?.bookableresourcebookingid || null;
-    taskDetailDto.ticketNumber = value?.plus_case?.ticketnumber || null;
-    taskDetailDto.title = value?.plus_case?.title || null;
+    taskDetailDto.ticketNumber = value?.plus_case?.ticketnumber || value?.msdyn_workorder?.msdyn_name;
+    taskDetailDto.title = value?.plus_case?.title || value?.msdyn_workorder?.msdyn_workordersummary;
     taskDetailDto.priority = value?.msdyn_workorder?.msdyn_priority?.msdyn_name || null;
     taskDetailDto.startTime = value?.starttime || null;
     taskDetailDto.endTime = value?.endtime || null;
     taskDetailDto.estimatedTravelTime = value?.msdyn_estimatedtravelduration || null;
     taskDetailDto.duration = value?.duration || null;
-    taskDetailDto.location = value?.plus_case?.msdyn_FunctionalLocation?.msdyn_name;
+    taskDetailDto.location = value?.plus_case?.msdyn_FunctionalLocation?.msdyn_name || value?.msdyn_workorder?.msdyn_FunctionalLocation?.msdyn_name;
     taskDetailDto.workOrder = value?.msdyn_workorder?.msdyn_name || null;
-    taskDetailDto.customerName = value?.plus_case?.primarycontactid?.fullname || null;
+    taskDetailDto.customerName = value?.plus_case?.primarycontactid?.fullname || value?.msdyn_workorder?.msdyn_reportedbycontact?.fullname;
     taskDetailDto.issue = value?.plus_case?.plus_problemissues?.plus_name;
     taskDetailDto.description = value?.BookingStatus?.description ?? "BookingStatus description not available";
     taskDetailDto.createdOn = value?.msdyn_workorder?.createdon;
