@@ -21,7 +21,6 @@ export class AuthMiddleware implements NestMiddleware {
   async use(req: Request, res: Response, next: NextFunction) {
     try {
       const authHeader: any = req?.headers?.authorization;
-      console.log("🚀 ~ AuthMiddleware ~ use ~ authHeader:", authHeader)
       if (!authHeader) {
         throw new HttpException("Token not found.", HttpStatus.UNAUTHORIZED);
       }
