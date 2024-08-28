@@ -12,6 +12,7 @@ import { UsersModule } from "./modules/admin/users/users.module";
 import { ApiModule } from "./modules/api/api.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { CmsModule } from "./modules/cms/cms.module";
+import { PromoCodeModule } from "./modules/admin/promo-code/promo-code.module";
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -21,6 +22,7 @@ import { CmsModule } from "./modules/cms/cms.module";
     ApiModule,
     CmsModule,
     EnvironmentModule,
+    PromoCodeModule
   ],
 
   controllers: [AppController]

@@ -153,4 +153,34 @@ export class CmsService {
       throw error;
     }
   }
+
+  async getDynamicContent(base_url: string, token: string, dynamic_endpoint: string): Promise<any> {
+    try {
+      const config: AxiosRequestConfig = this.apiService.getConfig(
+        `${base_url}api/data/v9.1/${dynamic_endpoint}`,
+        HTTPS_METHODS.GET,
+        token,
+      );
+      return this.apiService.request(config);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async CreateOrUpdateDynamicContent(base_url: string, token: string, dynamic_endpoint: string, method: HTTPS_METHODS, data?: any,): Promise<any> {
+    try {
+      const config: AxiosRequestConfig = this.apiService.getConfig(
+        `${base_url}api/data/v9.1/${dynamic_endpoint}`,
+        method,
+        token,
+        null,
+        data
+      );
+      return this.apiService.request(config);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+
 }
