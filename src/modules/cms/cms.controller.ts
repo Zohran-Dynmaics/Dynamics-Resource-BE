@@ -34,8 +34,8 @@ export class CmsController {
   ) {
     const { env, body } = req;
     try {
-      const endpoint = `${dynamic_endpoint}?${Object.keys(query).map(key => `${key}=${query[key]}`).join('&')}`;
-      return await this.cmsService.CreateOrUpdateDynamicContent(env?.base_url, env?.token, endpoint, HTTPS_METHODS.PATCH, body);
+      // const endpoint = `${dynamic_endpoint}?${Object.keys(query).map(key => `${key}=${query[key]}`).join('&')}`;
+      return await this.cmsService.CreateOrUpdateDynamicContent(env?.base_url, env?.token, dynamic_endpoint, HTTPS_METHODS.PATCH, body, query);
     } catch (error) {
       throw error;
     }

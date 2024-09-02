@@ -167,13 +167,13 @@ export class CmsService {
     }
   }
 
-  async CreateOrUpdateDynamicContent(base_url: string, token: string, dynamic_endpoint: string, method: HTTPS_METHODS, data?: any): Promise<any> {
+  async CreateOrUpdateDynamicContent(base_url: string, token: string, dynamic_endpoint: string, method: HTTPS_METHODS, data?: any, query?: any): Promise<any> {
     try {
       const config: AxiosRequestConfig = this.apiService.getConfig(
         `${base_url}api/data/v9.1/${dynamic_endpoint}`,
         method,
         token,
-        null,
+        query,
         data
       );
       console.log("🚀 ~ CmsService ~ CreateOrUpdateDynamicContent ~ config:", config)

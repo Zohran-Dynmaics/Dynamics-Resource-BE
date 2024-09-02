@@ -45,12 +45,6 @@ export class PromoCode {
     @Prop({ required: true, type: [String] })
     accounts: string[];
 
-    @Prop({ required: true, type: Date })
-    start_date_2: Date;
-
-    @Prop({ required: true, type: Date })
-    end_date_2: Date;
-
     @Prop({ required: false, enum: PromoStatusType, default: PromoStatusType.ACTIVE })
     status: PromoStatusType;
 

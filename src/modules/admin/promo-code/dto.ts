@@ -68,12 +68,4 @@ export class CreatePromoCode {
     @IsOptional()
     @IsString({ each: true })
     accounts?: string[];
-
-    @IsOptional()
-    @IsString()
-    start_date_2?: Date;
-
-    @IsOptional()
-    @IsString()
-    end_date_2?: Date;
 }
