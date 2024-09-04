@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Req } from "@nestjs/common";
 import { PromoCodeService } from "./promo-code.service";
-import { CreatePromoCode } from "./dto";
+import { CreatePromoCode, ValidatePromoCode } from "./dto";
 import { PromoCode } from "./promo-code.entity";
 import { CustomRequest } from "src/shared/custom-interface";
 
@@ -27,5 +27,17 @@ export class PromoCodeController {
     @Body() promoCode: CreatePromoCode
   ): Promise<PromoCode> {
     return await this.promocodeService.createPromoCode(promoCode);
+  }
+
+  @Post("validate")
+  async validatePromoCode(
+    @Body() body: ValidatePromoCode,
+    @Req() req: CustomRequest
+  ): Promise<any> {
+    const { user } = req;
+    return await this.promocodeService.validatePromoCode(
+      body,
+      user?._id.toString()
+    );
   }
 }
