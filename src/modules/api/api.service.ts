@@ -8,8 +8,8 @@ import { formatCrmError } from "src/shared/utility/utility";
 export class ApiService {
   constructor(
     @Inject(forwardRef(() => CmsService))
-    private readonly cmsService: CmsService,
-  ) { }
+    private readonly cmsService: CmsService
+  ) {}
 
   isTokenExpired(error: any) {
     return (
@@ -26,12 +26,21 @@ export class ApiService {
         return res.data;
       });
     } catch (error) {
-      console.log("🚀 ~ ApiService ~ request ~ error:", error?.response?.data?.error)
+      console.log(
+        "🚀 ~ ApiService ~ request ~ error:",
+        error?.response?.data?.error
+      );
       if (this.isTokenExpired(error)) {
         const token = await this.cmsService.refreshCrmToken(
-          config.headers.Authorization.split(" ")[1],
+          config.headers.Authorization.split(" ")[1]
         );
-        config = this.getConfig(config?.url, config?.method as HTTPS_METHODS, token, config?.params, config?.data)
+        config = this.getConfig(
+          config?.url,
+          config?.method as HTTPS_METHODS,
+          token,
+          config?.params,
+          config?.data
+        );
         this.request(config);
       }
       const { message, status } = formatCrmError(error);
@@ -46,16 +55,19 @@ export class ApiService {
     method: HTTPS_METHODS,
     token: string,
     params?: string,
-    data?: any,
+    data?: any
   ): AxiosRequestConfig {
     const config: AxiosRequestConfig = {
       headers: {
         Authorization: `Bearer ${token}`,
+        // "Content-Type": "application/json"
+        prefer: "return=representation",
+        "If-None-Match": ""
       },
       method,
       url,
       params,
-      data,
+      data
     };
     return config;
   }
