@@ -3,7 +3,8 @@ import {
   IsString,
   IsNumber,
   IsEnum,
-  IsDate
+  IsDate,
+  IsNotEmpty
 } from "class-validator";
 
 export enum PromoType {
@@ -12,8 +13,8 @@ export enum PromoType {
 }
 
 export enum PromoStatusType {
-  ACTIVE = "ACTIVE",
-  EXPIRED = "EXPIRED"
+  ACTIVE = "Active",
+  EXPIRED = "Expired"
 }
 
 export class CreatePromoCode {
@@ -31,7 +32,7 @@ export class CreatePromoCode {
 
   @IsOptional()
   @IsString()
-  limit?: number;
+  limit?: string;
 
   @IsOptional()
   @IsEnum(PromoType)
@@ -72,4 +73,26 @@ export class CreatePromoCode {
   @IsOptional()
   @IsString({ each: true })
   accounts?: string[];
+}
+
+export class ValidatePromoCode {
+  @IsString()
+  @IsNotEmpty()
+  promocode: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  orderAmount: number;
+
+  @IsString()
+  @IsOptional()
+  category?: string;
+
+  @IsString()
+  @IsOptional()
+  product_service?: string;
+
+  @IsString()
+  @IsOptional()
+  account?: string;
 }
