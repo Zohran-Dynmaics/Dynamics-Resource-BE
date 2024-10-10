@@ -11,8 +11,8 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
       delete ret.resetPasswordOtp;
       delete ret.resetPasswordOtpExpiry;
       return ret;
-    },
-  },
+    }
+  }
 })
 export class User {
   @Prop({ required: true, type: String })
@@ -26,6 +26,12 @@ export class User {
 
   @Prop({ type: String, required: true })
   resourceId: string;
+
+  @Prop({ type: String, required: false })
+  account?: string;
+
+  @Prop({ type: String, required: false })
+  accountId?: string;
 
   @Prop({ type: String, required: false })
   project?: string;

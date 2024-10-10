@@ -9,7 +9,7 @@ import { EnvironmentService } from "../admin/environment/environment.service";
 import {
   GetCrmTokenDto,
   GetCrmTokenResponseDto,
-  UpdateBookableResourceDto,
+  UpdateBookableResourceDto
 } from "./cms.dto";
 import { GRANT_TYPES } from "./constants";
 import { TokenEnvironmentDto } from "../admin/environment/environment.dto";
@@ -22,11 +22,11 @@ export class CmsService {
   constructor(
     @Inject(forwardRef(() => ApiService)) private apiService: ApiService,
     private envService: EnvironmentService,
-    private bookingService: BookingService,
-  ) { }
+    private bookingService: BookingService
+  ) {}
 
   async getCrmToken(
-    getCrmTokenDto: GetCrmTokenDto,
+    getCrmTokenDto: GetCrmTokenDto
   ): Promise<GetCrmTokenResponseDto> {
     const { base_url, client_id, client_secret, tenant_id } = getCrmTokenDto;
     const env = await this.envService.findByBaseUrl(base_url);
@@ -37,7 +37,7 @@ export class CmsService {
       resource: base_url,
       client_id,
       client_secret,
-      grant_type: GRANT_TYPES.CLIENT_CREDENTIALS,
+      grant_type: GRANT_TYPES.CLIENT_CREDENTIALS
     });
 
     const config: AxiosRequestConfig = {
@@ -45,8 +45,8 @@ export class CmsService {
       method: "POST",
       url: `${process.env.MICROSOFT_LOGIN_BASE_URL}${tenant_id}/oauth2/token`,
       headers: {
-        "Content-Type": "multipart/form-data",
-      },
+        "Content-Type": "multipart/form-data"
+      }
     };
 
     try {
@@ -54,7 +54,7 @@ export class CmsService {
       await this.envService.update({
         _id: env?._id,
         env_name: env?.env_name.toLowerCase(),
-        token: response?.access_token,
+        token: response?.access_token
       });
       return response as GetCrmTokenResponseDto;
     } catch (error) {
@@ -66,10 +66,10 @@ export class CmsService {
     const env = await this.envService.findById(env_id);
     const config: AxiosRequestConfig = {
       headers: {
-        Authorization: `Bearer ${env.token}`,
+        Authorization: `Bearer ${env.token}`
       },
       method: "GET",
-      url: `${process.env.RESOURCE}/api/data/v9.1/bookableresourcecategories`,
+      url: `${process.env.RESOURCE}/api/data/v9.1/bookableresourcecategories`
     };
 
     try {
@@ -81,9 +81,9 @@ export class CmsService {
 
   async getBookableResources(token: string, base_url: string): Promise<any> {
     const config: AxiosRequestConfig = this.apiService.getConfig(
-      `${base_url}/api/data/v9.1/bookableresources?$select=name,plus_password,plus_username&$expand=UserId($select=fullname,caltype,isintegrationuser,islicensed;$expand=defaultmailbox($select=emailaddress))`,
+      `${base_url}/api/data/v9.1/bookableresources?$select=name,plus_password,plus_username&$expand=msdyn_bookableresource_msdyn_requirementresourcepreference_BookableResource($select=msdyn_name;$expand=msdyn_Account($select=name)),UserId($select=fullname,caltype,isintegrationuser,islicensed;$expand=defaultmailbox($select=emailaddress))`,
       HTTPS_METHODS.GET,
-      token,
+      token
     );
     try {
       return await this.apiService.request(config);
@@ -96,14 +96,14 @@ export class CmsService {
     token: string,
     base_url: string,
     resourceId: string,
-    updateBookableResourceDto: UpdateBookableResourceDto,
+    updateBookableResourceDto: UpdateBookableResourceDto
   ): Promise<any> {
     const config: AxiosRequestConfig = this.apiService.getConfig(
       `${base_url}api/data/v9.1/bookableresources(${resourceId}) `,
       HTTPS_METHODS.PATCH,
       token,
       null,
-      updateBookableResourceDto,
+      updateBookableResourceDto
     );
     try {
       return await this.apiService.request(config);
@@ -122,7 +122,10 @@ export class CmsService {
     }
   }
 
-  async getHomeScreenData(env: TokenEnvironmentDto, user: TokenUserDto): Promise<any> {
+  async getHomeScreenData(
+    env: TokenEnvironmentDto,
+    user: TokenUserDto
+  ): Promise<any> {
     try {
       const { token, base_url } = env;
       const { bookableresourceid } = user;
@@ -132,34 +135,61 @@ export class CmsService {
         totalPpm: 0,
         taskCount: 0,
         rating: 0
-      }
+      };
 
-      const [taskCount, reactiveCount, todayPpm, totalPpm]: any = await Promise.all([
-        this.bookingService.getTasksOfDay(token, base_url, bookableresourceid),
-        this.bookingService.getTasksOfDay(token, base_url, bookableresourceid, { filter: FilterType.today, workordertype: "bc8d5111-b548-ef11-a316-6045bd14a33f" } as TaskFilterDto),
-        this.bookingService.getTasksOfDay(token, base_url, bookableresourceid, { filter: FilterType.today }, "$filter=_plus_case_value eq null"),
-        this.bookingService.getTasksOfDay(token, base_url, bookableresourceid, null, "$filter=_plus_case_value eq null")
-      ]);
+      const [taskCount, reactiveCount, todayPpm, totalPpm]: any =
+        await Promise.all([
+          this.bookingService.getTasksOfDay(
+            token,
+            base_url,
+            bookableresourceid
+          ),
+          this.bookingService.getTasksOfDay(
+            token,
+            base_url,
+            bookableresourceid,
+            {
+              filter: FilterType.today,
+              workordertype: "bc8d5111-b548-ef11-a316-6045bd14a33f"
+            } as TaskFilterDto
+          ),
+          this.bookingService.getTasksOfDay(
+            token,
+            base_url,
+            bookableresourceid,
+            { filter: FilterType.today },
+            "$filter=_plus_case_value eq null"
+          ),
+          this.bookingService.getTasksOfDay(
+            token,
+            base_url,
+            bookableresourceid,
+            null,
+            "$filter=_plus_case_value eq null"
+          )
+        ]);
 
       returnData.reactiveCount = reactiveCount?.length ?? 0;
       returnData.taskCount = taskCount?.length ?? 0;
       returnData.todayPpm = todayPpm?.length ?? 0;
       returnData.totalPpm = totalPpm?.length ?? 0;
 
-
       return returnData;
-
     } catch (error) {
       throw error;
     }
   }
 
-  async getDynamicContent(base_url: string, token: string, dynamic_endpoint: string): Promise<any> {
+  async getDynamicContent(
+    base_url: string,
+    token: string,
+    dynamic_endpoint: string
+  ): Promise<any> {
     try {
       const config: AxiosRequestConfig = this.apiService.getConfig(
         `${base_url}api/data/v9.1/${dynamic_endpoint}`,
         HTTPS_METHODS.GET,
-        token,
+        token
       );
       return this.apiService.request(config);
     } catch (error) {
@@ -167,7 +197,14 @@ export class CmsService {
     }
   }
 
-  async CreateOrUpdateDynamicContent(base_url: string, token: string, dynamic_endpoint: string, method: HTTPS_METHODS, data?: any, query?: any): Promise<any> {
+  async CreateOrUpdateDynamicContent(
+    base_url: string,
+    token: string,
+    dynamic_endpoint: string,
+    method: HTTPS_METHODS,
+    data?: any,
+    query?: any
+  ): Promise<any> {
     try {
       const config: AxiosRequestConfig = this.apiService.getConfig(
         `${base_url}api/data/v9.1/${dynamic_endpoint}`,
@@ -176,13 +213,17 @@ export class CmsService {
         query,
         data
       );
-      console.log("🚀 ~ CmsService ~ CreateOrUpdateDynamicContent ~ config:", config)
+      console.log(
+        "🚀 ~ CmsService ~ CreateOrUpdateDynamicContent ~ config:",
+        config
+      );
       return this.apiService.request(config);
     } catch (error) {
-      console.log("🚀 ~ CmsService ~ CreateOrUpdateDynamicContent ~ error:", error)
+      console.log(
+        "🚀 ~ CmsService ~ CreateOrUpdateDynamicContent ~ error:",
+        error
+      );
       throw error;
     }
   }
-
-
 }

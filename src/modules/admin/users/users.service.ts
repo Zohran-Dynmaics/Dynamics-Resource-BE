@@ -2,13 +2,13 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
-  NotFoundException,
+  NotFoundException
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 import {
   generateHash,
-  getEnvironmentNameFromEmail,
+  getEnvironmentNameFromEmail
 } from "src/shared/utility/utility";
 import { CmsService } from "../../cms/cms.service";
 import { EnvironmentService } from "../environment/environment.service";
@@ -20,11 +20,25 @@ export class UsersService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
     private envService: EnvironmentService,
-    private cmsService: CmsService,
-  ) { }
+    private cmsService: CmsService
+  ) {}
 
-  async create(username: string, password: string, email: string, resourceId: string, envName: string, role: string) {
-    return await this.userModel.create({ username, password, email, resourceId, envName, role });
+  async create(
+    username: string,
+    password: string,
+    email: string,
+    resourceId: string,
+    envName: string,
+    role: string
+  ) {
+    return await this.userModel.create({
+      username,
+      password,
+      email,
+      resourceId,
+      envName,
+      role
+    });
   }
 
   async update(updateUserDto: UpdateUserDto, crmToken?: string): Promise<User> {
@@ -37,11 +51,11 @@ export class UsersService {
       if (password) {
         updateUserDto.password = await generateHash(password);
 
-        const env = await this.envService.findByName(
-          user?.envName,
-        );
+        const env = await this.envService.findByName(user?.envName);
         if (!env) {
-          throw new NotFoundException(`Environment not found for  ${user?.email}`);
+          throw new NotFoundException(
+            `Environment not found for  ${user?.email}`
+          );
         }
         const access_token =
           env?.token ?? (await this.cmsService.getCrmToken(env)).access_token;
@@ -50,7 +64,7 @@ export class UsersService {
           access_token,
           env?.base_url,
           user?.resourceId,
-          { plus_password: password },
+          { plus_password: password }
         );
       }
       return await this.userModel
@@ -91,7 +105,7 @@ export class UsersService {
       if (!Object.keys(searchUserDto).length) {
         throw new HttpException(
           "At least one search parameter should be provided. (_id, email, project)",
-          HttpStatus.BAD_REQUEST,
+          HttpStatus.BAD_REQUEST
         );
       }
 

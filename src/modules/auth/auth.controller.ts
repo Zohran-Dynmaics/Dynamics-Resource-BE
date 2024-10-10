@@ -7,7 +7,7 @@ import {
   Post,
   Query,
   Req,
-  Res,
+  Res
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import {
@@ -16,14 +16,14 @@ import {
   SignUpDto,
   UpdatePasswordDto,
   UpdatePasswordRequestDto,
-  VerifyOtpDto,
+  VerifyOtpDto
 } from "./auth.dto";
 import { User } from "../admin/users/users.entity";
 import { Response } from "express";
 
 @Controller("auth")
 export class AuthController {
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService) {}
 
   @Get("azure-auth")
   async azureAuth(@Req() query: Request, @Res() res: Response): Promise<any> {
@@ -42,21 +42,21 @@ export class AuthController {
 
   @Post("update-password-request/:email")
   async updatePasswordRequest(
-    @Param() updatePasswordReqDto: UpdatePasswordRequestDto,
+    @Param() updatePasswordReqDto: UpdatePasswordRequestDto
   ): Promise<{ message: string }> {
     return await this.authService.updatePasswordRequest(updatePasswordReqDto);
   }
 
   @Post("verify-otp/:email/:otp")
   async verifyOtp(
-    @Param() verifyOtpDto: VerifyOtpDto,
+    @Param() verifyOtpDto: VerifyOtpDto
   ): Promise<{ message: string }> {
     return await this.authService.verifyOtp(verifyOtpDto);
   }
 
   @Patch("update-password")
   async updatePassword(
-    @Body() updatePasswordDto: UpdatePasswordDto,
+    @Body() updatePasswordDto: UpdatePasswordDto
   ): Promise<User> {
     return await this.authService.updatePassword(updatePasswordDto);
   }

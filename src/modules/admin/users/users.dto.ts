@@ -4,7 +4,7 @@ import {
   IsMongoId,
   IsNotEmpty,
   IsOptional,
-  IsString,
+  IsString
 } from "class-validator";
 import { Schema, Types } from "mongoose";
 
@@ -15,6 +15,14 @@ export class UpdateUserDto {
   @IsOptional()
   @IsString()
   password?: string;
+
+  @IsOptional()
+  @IsString()
+  account?: string;
+
+  @IsOptional()
+  @IsString()
+  accountId?: string;
 
   @IsOptional()
   @IsBoolean()
