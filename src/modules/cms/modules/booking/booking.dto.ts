@@ -1,251 +1,250 @@
 import {
-    IsString,
-    IsOptional,
-    isString,
-    IsNotEmpty,
-    IsEnum,
-    IsBoolean,
-    IsNumber,
+  IsString,
+  IsOptional,
+  isString,
+  IsNotEmpty,
+  IsEnum,
+  IsBoolean,
+  IsNumber
 } from "class-validator";
 
 export class BaseDateDto {
-    @IsString()
-    date: Date | string;
+  @IsString()
+  date: Date | string;
 }
 
 export class OptionalDateDto extends BaseDateDto {
-    @IsOptional()
-    date: Date | string;
+  @IsOptional()
+  date: Date | string;
 }
 
 export class RequiredDateDto extends BaseDateDto {
-    @IsNotEmpty()
-    date: Date | string;
+  @IsNotEmpty()
+  date: Date | string;
 }
 
 export enum FilterType {
-    today = "today",
-    tomorrow = "tomorrow",
-    week = "week",
+  today = "today",
+  tomorrow = "tomorrow",
+  week = "week"
 }
 
 export class TaskFilterDto {
-    @IsEnum(FilterType)
-    @IsOptional()
-    filter: FilterType;
+  @IsEnum(FilterType)
+  @IsOptional()
+  filter: FilterType;
 
-    @IsString()
-    @IsOptional()
-    workordertype?: string;
+  @IsString()
+  @IsOptional()
+  workordertype?: string;
 }
 
 export class CalenderDataDto {
-    @IsString()
-    @IsNotEmpty()
-    hour: string;
+  @IsString()
+  @IsNotEmpty()
+  hour: string;
 
-    @IsString()
-    @IsNotEmpty()
-    workOrderId: string;
+  @IsString()
+  @IsNotEmpty()
+  workOrderId: string;
 
-    @IsString()
-    @IsNotEmpty()
-    caseId: string;
+  @IsString()
+  @IsNotEmpty()
+  caseId: string;
 
-    @IsString()
-    @IsNotEmpty()
-    title: string;
+  @IsString()
+  @IsNotEmpty()
+  title: string;
 
-    @IsString()
-    @IsNotEmpty()
-    bookingStatus: string;
+  @IsString()
+  @IsNotEmpty()
+  bookingStatus: string;
 
-    @IsNumber()
-    @IsNotEmpty()
-    duration: number;
+  @IsNumber()
+  @IsNotEmpty()
+  duration: number;
 
-    @IsString()
-    @IsOptional()
-    workOrderType: null;
+  @IsString()
+  @IsOptional()
+  workOrderType: null;
 
-    @IsString()
-    @IsNotEmpty()
-    location: string;
+  @IsString()
+  @IsNotEmpty()
+  location: string;
 
-    @IsString()
-    @IsNotEmpty()
-    time: string;
+  @IsString()
+  @IsNotEmpty()
+  time: string;
 
-    @IsString()
-    @IsNotEmpty()
-    travelTime: number;
+  @IsString()
+  @IsNotEmpty()
+  travelTime: number;
 
-    @IsString()
-    @IsNotEmpty()
-    startTime: string;
+  @IsString()
+  @IsNotEmpty()
+  startTime: string;
 
-    @IsString()
-    @IsNotEmpty()
-    startDate: string;
+  @IsString()
+  @IsNotEmpty()
+  startDate: string;
 
-    @IsString()
-    @IsNotEmpty()
-    endTime: string;
+  @IsString()
+  @IsNotEmpty()
+  endTime: string;
 
-    @IsString()
-    @IsNotEmpty()
-    endDate: string;
+  @IsString()
+  @IsNotEmpty()
+  endDate: string;
 
+  @IsBoolean()
+  @IsOptional()
+  connectedToPrevious?: boolean;
 
-    @IsBoolean()
-    @IsOptional()
-    connectedToPrevious?: boolean;
-
-    @IsBoolean()
-    @IsOptional()
-    priority?: boolean;
+  @IsBoolean()
+  @IsOptional()
+  priority?: boolean;
 }
 
 export class TasksDataDto {
-    @IsString()
-    @IsNotEmpty()
-    task_id: string;
+  @IsString()
+  @IsNotEmpty()
+  task_id: string;
 
-    @IsString()
-    @IsNotEmpty()
-    ticket_no: string;
+  @IsString()
+  @IsNotEmpty()
+  ticket_no: string;
 
-    @IsString()
-    @IsNotEmpty()
-    title: string;
+  @IsString()
+  @IsNotEmpty()
+  title: string;
 
-    @IsString()
-    @IsNotEmpty()
-    priority: string;
+  @IsString()
+  @IsNotEmpty()
+  priority: string;
 
-    @IsString()
-    @IsNotEmpty()
-    location: string;
+  @IsString()
+  @IsNotEmpty()
+  location: string;
 
-    @IsString()
-    @IsNotEmpty()
-    responseType: string;
+  @IsString()
+  @IsNotEmpty()
+  responseType: string;
 
-    @IsString()
-    @IsNotEmpty()
-    building: string;
+  @IsString()
+  @IsNotEmpty()
+  building: string;
 
-    @IsString()
-    @IsNotEmpty()
-    start_time: string;
+  @IsString()
+  @IsNotEmpty()
+  start_time: string;
 
-    @IsString()
-    @IsNotEmpty()
-    end_time: string;
+  @IsString()
+  @IsNotEmpty()
+  end_time: string;
 
-    @IsString()
-    @IsNotEmpty()
-    estimated_travel_time: string;
+  @IsString()
+  @IsNotEmpty()
+  estimated_travel_time: string;
 
-    @IsString()
-    @IsNotEmpty()
-    total_time: string;
+  @IsString()
+  @IsNotEmpty()
+  total_time: string;
 }
 
 export class TasksCountDto {
-    @IsNumber()
-    @IsNotEmpty()
-    total: number = 0;
+  @IsNumber()
+  @IsNotEmpty()
+  total: number = 0;
 
-    @IsNumber()
-    @IsNotEmpty()
-    today: number = 0;
+  @IsNumber()
+  @IsNotEmpty()
+  today: number = 0;
 
-    @IsNumber()
-    @IsNotEmpty()
-    tomorrow: number = 0;
+  @IsNumber()
+  @IsNotEmpty()
+  tomorrow: number = 0;
 
-    @IsNumber()
-    @IsNotEmpty()
-    week: number = 0;
+  @IsNumber()
+  @IsNotEmpty()
+  week: number = 0;
 }
 
 export class TaskDetailDto {
+  @IsString()
+  @IsNotEmpty()
+  ticketId: string;
 
-    @IsString()
-    @IsNotEmpty()
-    ticketId: string;
+  @IsString()
+  @IsNotEmpty()
+  ticketNumber: string;
 
-    @IsString()
-    @IsNotEmpty()
-    ticketNumber: string;
+  @IsString()
+  @IsNotEmpty()
+  title: string;
 
-    @IsString()
-    @IsNotEmpty()
-    title: string;
+  @IsString()
+  @IsNotEmpty()
+  createdOn: string;
 
-    @IsString()
-    @IsNotEmpty()
-    createdOn: string;
+  @IsString()
+  @IsNotEmpty()
+  createByName: string;
 
-    @IsString()
-    @IsNotEmpty()
-    createByName: string;
+  @IsString()
+  @IsNotEmpty()
+  createByDesignation: string;
 
-    @IsString()
-    @IsNotEmpty()
-    createByDesignation: string;
+  @IsString()
+  @IsNotEmpty()
+  levelOfCompletion: string;
 
-    @IsString()
-    @IsNotEmpty()
-    priority: string;
+  @IsString()
+  @IsNotEmpty()
+  priority: string;
 
-    @IsString()
-    @IsNotEmpty()
-    startTime: string;
+  @IsString()
+  @IsNotEmpty()
+  startTime: string;
 
-    @IsString()
-    @IsNotEmpty()
-    endTime: string;
+  @IsString()
+  @IsNotEmpty()
+  endTime: string;
 
-    @IsString()
-    @IsNotEmpty()
-    estimatedTravelTime: string;
+  @IsString()
+  @IsNotEmpty()
+  estimatedTravelTime: string;
 
-    @IsString()
-    @IsNotEmpty()
-    duration: string;
+  @IsString()
+  @IsNotEmpty()
+  duration: string;
 
-    @IsString()
-    @IsNotEmpty()
-    workOrder: string;
+  @IsString()
+  @IsNotEmpty()
+  workOrder: string;
 
+  @IsString()
+  @IsNotEmpty()
+  customerName: string;
 
-    @IsString()
-    @IsNotEmpty()
-    customerName: string;
+  @IsString()
+  @IsNotEmpty()
+  location: string;
 
-    @IsString()
-    @IsNotEmpty()
-    location: string;
+  @IsString()
+  @IsNotEmpty()
+  issue: string;
 
-    @IsString()
-    @IsNotEmpty()
-    issue: string;
-
-
-    @IsString()
-    @IsNotEmpty()
-    description: string;
+  @IsString()
+  @IsNotEmpty()
+  description: string;
 }
 
 export class CalenderDataObjectType {
-    [key: string]: Array<CalenderDataDto>;
-
+  [key: string]: Array<CalenderDataDto>;
 }
 
 export class TaskUpdateDto {
-    @IsString()
-    @IsOptional()
-    'BookingStatus@odata.bind': string;
+  @IsString()
+  @IsOptional()
+  "BookingStatus@odata.bind": string;
 }
