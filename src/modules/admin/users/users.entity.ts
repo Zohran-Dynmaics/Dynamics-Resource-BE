@@ -27,10 +27,10 @@ export class User {
   @Prop({ type: String, required: true })
   resourceId: string;
 
-  @Prop({ type: String, required: false })
+  @Prop({ type: String, required: false, nullable: true })
   account?: string;
 
-  @Prop({ type: String, required: false })
+  @Prop({ type: String, required: false, nullable: true })
   accountId?: string;
 
   @Prop({ type: String, required: false })

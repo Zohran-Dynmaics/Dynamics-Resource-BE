@@ -46,10 +46,6 @@ export class AuthService {
         password,
         env_name
       );
-      console.log(
-        "🚀 ~ AuthService ~ signup ~ userValidation:",
-        userValidation
-      );
       if (!userValidation)
         throw new HttpException(
           "Not verified by CRM. Signup with CRM credentials.",
@@ -237,7 +233,6 @@ export class AuthService {
           HttpStatus.BAD_REQUEST
         );
       }
-      // console.log("🚀 ~ AuthService ~ env:", env);
       const access_token =
         env?.token ?? (await this.cmsService.getCrmToken(env)).access_token;
       const { value } = await this.cmsService.getBookableResources(
@@ -257,20 +252,16 @@ export class AuthService {
           HttpStatus.BAD_REQUEST
         );
 
-      // const user = await this.usersService.findByUsername(
-      //   username.toLowerCase()
-      // );
-      // console.log("🚀 ~ AuthService ~ user:", user);
+      console.log(
+        userValidation?.msdyn_bookableresource_msdyn_requirementresourcepreference_BookableResource?.filter(
+          (account) => account?.msdyn_Account !== null
+        )
+      );
 
       const { name, accountid } =
-        userValidation
-          ?.msdyn_bookableresource_msdyn_requirementresourcepreference_BookableResource?.[0]
-          ?.msdyn_Account;
-      // const updatedUser = await this.usersService.update({
-      //   _id: user?._id,
-      //   account: name,
-      //   accountId: accountid
-      // });
+        userValidation?.msdyn_bookableresource_msdyn_requirementresourcepreference_BookableResource?.filter(
+          (account) => account?.msdyn_Account !== null
+        )?.[0]?.msdyn_Account;
 
       return { userValidation, env, account: name, accountId: accountid };
     } catch (error) {

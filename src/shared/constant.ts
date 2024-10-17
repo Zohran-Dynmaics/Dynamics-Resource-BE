@@ -10,9 +10,9 @@ const END_POINTS = {
     endpoint: `${COMMON_URL}/bookableresourcebookings`,
     params: {
       $expand:
-        "msdyn_workorder($expand=msdyn_workordertype($select=msdyn_name),msdyn_priority($select=msdyn_name),msdyn_FunctionalLocation($select=msdyn_name),msdyn_serviceaccount),BookingStatus($select=name),plus_case($expand=primarycontactid($select=fullname),msdyn_FunctionalLocation($select=msdyn_name))",
+        "msdyn_workorder($expand=msdyn_workordertype($select=msdyn_name),msdyn_priority($select=msdyn_name),msdyn_FunctionalLocation($select=msdyn_name),msdyn_serviceaccount),BookingStatus($select=name),plus_case($expand=primarycontactid($select=fullname),msdyn_FunctionalLocation($select=msdyn_name))"
     }
-  },
+  }
 };
 
 export const DATES = {
@@ -24,25 +24,23 @@ export const DATES = {
   },
   week: () => {
     const { startOfDay } = getDayBoundaries(new Date().toISOString());
-    const nextWeekDate = moment().endOf('week').toDate();
+    const nextWeekDate = moment().endOf("week").toDate();
     const { endOfDay } = getDayBoundaries(nextWeekDate);
 
     return { startOfDay, endOfDay };
-  },
+  }
 };
 
 const buildQueryParams = (
   query: any | null,
   resourceId: string,
-  date?: Date | string | null,
+  date?: Date | string | null
 ) => {
   const params = {
     ...END_POINTS?.BOOKABALE_RESOURCE_BOOKINGS?.params,
     $filter: `_resource_value eq ${resourceId}`,
-    $count: "true",
+    $count: "true"
   };
-
-
 
   if (query?.workordertype) {
     params["$filter"] +=
@@ -51,7 +49,7 @@ const buildQueryParams = (
 
   if (date) {
     const { startOfDay, endOfDay } = getDayBoundaries(
-      new Date(date).toISOString(),
+      new Date(date).toISOString()
     );
     params["$filter"] +=
       ` and starttime ge ${startOfDay} and starttime lt ${endOfDay}`;
@@ -69,19 +67,20 @@ export const URLS_AND_QUERY_PARAMS = {
         endpoint: (base_url: string): string =>
           `${base_url}${END_POINTS.BOOKABALE_RESOURCE_BOOKINGS.endpoint}?`,
         query: (query: TaskFilterDto | null, resourceId: string) =>
-          buildQueryParams(query, resourceId),
+          buildQueryParams(query, resourceId)
       },
       BOOKING_DETAIL: {
         endpoint: (base_url: string, bookingId: string): string =>
           `${base_url}${END_POINTS.BOOKABALE_RESOURCE_BOOKINGS.endpoint}${`(${bookingId})`}?`,
-        query: () => `$expand=${END_POINTS.BOOKABALE_RESOURCE_BOOKINGS.params.$expand}`,
+        query: () =>
+          `$expand=${END_POINTS.BOOKABALE_RESOURCE_BOOKINGS.params.$expand}`
       },
       BOOKINGS_FOR_CALENDER: {
         endpoint: (base_url: string): string =>
           `${base_url}${END_POINTS.BOOKABALE_RESOURCE_BOOKINGS.endpoint}?`,
         query: (date: Date | string | null, resourceId: string) =>
-          buildQueryParams(null, resourceId, date),
-      },
-    },
-  },
+          buildQueryParams(null, resourceId, date)
+      }
+    }
+  }
 };

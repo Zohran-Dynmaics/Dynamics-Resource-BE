@@ -5,15 +5,15 @@ import { CustomRequest } from "src/shared/custom-interface";
 
 @Controller("cms")
 export class ProblemIssueController {
-  constructor(private problemIssueService: ProblemIssueService) { }
+  constructor(private problemIssueService: ProblemIssueService) {}
 
-  @Get("plus_problemissues")
+  @Get("plus_problemissue")
   getAllProblemIssues(@Req() req: CustomRequest): Promise<any> {
     const { env, query } = req;
     return this.problemIssueService.getAllProblemIssues(
       env.token,
       env.base_url,
-      query,
+      query
     );
   }
 }

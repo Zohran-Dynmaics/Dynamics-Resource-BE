@@ -5,7 +5,7 @@ import { ParamsDto } from "../../cms.dto";
 const initialQuery: ParamsDto = {
   // $select: "starttime,duration,endtime,msdyn_estimatedtravelduration",
   $expand:
-    "msdyn_workorder($expand=createdby($select=fullname,title),msdyn_reportedbycontact($select=fullname),msdyn_workordertype($select=msdyn_name),msdyn_priority($select=msdyn_name),msdyn_servicerequest,msdyn_FunctionalLocation($select=msdyn_name),msdyn_serviceaccount($select=name)),BookingStatus($select=name,msdyn_statuscolor),plus_case($select=plus_levelofcompletion,ticketnumber,title,prioritycode;$expand=primarycontactid($select=fullname),msdyn_FunctionalLocation($select=msdyn_name),plus_problemissues($select=plus_name))",
+    "msdyn_workorder($expand=plus_problemissue($select=plus_name),createdby($select=fullname,title),msdyn_reportedbycontact($select=fullname),msdyn_workordertype($select=msdyn_name),msdyn_priority($select=msdyn_name),msdyn_servicerequest,msdyn_FunctionalLocation($select=msdyn_name),msdyn_serviceaccount($select=name)),BookingStatus($select=name,msdyn_statuscolor),plus_case($select=plus_levelofcompletion,ticketnumber,title,prioritycode;$expand=primarycontactid($select=fullname),msdyn_FunctionalLocation($select=msdyn_name),)",
   $count: true
 };
 

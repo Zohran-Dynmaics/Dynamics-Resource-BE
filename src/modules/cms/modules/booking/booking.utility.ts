@@ -220,7 +220,7 @@ export const FormatDataForTaskDetail = (value: any) => {
   taskDetailDto.customerName =
     value?.plus_case?.primarycontactid?.fullname ||
     value?.msdyn_workorder?.msdyn_reportedbycontact?.fullname;
-  taskDetailDto.issue = value?.plus_case?.plus_problemissues?.plus_name;
+  taskDetailDto.issue = value?.plus_case?.plus_problemissue?.plus_name;
   taskDetailDto.levelOfCompletion =
     value?.plus_case?.plus_levelofcompletion || null;
   taskDetailDto.description =
