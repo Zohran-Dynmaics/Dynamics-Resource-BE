@@ -41,10 +41,14 @@ export class AuthService {
       if (user) {
         throw new HttpException("User already exists.", HttpStatus.BAD_REQUEST);
       }
-      const { userValidation } = await this.verifyUserOnCrm(
+      const { userValidation, account, accountId } = await this.verifyUserOnCrm(
         username,
         password,
         env_name
+      );
+      console.log(
+        "🚀 ~ AuthService ~ signup ~ userValidation:",
+        userValidation
       );
       if (!userValidation)
         throw new HttpException(
@@ -56,9 +60,11 @@ export class AuthService {
         username.toLowerCase(),
         hashedPassword,
         userValidation?.UserId?.defaultmailbox?.emailaddress,
-        userValidation.bookableresourceid,
-        env_name.toLowerCase(),
-        userValidation?.UserId?.title
+        userValidation?.bookableresourceid,
+        env_name?.toLowerCase(),
+        userValidation?.UserId?.title,
+        account,
+        accountId
       );
     } catch (error) {
       throw error;
@@ -78,13 +84,17 @@ export class AuthService {
       if (!isMatch) {
         throw new HttpException("Invalid credentials", HttpStatus.BAD_REQUEST);
       }
-      const { userValidation, env, updatedUser } = await this.verifyUserOnCrm(
-        username,
-        password,
-        env_name
-      );
+      const { userValidation, env, account, accountId } =
+        await this.verifyUserOnCrm(username, password, env_name);
       if (!userValidation)
         throw new HttpException("Not verified by CRM.", HttpStatus.BAD_REQUEST);
+
+      const updatedUser = await this.usersService.update({
+        _id: user?._id,
+        account,
+        accountId
+      });
+
       const payload: TokenPayloadDto = {
         user: {
           _id: user?._id,
@@ -221,6 +231,13 @@ export class AuthService {
   ): Promise<any> {
     try {
       const env = await this.envService.findByName(env_name);
+      if (!env) {
+        throw new HttpException(
+          "Environment not found",
+          HttpStatus.BAD_REQUEST
+        );
+      }
+      // console.log("🚀 ~ AuthService ~ env:", env);
       const access_token =
         env?.token ?? (await this.cmsService.getCrmToken(env)).access_token;
       const { value } = await this.cmsService.getBookableResources(
@@ -233,27 +250,29 @@ export class AuthService {
           user.plus_password === password
         );
       });
+
       if (!userValidation)
         throw new HttpException(
           "Not verified by CRM. SignUp/SignIn with CRM credentials.",
           HttpStatus.BAD_REQUEST
         );
 
-      const user = await this.usersService.findByUsername(
-        username.toLowerCase()
-      );
+      // const user = await this.usersService.findByUsername(
+      //   username.toLowerCase()
+      // );
+      // console.log("🚀 ~ AuthService ~ user:", user);
 
       const { name, accountid } =
         userValidation
           ?.msdyn_bookableresource_msdyn_requirementresourcepreference_BookableResource?.[0]
           ?.msdyn_Account;
-      const updatedUser = await this.usersService.update({
-        _id: user?._id,
-        account:name,
-        accountId:accountid
-      });
+      // const updatedUser = await this.usersService.update({
+      //   _id: user?._id,
+      //   account: name,
+      //   accountId: accountid
+      // });
 
-      return { userValidation, env, updatedUser };
+      return { userValidation, env, account: name, accountId: accountid };
     } catch (error) {
       throw error;
     }

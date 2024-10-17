@@ -29,7 +29,9 @@ export class UsersService {
     email: string,
     resourceId: string,
     envName: string,
-    role: string
+    role: string,
+    account: string,
+    accountId: string
   ) {
     return await this.userModel.create({
       username,
@@ -37,7 +39,9 @@ export class UsersService {
       email,
       resourceId,
       envName,
-      role
+      role,
+      account,
+      accountId
     });
   }
 
