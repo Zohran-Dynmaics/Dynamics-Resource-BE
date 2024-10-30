@@ -33,6 +33,18 @@ export class User {
   @Prop({ type: String, required: false, nullable: true })
   accountId?: string;
 
+  @Prop({ type: String, required: false, nullable: true })
+  plusWarehouseId?: string;
+
+  @Prop({ type: String, required: false, nullable: true })
+  plusWarehouseName?: string;
+
+  @Prop({ type: String, required: false, nullable: true })
+  plusParentWarehouseId?: string;
+
+  @Prop({ type: String, required: false, nullable: true })
+  plusParentWarehouseName?: string;
+
   @Prop({ type: String, required: false })
   project?: string;
 

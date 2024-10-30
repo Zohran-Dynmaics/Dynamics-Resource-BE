@@ -25,6 +25,22 @@ export class UpdateUserDto {
   accountId?: string;
 
   @IsOptional()
+  @IsString()
+  plusWarehouseId?: string;
+
+  @IsOptional()
+  @IsString()
+  plusWarehouseName?: string;
+
+  @IsOptional()
+  @IsString()
+  plusParentWarehouseName?: string;
+
+  @IsOptional()
+  @IsString()
+  plusParentWarehouseId?: string;
+
+  @IsOptional()
   @IsBoolean()
   resetPasswordRequested?: boolean;
 

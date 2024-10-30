@@ -81,7 +81,7 @@ export class CmsService {
 
   async getBookableResources(token: string, base_url: string): Promise<any> {
     const config: AxiosRequestConfig = this.apiService.getConfig(
-      `${base_url}/api/data/v9.1/bookableresources?$select=name,plus_password,plus_username&$expand=msdyn_bookableresource_msdyn_requirementresourcepreference_BookableResource($select=msdyn_name;$expand=msdyn_Account($select=name)),UserId($select=fullname,caltype,isintegrationuser,islicensed;$expand=defaultmailbox($select=emailaddress))`,
+      `${base_url}/api/data/v9.1/bookableresources?$select=name,plus_password,plus_username&$expand=plus_warehouseid($select=msdyn_name;$expand=plus_parentwarehouse),msdyn_bookableresource_msdyn_requirementresourcepreference_BookableResource($select=msdyn_name;$expand=msdyn_Account($select=name)),UserId($select=fullname,caltype,isintegrationuser,islicensed;$expand=defaultmailbox($select=emailaddress))`,
       HTTPS_METHODS.GET,
       token
     );

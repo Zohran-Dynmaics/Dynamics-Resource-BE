@@ -80,7 +80,7 @@ export class AuthService {
       if (!isMatch) {
         throw new HttpException("Invalid credentials", HttpStatus.BAD_REQUEST);
       }
-      const { userValidation, env, account, accountId } =
+      const { userValidation, env, account, accountId, plus_warehouse } =
         await this.verifyUserOnCrm(username, password, env_name);
       if (!userValidation)
         throw new HttpException("Not verified by CRM.", HttpStatus.BAD_REQUEST);
@@ -88,7 +88,13 @@ export class AuthService {
       const updatedUser = await this.usersService.update({
         _id: user?._id,
         account,
-        accountId
+        accountId,
+        plusWarehouseId: plus_warehouse?.msdyn_warehouseid || null,
+        plusWarehouseName: plus_warehouse?.msdyn_name || null,
+        plusParentWarehouseId:
+          plus_warehouse?.plus_parentwarehouse?.msdyn_warehouseid || null,
+        plusParentWarehouseName:
+          plus_warehouse?.plus_parentwarehouse?.msdyn_name || null
       });
 
       const payload: TokenPayloadDto = {
@@ -239,6 +245,7 @@ export class AuthService {
         access_token,
         env?.base_url
       );
+      console.log("🚀 ~ AuthService ~ value:", value);
       const userValidation = value.find((user) => {
         return (
           username.toLowerCase() === user.plus_username.toLowerCase() &&
@@ -252,18 +259,18 @@ export class AuthService {
           HttpStatus.BAD_REQUEST
         );
 
-      console.log(
-        userValidation?.msdyn_bookableresource_msdyn_requirementresourcepreference_BookableResource?.filter(
-          (account) => account?.msdyn_Account !== null
-        )
-      );
-
       const { name, accountid } =
         userValidation?.msdyn_bookableresource_msdyn_requirementresourcepreference_BookableResource?.filter(
           (account) => account?.msdyn_Account !== null
         )?.[0]?.msdyn_Account;
 
-      return { userValidation, env, account: name, accountId: accountid };
+      return {
+        userValidation,
+        env,
+        account: name,
+        accountId: accountid,
+        warehouse: value?.plus_warehouseid
+      };
     } catch (error) {
       throw error;
     }
