@@ -80,8 +80,9 @@ export class AuthService {
       if (!isMatch) {
         throw new HttpException("Invalid credentials", HttpStatus.BAD_REQUEST);
       }
-      const { userValidation, env, account, accountId, plus_warehouse } =
+      const { userValidation, env, account, accountId, warehouse } =
         await this.verifyUserOnCrm(username, password, env_name);
+      console.log("🚀 ~ AuthService ~ signin ~ plus_warehouse:", warehouse);
       if (!userValidation)
         throw new HttpException("Not verified by CRM.", HttpStatus.BAD_REQUEST);
 
@@ -89,12 +90,12 @@ export class AuthService {
         _id: user?._id,
         account,
         accountId,
-        plusWarehouseId: plus_warehouse?.msdyn_warehouseid || null,
-        plusWarehouseName: plus_warehouse?.msdyn_name || null,
+        plusWarehouseId: warehouse?.msdyn_warehouseid || null,
+        plusWarehouseName: warehouse?.msdyn_name || null,
         plusParentWarehouseId:
-          plus_warehouse?.plus_parentwarehouse?.msdyn_warehouseid || null,
+          warehouse?.plus_parentwarehouse?.msdyn_warehouseid || null,
         plusParentWarehouseName:
-          plus_warehouse?.plus_parentwarehouse?.msdyn_name || null
+          warehouse?.plus_parentwarehouse?.msdyn_name || null
       });
 
       const payload: TokenPayloadDto = {
@@ -245,7 +246,7 @@ export class AuthService {
         access_token,
         env?.base_url
       );
-      console.log("🚀 ~ AuthService ~ value:", value);
+      console.log("🚀 ~ AuthService ~ value:", value?.plus_warehouseid);
       const userValidation = value.find((user) => {
         return (
           username.toLowerCase() === user.plus_username.toLowerCase() &&
@@ -269,7 +270,7 @@ export class AuthService {
         env,
         account: name,
         accountId: accountid,
-        warehouse: value?.plus_warehouseid
+        warehouse: userValidation?.plus_warehouseid
       };
     } catch (error) {
       throw error;

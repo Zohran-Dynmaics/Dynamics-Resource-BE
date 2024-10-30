@@ -213,16 +213,8 @@ export class CmsService {
         query,
         data
       );
-      console.log(
-        "🚀 ~ CmsService ~ CreateOrUpdateDynamicContent ~ config:",
-        config
-      );
       return this.apiService.request(config);
     } catch (error) {
-      console.log(
-        "🚀 ~ CmsService ~ CreateOrUpdateDynamicContent ~ error:",
-        error
-      );
       throw error;
     }
   }

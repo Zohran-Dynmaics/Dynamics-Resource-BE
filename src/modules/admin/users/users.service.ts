@@ -46,7 +46,6 @@ export class UsersService {
   }
 
   async update(updateUserDto: UpdateUserDto, crmToken?: string): Promise<User> {
-    console.log("🚀 ~ UsersService ~ update ~ updateUserDto:", updateUserDto);
     const { _id, password = null } = updateUserDto;
     try {
       const user = await this.findOne({ _id });
