@@ -6,7 +6,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { UsersModule } from "../users/users.module";
 import { CmsModule } from "../cms/cms.module";
 import { EnvironmentModule } from "../admin/environment/environment.module";
-import { CustomerModule } from "../customer copy/customer.module";
+import { CustomerModule } from "../customer/customer.module";
 
 @Module({
   imports: [

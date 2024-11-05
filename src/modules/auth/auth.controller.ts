@@ -12,8 +12,8 @@ import {
 } from "@nestjs/common";
 import { Response } from "express";
 import { validatePhoneNumber } from "src/shared/utility/utility";
-import { Customer } from "../customer copy/customer.entity";
-import { CreateCustomer, CustomerLogin } from "../customer copy/dto";
+import { Customer } from "../customer/customer.entity";
+import { CreateCustomer, CustomerLogin } from "../customer/dto";
 import { User } from "../users/users.entity";
 import {
   ResponseSignUpDto,
@@ -27,7 +27,7 @@ import {
   VerifyOtpDto
 } from "./auth.dto";
 import { AuthService } from "./auth.service";
-import { CustomerService } from "../customer copy/customer.service";
+import { CustomerService } from "../customer/customer.service";
 
 @Controller("auth")
 export class AuthController {
