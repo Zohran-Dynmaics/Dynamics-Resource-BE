@@ -1,6 +1,7 @@
 export enum UserRole {
   TECHNICIAN = "technician",
   ADMIN = "admin",
+  CUSTOMER = "customer"
 }
 
 export enum HTTPS_METHODS {
@@ -15,5 +16,5 @@ export enum HTTPS_METHODS {
   CONNECT = "CONNECT",
   ALL = "ALL",
   ANY = "ANY",
-  DEFAULT = "DEFAULT",
+  DEFAULT = "DEFAULT"
 }

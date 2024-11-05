@@ -13,7 +13,7 @@ import {
 } from "./cms.dto";
 import { GRANT_TYPES } from "./constants";
 import { TokenEnvironmentDto } from "../admin/environment/environment.dto";
-import { TokenUserDto } from "../admin/users/users.dto";
+import { TokenUserDto } from "../users/users.dto";
 import { BookingService } from "./modules/booking/booking.service";
 import { FilterType, TaskFilterDto } from "./modules/booking/booking.dto";
 

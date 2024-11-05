@@ -10,8 +10,8 @@ import {
   generateHash,
   getEnvironmentNameFromEmail
 } from "src/shared/utility/utility";
-import { CmsService } from "../../cms/cms.service";
-import { EnvironmentService } from "../environment/environment.service";
+import { CmsService } from "../cms/cms.service";
+import { EnvironmentService } from "../admin/environment/environment.service";
 import { SearchUserDto, UpdateUserDto } from "./users.dto";
 import { User } from "./users.entity";
 
@@ -30,8 +30,8 @@ export class UsersService {
     resourceId: string,
     envName: string,
     role: string,
-    account: string,
-    accountId: string
+    department?: string,
+    access?: string[]
   ) {
     return await this.userModel.create({
       username,
@@ -40,8 +40,8 @@ export class UsersService {
       resourceId,
       envName,
       role,
-      account,
-      accountId
+      department,
+      access
     });
   }
 

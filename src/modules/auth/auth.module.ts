@@ -3,14 +3,16 @@ import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { UsersModule } from "../admin/users/users.module";
+import { UsersModule } from "../users/users.module";
 import { CmsModule } from "../cms/cms.module";
 import { EnvironmentModule } from "../admin/environment/environment.module";
+import { CustomerModule } from "../customer copy/customer.module";
 
 @Module({
   imports: [
     UsersModule,
     CmsModule,
+    CustomerModule,
     EnvironmentModule,
     JwtModule.registerAsync({
       global: true,
@@ -18,13 +20,13 @@ import { EnvironmentModule } from "../admin/environment/environment.module";
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get("JWT_SECRET"),
         signOptions: {
-          expiresIn: configService.get("JWT_EXPIRES_IN"),
-        },
+          expiresIn: configService.get("JWT_EXPIRES_IN")
+        }
       }),
-      inject: [ConfigService],
-    }),
+      inject: [ConfigService]
+    })
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService]
 })
-export class AuthModule { }
+export class AuthModule {}
