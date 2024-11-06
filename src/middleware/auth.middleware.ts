@@ -2,21 +2,22 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
-  NestMiddleware,
+  NestMiddleware
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { NextFunction, Request, Response } from "express";
 import { ApiService } from "src/modules/api/api.service";
 import { CmsService } from "src/modules/cms/cms.service";
 import { EnvironmentService } from "src/modules/admin/environment/environment.service";
+import { CustomRequest } from "src/shared/custom-interface";
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
   constructor(
     private jwtService: JwtService,
     private envService: EnvironmentService,
-    private cmsService: CmsService,
-  ) { }
+    private cmsService: CmsService
+  ) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
     try {

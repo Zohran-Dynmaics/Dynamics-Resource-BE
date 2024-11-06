@@ -20,7 +20,6 @@ export class CustomerController {
 
   @Get("stats")
   async getStats(): Promise<any> {
-    console.log("getStats");
     // Fetch user statistics from your database or external API
     // Replace this line with your actual logic
     return await this.customerService.getStats();

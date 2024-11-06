@@ -26,10 +26,6 @@ export class ApiService {
         return res.data;
       });
     } catch (error) {
-      console.log(
-        "🚀 ~ ApiService ~ request ~ error:",
-        error?.response?.data?.error
-      );
       if (this.isTokenExpired(error)) {
         const token = await this.cmsService.refreshCrmToken(
           config.headers.Authorization.split(" ")[1]

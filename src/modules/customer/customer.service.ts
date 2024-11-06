@@ -460,7 +460,6 @@ export class CustomerService {
     try {
       const { phoneNumber, password, device, appName } = loginDto;
       let customer: any = await this.findByPhoneNumber(phoneNumber);
-      console.log("🚀 ~ CustomerService ~ login ~ customer:", customer);
 
       if (!customer) {
         throw new HttpException("Customer not found", HttpStatus.NOT_FOUND);
@@ -481,14 +480,12 @@ export class CustomerService {
       }
 
       const isMatch = await this.comparePasswords(password, customer.password);
-      console.log("🚀 ~ CustomerService ~ login ~ isMatch:", isMatch);
 
       if (!isMatch) {
         throw new HttpException("Invalid credentials", HttpStatus.BAD_REQUEST);
       }
 
       const crmCustomer = await this.checkCRMCustomer(phoneNumber);
-      console.log("🚀 ~ CustomerService ~ login ~ crmCustomer:", crmCustomer);
 
       if (crmCustomer.isNewCustomer) {
         throw new HttpException(
@@ -590,7 +587,6 @@ export class CustomerService {
       let ios = 0;
 
       activeCustomers.forEach((customer) => {
-        console.log("custmer", customer);
         if (customer?.device?.toLowerCase() == "android") android += 1;
         else if (customer?.device?.toLowerCase() == "ios") ios += 1;
       });

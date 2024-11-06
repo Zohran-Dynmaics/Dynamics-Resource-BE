@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod
+} from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { MongooseModule } from "@nestjs/mongoose";
 import { AppController } from "./app.controller";
@@ -25,6 +30,9 @@ import { PromoCodeModule } from "./modules/admin/promo-code/promo-code.module";
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes("cms/*", "admin/*");
+    consumer
+      .apply(AuthMiddleware)
+      .exclude({ path: "auth/(.*)", method: RequestMethod.ALL })
+      .forRoutes("*");
   }
 }
