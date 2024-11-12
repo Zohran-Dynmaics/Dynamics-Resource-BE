@@ -141,10 +141,6 @@ export class CustomerService {
   async checkCRMCustomer(phoneNumber: string): Promise<any> {
     try {
       const customer = await this.customerModel.findOne({ phoneNumber }).exec();
-      console.log(
-        "🚀 ~ CustomerService ~ checkCRMCustomer ~ customer:",
-        customer
-      );
 
       // if (customer && customer?.downloadedOn != null) {
       //   throw new HttpException(
@@ -493,8 +489,9 @@ export class CustomerService {
       const crmCustomer = await this.checkCRMCustomer(phoneNumber);
 
       if (crmCustomer.isNewCustomer) {
+        await this.deleteAccount(customer?._id);
         throw new HttpException(
-          "Customer not found in CRM with provided phone number",
+          "Customer not found in CRM with provided phone number. Please follow the register process.",
           HttpStatus.NOT_FOUND
         );
       }
