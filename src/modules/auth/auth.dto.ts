@@ -1,4 +1,11 @@
-import { IsBoolean, IsEmail, IsNotEmpty, IsString } from "class-validator";
+import {
+  IsBoolean,
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString
+} from "class-validator";
 import { User } from "../users/users.entity";
 import { TokenUserDto } from "../users/users.dto";
 import { TokenEnvironmentDto } from "../admin/environment/environment.dto";
@@ -61,4 +68,19 @@ export class VerifyOtp extends UpdatePasswordRequest {
 export class TokenPayloadDto {
   user: TokenUserDto;
   env: TokenEnvironmentDto;
+}
+
+export enum ResendOTPPurpose {
+  PASSWORD_RESET = "passwordReset",
+  VERIFY_CUSTOMER = "verifyCustomer"
+}
+
+export class ResendOtp {
+  @IsNotEmpty({ message: "Phone Number should not be empty." })
+  @IsString()
+  phoneNumber: string;
+
+  @IsOptional()
+  @IsEnum(ResendOTPPurpose)
+  purpose?: ResendOTPPurpose;
 }

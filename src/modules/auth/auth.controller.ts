@@ -16,6 +16,7 @@ import { Customer } from "../customer/customer.entity";
 import { CreateCustomer, CustomerLogin } from "../customer/dto";
 import { User } from "../users/users.entity";
 import {
+  ResendOtp,
   ResponseSignUpDto,
   SignInDto,
   SignUpDto,
@@ -192,12 +193,13 @@ export class AuthController {
   }
 
   @Post("customer/resend-otp")
-  async resendOtp(@Body("phoneNumber") phoneNumber: string): Promise<string> {
+  async resendOtp(@Body() resendOtpBody: ResendOtp): Promise<string> {
     try {
+      const { phoneNumber, purpose } = resendOtpBody;
       const isValidPhoneNumber = validatePhoneNumber(phoneNumber);
       if (!isValidPhoneNumber)
         throw new HttpException("Invalid phone number", HttpStatus.BAD_REQUEST);
-      return this.customerService.resendOtp(phoneNumber);
+      return this.customerService.resendOtp(phoneNumber, purpose);
     } catch (error) {
       throw error;
     }

@@ -6,7 +6,12 @@ import { Model } from "mongoose";
 import { HTTPS_METHODS } from "src/shared/enum";
 import { generateHash, sendOtpToPhoneNumber } from "src/shared/utility/utility";
 import { EnvironmentService } from "../admin/environment/environment.service";
-import { UpdatePassword, VerifyOtp } from "../auth/auth.dto";
+import {
+  ResendOtp,
+  ResendOTPPurpose,
+  UpdatePassword,
+  VerifyOtp
+} from "../auth/auth.dto";
 import { CmsService } from "../cms/cms.service";
 import { Customer } from "./customer.entity";
 import { CreateCustomer, CustomerLogin } from "./dto";
@@ -87,30 +92,45 @@ export class CustomerService {
     }
   }
 
-  async resendOtp(phoneNumber: string): Promise<string> {
+  async resendOtp(
+    phoneNumber: string,
+    purpose?: ResendOTPPurpose
+  ): Promise<string> {
     try {
       const customer: any = await this.findByPhoneNumber(phoneNumber);
 
-      const otp = otpGenerator.generate(4, {
-        upperCaseAlphabets: false,
-        lowerCaseAlphabets: false,
-        specialChars: false
-      });
-
-      await sendOtpToPhoneNumber(
-        phoneNumber,
-        `Your account verification otp is : ${otp}`
-      );
-
-      if (!customer)
+      if (!customer) {
         throw new HttpException(
           "Customer not found with provided phone number",
           HttpStatus.NOT_FOUND
         );
+      }
 
-      await this.customerModel.findByIdAndUpdate(customer?._id, {
-        otp
-      });
+      // const otp = otpGenerator.generate(4, {
+      //   upperCaseAlphabets: false,
+      //   lowerCaseAlphabets: false,
+      //   specialChars: false
+      // });
+      const otp = "1234";
+
+      // await sendOtpToPhoneNumber(
+      //   phoneNumber,
+      //   purpose == ResendOTPPurpose.VERIFY_CUSTOMER
+      //     ? `Your account verification OTP is : ${otp}`
+      //     : `OTP for reset password is : ${otp}`
+      // );
+
+      const updateRecord =
+        purpose == ResendOTPPurpose.VERIFY_CUSTOMER
+          ? {
+              otp,
+              verified: false
+            }
+          : {
+              resetPasswordOtp: otp,
+              resetPasswordOtpExpiry: new Date(new Date().getTime() + 3600)
+            };
+      await this.customerModel.findByIdAndUpdate(customer?._id, updateRecord);
 
       return "OTP Sent to your provided phone number";
     } catch (error) {
