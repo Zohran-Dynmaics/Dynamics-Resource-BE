@@ -17,7 +17,7 @@ export class UpdatePasswordRequestDto {
 }
 
 export class UpdatePasswordRequest {
-  @IsNotEmpty({ message: "Email should not be empty." })
+  @IsNotEmpty({ message: "Phone Number should not be empty." })
   @IsString()
   phoneNumber: string;
 }

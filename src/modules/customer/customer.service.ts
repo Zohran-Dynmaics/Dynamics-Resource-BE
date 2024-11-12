@@ -493,6 +493,13 @@ export class CustomerService {
         );
       }
 
+      if (!customer?.downloadedOn) {
+        throw new HttpException(
+          "You have not completed the registration process yet. Please complete the registration process and then login.",
+          HttpStatus.BAD_REQUEST
+        );
+      }
+
       if (!customer?.password) {
         throw new HttpException(
           "No password has been set for this account. Please use the 'Forgot Password' option to set your password and try again.",
