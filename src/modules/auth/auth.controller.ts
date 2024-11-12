@@ -93,6 +93,7 @@ export class AuthController {
   async checkCRMCustomer(
     @Param("phoneNumber") phoneNumber: string
   ): Promise<any> {
+    console.log("🚀 ~ AuthController ~ phoneNumber:", phoneNumber);
     try {
       const isValidPhoneNumber = validatePhoneNumber(phoneNumber);
       if (!isValidPhoneNumber)

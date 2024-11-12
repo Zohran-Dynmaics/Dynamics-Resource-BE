@@ -56,7 +56,7 @@ export class CustomerService {
   async verifyPhoneNumber(phoneNumber: string): Promise<string> {
     try {
       const customer = await this.customerModel.findOne({ phoneNumber }).exec();
-      if (customer && customer.verified) {
+      if (customer && customer.downloadedOn !== null) {
         throw new HttpException(
           "Phone number already registered with an account. Login Please.",
           HttpStatus.BAD_REQUEST
@@ -141,10 +141,14 @@ export class CustomerService {
   async checkCRMCustomer(phoneNumber: string): Promise<any> {
     try {
       const customer = await this.customerModel.findOne({ phoneNumber }).exec();
+      console.log(
+        "🚀 ~ CustomerService ~ checkCRMCustomer ~ customer:",
+        customer
+      );
 
-      // if (customer) {
-      //   return new HttpException(
-      //     `This phone number already registered with an account`,
+      // if (customer && customer?.downloadedOn != null) {
+      //   throw new HttpException(
+      //     "Phone number already registered with an account. Login Please.",
       //     HttpStatus.BAD_REQUEST
       //   );
       // }
@@ -368,6 +372,7 @@ export class CustomerService {
     const { _id } = user;
     try {
       const customer: any = await this.findById(_id);
+      console.log("🚀 ~ CustomerService ~ customer:", customer);
       if (!customer) {
         throw new HttpException(`Customer not found`, HttpStatus.NOT_FOUND);
       }

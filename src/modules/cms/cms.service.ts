@@ -213,6 +213,7 @@ export class CmsService {
         query,
         data
       );
+      console.log("🚀 ~ CmsService ~ config:", config);
       return this.apiService.request(config);
     } catch (error) {
       throw error;
