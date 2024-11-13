@@ -96,10 +96,6 @@ export class AuthService {
         password,
         env_name
       );
-      console.log(
-        "🚀 ~ AuthService ~ signin ~ userValidation:",
-        userValidation
-      );
       if (!userValidation) {
         throw new HttpException("Not verified by CRM.", HttpStatus.BAD_REQUEST);
       }
@@ -117,8 +113,11 @@ export class AuthService {
         }
       };
       user.department = department;
-      await user.save();
-      return { token: await this.generateToken(payload), user };
+      const updateUser = await user.save();
+      return {
+        token: await this.generateToken(payload),
+        user: { ...updateUser?._doc, ...userValidation }
+      };
     } catch (error) {
       throw error;
     }
