@@ -83,7 +83,7 @@ export class AuthService {
         throw new HttpException("Invalid credentials", HttpStatus.BAD_REQUEST);
       }
       const { userValidation, env, department } = await this.verifyUserOnCrm(
-        username,
+        username.toLowerCase(),
         password,
         env_name
       );
@@ -300,8 +300,8 @@ export class AuthService {
       );
       const userValidation = value.find((user) => {
         if (
-          username === user.plus_username &&
-          user.plus_password === password
+          username === user?.plus_username.toLowerCase() &&
+          user?.plus_password === password
         ) {
           department = user?.plus_department?.plus_name;
           return true;
