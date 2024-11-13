@@ -5,6 +5,7 @@ import { ConfigService } from "@nestjs/config";
 import { HttpExceptionFilter } from "./filters/exception.filters";
 import { Logger as NestLogger, ValidationPipe } from "@nestjs/common";
 import * as cookieParser from "cookie-parser";
+import * as bodyParser from "body-parser";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,8 +15,8 @@ async function bootstrap() {
     new ValidationPipe({
       transform: true,
       whitelist: true,
-      forbidNonWhitelisted: true,
-    }),
+      forbidNonWhitelisted: true
+    })
   );
 
   app.use(cookieParser());
@@ -23,6 +24,9 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ResponseInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter());
   app.enableCors();
+  app.use(bodyParser.json({ limit: "50mb" }));
+  app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+
   app.setGlobalPrefix("api/v0");
 
   const port = configService.get("APP_PORT") || 3000;
