@@ -20,7 +20,13 @@ export class User {
   @Prop({ type: String, required: true })
   password: string;
 
-  @Prop({ type: String, required: false, IsEmail: true, unique: true })
+  @Prop({
+    type: String,
+    required: false,
+    IsEmail: true,
+    // unique: true,
+    nullable: true
+  })
   email?: string;
 
   @Prop({ type: String, required: false })

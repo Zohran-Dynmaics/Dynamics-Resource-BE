@@ -49,9 +49,13 @@ export class AuthService {
         password,
         env_name
       );
+      console.log(
+        "🚀 ~ AuthService ~ signup ~ userValidation:",
+        userValidation
+      );
       if (!userValidation)
         throw new HttpException(
-          "Not verified by CRM. Signup with CRM credentials.",
+          "Invalid username or password",
           HttpStatus.BAD_REQUEST
         );
       const hashedPassword: string = await generateHash(password);
@@ -72,23 +76,33 @@ export class AuthService {
   async signin(singinDto: SignInDto): Promise<any> {
     try {
       const { username, password, env_name } = singinDto;
+
       let user: any = await this.usersService.findByUsername(
         username.toLowerCase()
       );
+
       if (!user) {
         user = await this.signup(singinDto);
       }
+
       const isMatch = await this.comparePasswords(password, user.password);
+
       if (!isMatch) {
         throw new HttpException("Invalid credentials", HttpStatus.BAD_REQUEST);
       }
+
       const { userValidation, env, department } = await this.verifyUserOnCrm(
         username.toLowerCase(),
         password,
         env_name
       );
-      if (!userValidation)
+      console.log(
+        "🚀 ~ AuthService ~ signin ~ userValidation:",
+        userValidation
+      );
+      if (!userValidation) {
         throw new HttpException("Not verified by CRM.", HttpStatus.BAD_REQUEST);
+      }
       const payload: TokenPayloadDto = {
         user: {
           _id: user?._id,
@@ -307,11 +321,12 @@ export class AuthService {
           return true;
         }
       });
+      console.log(
+        "🚀 ~ AuthService ~ userValidation ~ userValidation:",
+        userValidation
+      );
       if (!userValidation)
-        throw new HttpException(
-          "Not verified by CRM. SignUp/SignIn with CRM credentials.",
-          HttpStatus.BAD_REQUEST
-        );
+        throw new HttpException("Invalid credentials", HttpStatus.BAD_REQUEST);
 
       return { userValidation, env, department };
     } catch (error) {
