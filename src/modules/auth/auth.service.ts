@@ -24,6 +24,7 @@ import { OTP_EMAIL_TEMPLATE } from "./constants";
 import moment from "moment";
 import { Roles } from "src/decorators/auth.decorator";
 import { UserRole } from "src/shared/enum";
+import { UpdateUserDto } from "../users/users.dto";
 const otpGenerator = require("otp-generator");
 
 @Injectable()
@@ -49,10 +50,7 @@ export class AuthService {
         password,
         env_name
       );
-      console.log(
-        "🚀 ~ AuthService ~ signup ~ userValidation:",
-        userValidation
-      );
+
       if (!userValidation)
         throw new HttpException(
           "Invalid username or password",
@@ -96,9 +94,11 @@ export class AuthService {
         password,
         env_name
       );
+
       if (!userValidation) {
-        throw new HttpException("Not verified by CRM.", HttpStatus.BAD_REQUEST);
+        throw new HttpException("Invalid credentials", HttpStatus.BAD_REQUEST);
       }
+
       const payload: TokenPayloadDto = {
         user: {
           _id: user?._id,
@@ -112,8 +112,38 @@ export class AuthService {
           name: env?.env_name
         }
       };
-      user.department = department;
-      const updateUser = await user.save();
+
+      const resourceAccount =
+        userValidation?.msdyn_bookableresource_msdyn_requirementresourcepreference_BookableResource.filter(
+          (item) => item.msdyn_Account !== null
+        );
+      console.log(
+        "🚀 ~ AuthService ~ signin ~ resourceAccount:",
+        resourceAccount
+      );
+
+      const updateRequestRecord: UpdateUserDto = {
+        _id: user?._id,
+        department: userValidation?.plus_department?.plus_name || null,
+        departmentId:
+          userValidation?.plus_department?.plus_departmentid || null,
+        resourceId: userValidation?.bookableresourceid || null,
+        plusWarehouseId:
+          userValidation?.plus_warehouseid?.msdyn_warehouseid || null,
+        plusWarehouseName: userValidation?.plus_warehouseid?.msdyn_name || null,
+        plusParentWarehouseName:
+          userValidation?.plus_warehouseid?.plus_parentwarehouse?.msdyn_name ||
+          null,
+        plusParentWarehouseId:
+          userValidation?.plus_warehouseid?.plus_parentwarehouse
+            ?.msdyn_warehouseid || null,
+
+        account: resourceAccount?.[0]?.msdyn_Account?.name || null,
+        accountId: resourceAccount?.[0]?.msdyn_Account?.accountid || null
+      };
+      // user.department = department;
+      const updateUser: any =
+        await this.usersService.update(updateRequestRecord);
       return {
         token: await this.generateToken(payload),
         user: { ...updateUser?._doc, ...userValidation }
@@ -320,10 +350,7 @@ export class AuthService {
           return true;
         }
       });
-      console.log(
-        "🚀 ~ AuthService ~ userValidation ~ userValidation:",
-        userValidation
-      );
+
       if (!userValidation)
         throw new HttpException("Invalid credentials", HttpStatus.BAD_REQUEST);
 

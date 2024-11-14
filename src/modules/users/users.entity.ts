@@ -51,13 +51,31 @@ export class User {
   account?: string;
 
   @Prop({ type: String, required: false })
+  accountId?: string;
+
+  @Prop({ type: String, required: false })
+  plusWarehouseId?: string;
+
+  @Prop({ type: String, required: false })
+  plusWarehouseName?: string;
+
+  @Prop({ type: String, required: false })
+  plusParentWarehouseId?: string;
+
+  @Prop({ type: String, required: false })
+  plusParentWarehouseName?: string;
+
+  @Prop({ type: String, required: false })
   department?: string;
+
+  @Prop({ type: String, required: false })
+  departmentId?: string;
 
   @Prop({ type: String, required: true, default: UserRole.TECHNICIAN })
   role: string;
 
-  @Prop({ required: false, type: [String] })
-  access?: string[];
+  // @Prop({ required: false, type: [String] })
+  // access?: string[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

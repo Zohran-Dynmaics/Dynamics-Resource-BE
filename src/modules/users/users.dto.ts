@@ -22,6 +22,18 @@ export class UpdateUserDto {
 
   @IsOptional()
   @IsString()
+  resourceId?: string;
+
+  @IsOptional()
+  @IsString()
+  department?: string;
+
+  @IsOptional()
+  @IsString()
+  departmentId?: string;
+
+  @IsOptional()
+  @IsString()
   accountId?: string;
 
   @IsOptional()
