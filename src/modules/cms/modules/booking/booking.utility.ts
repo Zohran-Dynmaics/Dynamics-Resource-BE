@@ -29,7 +29,14 @@ export const countBookings = (bookings) => {
       } else if (bookingDate.isSame(tomorrow, "day")) {
         taskCountDto.tomorrow++;
         taskCountDto.week++;
-      } else if (bookingDate.isBetween(today, endOfWeek, null, "[]")) {
+      } else if (
+        bookingDate.isBetween(
+          moment().startOf("isoWeek"),
+          moment().endOf("isoWeek"),
+          null,
+          "[]"
+        )
+      ) {
         taskCountDto.week++;
       }
     }

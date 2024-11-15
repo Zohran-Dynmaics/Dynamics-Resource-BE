@@ -16,17 +16,17 @@ import {
   FormatDataForCalender,
   FormatDataForTaskDetail,
   FormatDataForTasks,
-  TaskOfDayFilter,
+  TaskOfDayFilter
 } from "./booking.utility";
 
 @Injectable()
 export class BookingService {
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
   async getAllBooking(
     token: string,
     base_url: string,
-    query?: any,
+    query?: any
   ): Promise<any> {
     const { endpoint, searchQuery } = BOOKING_ENDPOINTS.ALL_BOOKINGS;
     const config: AxiosRequestConfig = this.apiService.getConfig(
@@ -42,8 +42,6 @@ export class BookingService {
     }
   }
 
-
-
   async getTasksOfDay(
     token: string,
     base_url: string,
@@ -56,7 +54,15 @@ export class BookingService {
       `${endpoint(base_url)}`,
       HTTPS_METHODS.GET,
       token,
-      searchQuery({ $filter: TaskOfDayFilter(resource_id, taskFilterDto?.filter, taskFilterDto?.workordertype, query), ...query }) as string
+      searchQuery({
+        $filter: TaskOfDayFilter(
+          resource_id,
+          taskFilterDto?.filter,
+          taskFilterDto?.workordertype,
+          query
+        ),
+        ...query
+      }) as string
     );
     try {
       const { value }: any = await this.apiService.request(config);
@@ -66,12 +72,24 @@ export class BookingService {
     }
   }
 
-  async getTaskById(token: string, base_url: string, task_id: string, query?: any): Promise<TaskDetailDto> {
+  async getTaskById(
+    token: string,
+    base_url: string,
+    task_id: string,
+    query?: any
+  ): Promise<TaskDetailDto> {
     try {
       const { endpoint, searchQuery } = BOOKING_ENDPOINTS.BOOKING;
-      const config: AxiosRequestConfig = this.apiService.getConfig(`${endpoint(base_url, task_id)}`, HTTPS_METHODS.GET, token, searchQuery(query) as string);
+      const config: AxiosRequestConfig = this.apiService.getConfig(
+        `${endpoint(base_url, task_id)}`,
+        HTTPS_METHODS.GET,
+        token,
+        searchQuery(query) as string
+      );
       const apiResponse: any = await this.apiService.request(config);
-      return Object.keys(query) ? FormatDataForTaskDetail(apiResponse) : apiResponse;
+      return Object.keys(query)
+        ? FormatDataForTaskDetail(apiResponse)
+        : apiResponse;
     } catch (error) {
       throw error;
     }
@@ -89,7 +107,10 @@ export class BookingService {
         `${endpoint(base_url)}`,
         HTTPS_METHODS.GET,
         token,
-        searchQuery({ $filter: `_resource_value eq ${resource_id}`, ...query }) as string
+        searchQuery({
+          $filter: `_resource_value eq ${resource_id} and _bookingstatus_value ne bb4acc71-8179-ef11-ac21-7c1e5236f34e and (msdyn_workorder/_msdyn_workordertype_value ne '766b493d-7442-ef11-a316-7c1e52353674' and msdyn_workorder/msdyn_systemstatus ne 690970003)`,
+          ...query
+        }) as string
       );
       const apiRespnse: any = await this.apiService.request(config);
       return countBookings(apiRespnse);
@@ -102,7 +123,7 @@ export class BookingService {
     token: string,
     base_url: string,
     resource_id: string,
-    date: Date | string,
+    date: Date | string
   ): Promise<any> {
     const { endpoint, query } =
       URLS_AND_QUERY_PARAMS?.BOOKING?.GET?.BOOKINGS_FOR_CALENDER;
@@ -110,7 +131,7 @@ export class BookingService {
     const config: AxiosRequestConfig = this.apiService.getConfig(
       `${endpoint(base_url)}${query(date, resource_id)}`,
       HTTPS_METHODS.GET,
-      token,
+      token
     );
     try {
       const apiResponse: any = await this.apiService.request(config);
@@ -120,7 +141,12 @@ export class BookingService {
     }
   }
 
-  async updateTask(token: string, base_url: string, task_id: string, updateTaskDto: TaskUpdateDto): Promise<any> {
+  async updateTask(
+    token: string,
+    base_url: string,
+    task_id: string,
+    updateTaskDto: TaskUpdateDto
+  ): Promise<any> {
     try {
       const { endpoint } = BOOKING_ENDPOINTS.BOOKING;
       const config: AxiosRequestConfig = this.apiService.getConfig(
