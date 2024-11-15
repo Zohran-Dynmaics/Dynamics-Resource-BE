@@ -258,6 +258,8 @@ export const TaskOfDayFilter = (
           })[0]
       : query;
 
+  console.log("query", query?.$filter);
+
   let queryString: string = `_resource_value eq ${resource_id}`;
 
   if (workordertype) {
@@ -271,5 +273,6 @@ export const TaskOfDayFilter = (
     queryString += ` and ${query?.$filter}`;
   }
 
+  console.log(queryString);
   return queryString;
 };

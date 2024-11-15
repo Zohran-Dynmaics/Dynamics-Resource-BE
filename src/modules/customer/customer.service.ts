@@ -213,7 +213,8 @@ export class CustomerService {
         customer.firstName = crmContact?.value?.[0]?.firstname;
         customer.lastName = crmContact?.value?.[0]?.lastname;
         customer.contactId = crmContact?.value?.[0]?.contactid;
-
+        customer.address =
+          crmContact?.value?.[0]?.address1_name || customer?.address;
         customer.customerNumber = crmContact?.value?.[0]?.plus_customernumber;
 
         await customer.save();
@@ -265,7 +266,7 @@ export class CustomerService {
           firstname: fullName[0],
           lastname: fullName[1],
           emailaddress1: customer?.email.toLowerCase(),
-          address1_line1: customer?.address
+          address1_name: customer?.address
         };
 
         const env = await this.envService.findByName(process.env.ENVIRONMENT);

@@ -142,7 +142,9 @@ export class CmsService {
           this.bookingService.getTasksOfDay(
             token,
             base_url,
-            bookableresourceid
+            bookableresourceid,
+            null,
+            "$filter=_bookingstatus_value ne bb4acc71-8179-ef11-ac21-7c1e5236f34e and (msdyn_workorder/_msdyn_workordertype_value ne 766b493d-7442-ef11-a316-7c1e52353674 and msdyn_workorder/msdyn_systemstatus ne 690970003)"
           ),
           this.bookingService.getTasksOfDay(
             token,
@@ -150,7 +152,7 @@ export class CmsService {
             bookableresourceid,
             {
               filter: FilterType.today,
-              workordertype: "bc8d5111-b548-ef11-a316-6045bd14a33f"
+              workordertype: "150032b3-b579-ef11-ac20-7c1e52366543"
             } as TaskFilterDto
           ),
           this.bookingService.getTasksOfDay(
@@ -158,16 +160,20 @@ export class CmsService {
             base_url,
             bookableresourceid,
             { filter: FilterType.today },
-            "$filter=_plus_case_value eq null"
+            "$filter=_plus_case_value eq null and _resource_value eq 7b36ba8c-688c-ef11-8a6a-002248cb3595 and _bookingstatus_value ne 0adbf4e6-86cc-4db0-9dbb-51b7d1ed4020 and _bookingstatus_value ne c33410b9-1abe-4631-b4e9-6e4a1113af34 and msdyn_workorder/_msdyn_workordertype_value eq 766b493d-7442-ef11-a316-7c1e52353674"
+            // "$expand=msdyn_workorder($select=msdyn_name,_msdyn_workordertype_value)&$filter=_resource_value eq 7b36ba8c-688c-ef11-8a6a-002248cb3595 and _plus_case_value eq null and _bookingstatus_value ne 0adbf4e6-86cc-4db0-9dbb-51b7d1ed4020 and _bookingstatus_value ne c33410b9-1abe-4631-b4e9-6e4a1113af34 and msdyn_workorder/_msdyn_workordertype_value eq 766b493d-7442-ef11-a316-7c1e52353674&$count=true"
+            // "$filter=_plus_case_value eq null and bookingstatus_value ne 0adbf4e6-86cc-4db0-9dbb-51b7d1ed4020 and _bookingstatus_value ne c33410b9-1abe-4631-b4e9-6e4a1113af34 and msdyn_workorder/_msdyn_workordertype_value eq 766b493d-7442-ef11-a316-7c1e52353674"
           ),
           this.bookingService.getTasksOfDay(
             token,
             base_url,
             bookableresourceid,
             null,
-            "$filter=_plus_case_value eq null"
+            "$filter=_plus_case_value eq null and _resource_value eq 7b36ba8c-688c-ef11-8a6a-002248cb3595 and _bookingstatus_value ne 0adbf4e6-86cc-4db0-9dbb-51b7d1ed4020 and _bookingstatus_value ne c33410b9-1abe-4631-b4e9-6e4a1113af34 and msdyn_workorder/_msdyn_workordertype_value eq 766b493d-7442-ef11-a316-7c1e52353674"
           )
         ]);
+
+      // console.log("total ppm", totalPpm);
 
       returnData.reactiveCount = reactiveCount?.length ?? 0;
       returnData.taskCount = taskCount?.length ?? 0;

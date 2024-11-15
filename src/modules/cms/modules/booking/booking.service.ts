@@ -64,6 +64,8 @@ export class BookingService {
         ...query
       }) as string
     );
+    // console.log("🚀 ~ BookingService ~ config:", config);
+
     try {
       const { value }: any = await this.apiService.request(config);
       return FormatDataForTasks(value);

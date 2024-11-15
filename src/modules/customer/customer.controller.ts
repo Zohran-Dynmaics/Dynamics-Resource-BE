@@ -42,8 +42,6 @@ export class CustomerController {
     @Req() req: CustomRequest
   ): Promise<Customer> {
     const { env, user } = req;
-    console.log("🚀 ~ CustomerController ~ user:", user);
-    console.log("🚀 ~ CustomerController ~ env:", env);
     return await this.customerService.update(updateCustomerDto, env, user);
   }
 
