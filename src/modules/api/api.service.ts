@@ -19,31 +19,63 @@ export class ApiService {
     );
   }
 
+  // async request(config: AxiosRequestConfig): Promise<AxiosResponse> {
+  //   let response: AxiosResponse = null;
+  //   try {
+  //     response = await axios.request(config).then((res) => {
+  //       return res.data;
+  //     });
+  //   } catch (error) {
+  //     if (this.isTokenExpired(error)) {
+  //       const token = await this.cmsService.refreshCrmToken(
+  //         config.headers.Authorization.split(" ")[1]
+  //       );
+  //       config = this.getConfig(
+  //         config?.url,
+  //         config?.method as HTTPS_METHODS,
+  //         token,
+  //         config?.params,
+  //         config?.data
+  //       );
+  //       this.request(config);
+  //     }
+  //     const { message, status } = formatCrmError(error);
+  //     throw new HttpException(message, status);
+  //   }
+
+  //   return response;
+  // }
+
   async request(config: AxiosRequestConfig): Promise<AxiosResponse> {
-    let response: AxiosResponse = null;
     try {
-      response = await axios.request(config).then((res) => {
-        return res.data;
-      });
+      // Make the initial request
+      const response = await axios.request(config);
+      return response.data;
     } catch (error) {
       if (this.isTokenExpired(error)) {
-        const token = await this.cmsService.refreshCrmToken(
+        // Refresh the token
+        const newToken = await this.cmsService.refreshCrmToken(
           config.headers.Authorization.split(" ")[1]
         );
+
+        // Update the configuration with the new token
         config = this.getConfig(
           config?.url,
           config?.method as HTTPS_METHODS,
-          token,
+          newToken,
           config?.params,
           config?.data
         );
-        this.request(config);
+
+        // Retry the request with the updated configuration and return the response
+        const retriedResponse = await this.request(config); // Await here
+        return retriedResponse.data;
       }
+
+      // If the error is not token expiration, format and throw it
       const { message, status } = formatCrmError(error);
       throw new HttpException(message, status);
     }
-
-    return response;
   }
 
   getConfig(
