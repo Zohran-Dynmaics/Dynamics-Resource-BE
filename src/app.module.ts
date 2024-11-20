@@ -14,6 +14,7 @@ import { ApiModule } from "./modules/api/api.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { CmsModule } from "./modules/cms/cms.module";
 import { PromoCodeModule } from "./modules/admin/promo-code/promo-code.module";
+import { LocationGateway } from "./location/location.gateway";
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -26,7 +27,9 @@ import { PromoCodeModule } from "./modules/admin/promo-code/promo-code.module";
     PromoCodeModule
   ],
 
-  controllers: [AppController]
+  controllers: [AppController],
+
+  providers: [LocationGateway]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

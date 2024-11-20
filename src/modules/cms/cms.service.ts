@@ -151,9 +151,10 @@ export class CmsService {
             base_url,
             bookableresourceid,
             {
-              filter: FilterType.today,
-              workordertype: "150032b3-b579-ef11-ac20-7c1e52366543"
-            } as TaskFilterDto
+              filter: FilterType.today
+              // workordertype: "150032b3-b579-ef11-ac20-7c1e52366543"
+            } as TaskFilterDto,
+            "$fiter=msdyn_workorder/_msdyn_workordertype_value eq 150032b3-b579-ef11-ac20-7c1e52366543"
           ),
           this.bookingService.getTasksOfDay(
             token,

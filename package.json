@@ -28,6 +28,8 @@
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/mongoose": "^10.0.6",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/platform-socket.io": "^10.4.8",
+    "@nestjs/websockets": "^10.4.8",
     "@types/bcrypt": "^5.0.2",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
@@ -42,6 +44,7 @@
     "phone": "^3.1.53",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
+    "socket.io": "^4.8.1",
     "uuid": "^11.0.2"
   },
   "devDependencies": {
