@@ -162,12 +162,12 @@ export class CustomerService {
     try {
       const customer = await this.customerModel.findOne({ phoneNumber }).exec();
 
-      // if (customer && customer?.downloadedOn != null) {
-      //   throw new HttpException(
-      //     "Phone number already registered with an account. Login Please.",
-      //     HttpStatus.BAD_REQUEST
-      //   );
-      // }
+      if (!customer) {
+        throw new HttpException(
+          "Please verify your phone number first.",
+          HttpStatus.BAD_REQUEST
+        );
+      }
 
       const env = await this.envService.findByName(process.env.ENVIRONMENT);
       const crmToken = env?.token
