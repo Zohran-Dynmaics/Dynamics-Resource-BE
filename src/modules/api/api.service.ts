@@ -69,7 +69,7 @@ export class ApiService {
 
         // Retry the request with the updated configuration and return the response
         const retriedResponse = await this.request(config); // Await here
-        return retriedResponse.data;
+        return retriedResponse;
       }
 
       // If the error is not token expiration, format and throw it

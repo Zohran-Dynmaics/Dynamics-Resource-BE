@@ -117,10 +117,6 @@ export class AuthService {
         userValidation?.msdyn_bookableresource_msdyn_requirementresourcepreference_BookableResource.filter(
           (item) => item.msdyn_Account !== null
         );
-      console.log(
-        "🚀 ~ AuthService ~ signin ~ resourceAccount:",
-        resourceAccount
-      );
 
       const updateRequestRecord: UpdateUserDto = {
         _id: user?._id,
