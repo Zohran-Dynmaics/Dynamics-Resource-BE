@@ -174,35 +174,46 @@ export class CmsService {
       //     )
       //   ]);
 
+      /**
+       *  Booking Statuses
+       *    1. Completed = c33410b9-1abe-4631-b4e9-6e4a1113af34
+       *    2. Cancelled = 0adbf4e6-86cc-4db0-9dbb-51b7d1ed4020
+       *    3. Partially Completed = bb4acc71-8179-ef11-ac21-7c1e5236f34e
+       *
+       */
+
       const [taskCount, reactiveCount, todayPpm, totalPpm]: any =
         await Promise.all([
-          this.bookingService.getTasksOfDay(
+          this.bookingService.getHomeScreenStats(
             token,
             base_url,
-            bookableresourceid
+            bookableresourceid,
+            null,
+            "$filter=_bookingstatus_value ne bb4acc71-8179-ef11-ac21-7c1e5236f34e and _bookingstatus_value ne 0adbf4e6-86cc-4db0-9dbb-51b7d1ed4020 and _bookingstatus_value ne c33410b9-1abe-4631-b4e9-6e4a1113af34 and (msdyn_workorder/_msdyn_workordertype_value ne 766b493d-7442-ef11-a316-7c1e52353674 and msdyn_workorder/msdyn_systemstatus ne 690970003)"
           ),
-          this.bookingService.getTasksOfDay(
+          this.bookingService.getHomeScreenStats(
             token,
             base_url,
             bookableresourceid,
             {
               filter: FilterType.today,
-              workordertype: "766b493d-7442-ef11-a316-7c1e52353674"
+              workordertype: "150032b3-b579-ef11-ac20-7c1e52366543"
             } as TaskFilterDto
           ),
-          this.bookingService.getTasksOfDay(
+          this.bookingService.getHomeScreenStats(
             token,
             base_url,
             bookableresourceid,
             { filter: FilterType.today },
-            "$filter=_plus_case_value eq null"
+            // _plus_case_value eq null  and
+            "$filter=_bookingstatus_value ne 0adbf4e6-86cc-4db0-9dbb-51b7d1ed4020 and _bookingstatus_value ne bb4acc71-8179-ef11-ac21-7c1e5236f34e and _bookingstatus_value ne c33410b9-1abe-4631-b4e9-6e4a1113af34 and msdyn_workorder/_msdyn_workordertype_value eq 766b493d-7442-ef11-a316-7c1e52353674"
           ),
-          this.bookingService.getTasksOfDay(
+          this.bookingService.getHomeScreenStats(
             token,
             base_url,
             bookableresourceid,
             null,
-            "$filter=_plus_case_value eq null"
+            "$filter=_bookingstatus_value ne 0adbf4e6-86cc-4db0-9dbb-51b7d1ed4020 and _bookingstatus_value ne c33410b9-1abe-4631-b4e9-6e4a1113af34 and _bookingstatus_value ne bb4acc71-8179-ef11-ac21-7c1e5236f34e and msdyn_workorder/_msdyn_workordertype_value eq 766b493d-7442-ef11-a316-7c1e52353674"
           )
         ]);
 

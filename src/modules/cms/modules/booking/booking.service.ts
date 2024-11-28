@@ -64,11 +64,42 @@ export class BookingService {
         ...query
       }) as string
     );
-    // console.log("🚀 ~ BookingService ~ config:", config);
+    console.log("🚀 ~ BookingService ~ config:", config);
 
     try {
       const { value }: any = await this.apiService.request(config);
       return FormatDataForTasks(value);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getHomeScreenStats(
+    token: string,
+    base_url: string,
+    resource_id: string,
+    taskFilterDto?: TaskFilterDto,
+    query?: any
+  ): Promise<Array<TasksDataDto>> {
+    const { endpoint, searchQuery } = BOOKING_ENDPOINTS.ALL_BOOKINGS;
+    const config: AxiosRequestConfig = this.apiService.getConfig(
+      `${endpoint(base_url)}`,
+      HTTPS_METHODS.GET,
+      token,
+      searchQuery({
+        $filter: TaskOfDayFilter(
+          resource_id,
+          taskFilterDto?.filter,
+          taskFilterDto?.workordertype,
+          query
+        ),
+        ...query
+      }) as string
+    );
+
+    try {
+      const { value }: any = await this.apiService.request(config);
+      return value;
     } catch (error) {
       throw error;
     }
