@@ -181,7 +181,7 @@ export const FormatDataForTasks = (value: any) => {
 
     if (
       msdyn_workorder?._msdyn_workordertype_value !==
-      "766b493d-7442-ef11-a316-7c1e52353674"
+      "150032b3-b579-ef11-ac20-7c1e52366543"
     ) {
       returnData.push({
         ticketId: booking?.bookableresourcebookingid,
