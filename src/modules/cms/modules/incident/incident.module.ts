@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { forwardRef, Module } from "@nestjs/common";
 import { IncidentController } from "./incident.controller";
 import { IncidentService } from "./incident.service";
 import { ApiModule } from "src/modules/api/api.module";
@@ -6,8 +6,8 @@ import { EnvironmentModule } from "src/modules/admin/environment/environment.mod
 import { CmsModule } from "../../cms.module";
 
 @Module({
-  imports: [ApiModule],
+  imports: [forwardRef(() => ApiModule)],
   controllers: [IncidentController],
-  providers: [IncidentService],
+  providers: [IncidentService]
 })
-export class IncidentModule { }
+export class IncidentModule {}

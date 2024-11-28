@@ -4,7 +4,8 @@ import {
   isNotEmpty,
   IsNotEmpty,
   IsOptional,
-  IsString
+  IsString,
+  Matches
 } from "class-validator";
 
 export class CreateCustomer {
@@ -74,6 +75,13 @@ export class UpdatePassword {
 }
 
 export class UpdateCustomerDto {
+  @IsOptional()
+  @IsString()
+  @Matches(/^data:image\/[a-zA-Z]+;base64,/, {
+    message: "Profile must be a valid base64 image string"
+  })
+  profile?: string;
+
   @IsOptional()
   @IsString()
   fullname?: string;

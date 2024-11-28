@@ -6,8 +6,8 @@ import { EnvironmentModule } from "src/modules/admin/environment/environment.mod
 import { CmsModule } from "../../cms.module";
 
 @Module({
-  imports: [ApiModule],
+  imports: [forwardRef(() => ApiModule)],
   controllers: [ContactController],
-  providers: [ContactService],
+  providers: [ContactService]
 })
-export class ContactModule { }
+export class ContactModule {}

@@ -6,9 +6,36 @@ import { HttpExceptionFilter } from "./filters/exception.filters";
 import { Logger as NestLogger, ValidationPipe } from "@nestjs/common";
 import * as cookieParser from "cookie-parser";
 import * as bodyParser from "body-parser";
+import { WINSTON_MODULE_NEST_PROVIDER, WinstonModule } from "nest-winston";
+import * as winston from "winston";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(
+    AppModule
+    //    ,{
+    //   logger: WinstonModule.createLogger({
+    //     transports: [
+    //       new winston.transports.Console({
+    //         format: winston.format.combine(
+    //           winston.format.timestamp(),
+    //           winston.format.colorize(),
+    //           winston.format.printf(({ timestamp, level, message }) => {
+    //             return `[${timestamp}] ${level}: ${message}`;
+    //           })
+    //         )
+    //       }),
+    //       new winston.transports.File({
+    //         filename: "logs/combined.log",
+    //         level: "info",
+    //         format: winston.format.combine(
+    //           winston.format.timestamp(),
+    //           winston.format.json()
+    //         )
+    //       })
+    //     ]
+    //   })
+    // }
+  );
   const configService = app.get(ConfigService);
 
   app.useGlobalPipes(
@@ -21,8 +48,9 @@ async function bootstrap() {
 
   app.use(cookieParser());
 
-  app.useGlobalInterceptors(new ResponseInterceptor());
-  app.useGlobalFilters(new HttpExceptionFilter());
+  const logger = app.get(WINSTON_MODULE_NEST_PROVIDER);
+  app.useGlobalInterceptors(new ResponseInterceptor(logger));
+  app.useGlobalFilters(new HttpExceptionFilter(logger));
   app.enableCors();
   app.use(bodyParser.json({ limit: "50mb" }));
   app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));

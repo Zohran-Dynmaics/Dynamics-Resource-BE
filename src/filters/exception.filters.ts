@@ -4,11 +4,20 @@ import {
   ExceptionFilter,
   HttpException,
   HttpStatus,
+  Inject,
+  LoggerService
 } from "@nestjs/common";
-import { exec } from "child_process";
-
+import { WINSTON_MODULE_NEST_PROVIDER } from "nest-winston";
+import { Logger } from "winston";
+// import { WINSTON_MODULE_NEST_PROVIDER } from "nest-winston";
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
+  constructor(
+    @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService
+  ) {}
+
+  // logger = new Logger();
+
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
@@ -24,9 +33,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
       success: false,
       message: exception?.message || "Internal Server Error",
       timestamp: new Date().toISOString(),
-      path: request.url,
+      path: request.url
     };
 
+    // Log the error details to Winston
     if (exception instanceof HttpException) {
       const res = exception.getResponse();
 
@@ -35,6 +45,17 @@ export class HttpExceptionFilter implements ExceptionFilter {
       }
     }
 
+    this.logger.error("Exception caught", {
+      method: request.method,
+      url: request.url,
+      body: request.body,
+      query: request.query,
+      params: request.params,
+      status,
+      errorMessage: exception?.message || "Unknown error",
+      stack: exception?.stack || null,
+      timestamp: errorResponse.timestamp
+    });
     response.status(status).json(errorResponse);
   }
 }

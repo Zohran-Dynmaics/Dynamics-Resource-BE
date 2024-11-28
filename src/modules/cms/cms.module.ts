@@ -21,10 +21,10 @@ import { ProblemIssueModule } from "./modules/problem-issue/problem-issue.module
     ResourceModule,
     IncidentModule,
     WorkOrderModule,
-    ProblemIssueModule,
+    ProblemIssueModule
   ],
   controllers: [CmsController],
   providers: [CmsService],
-  exports: [CmsService],
+  exports: [CmsService]
 })
-export class CmsModule { }
+export class CmsModule {}

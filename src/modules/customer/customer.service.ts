@@ -178,10 +178,6 @@ export class CustomerService {
         crmToken,
         `contacts?$filter=contains(mobilephone,'${phoneNumber}')&$count=true&$expand=plus_zone($select=msdyn_name),plus_building($select=msdyn_name),parentcustomerid_account,plus_floor($select=msdyn_name),plus_location($select=msdyn_name)&$top=1`
       );
-      console.log(
-        "🚀 ~ CustomerService ~ checkCRMCustomer ~ crmContact:",
-        crmContact
-      );
       if (crmContact.value.length >= 0) {
         customer.location =
           crmContact?.value?.[0]?.plus_location?.msdyn_name || null;
@@ -220,6 +216,7 @@ export class CustomerService {
         customer.address =
           crmContact?.value?.[0]?.address1_name || customer?.address;
         customer.customerNumber = crmContact?.value?.[0]?.plus_customernumber;
+        customer.profile = crmContact?.value?.[0]?.plus_profilepicture || null;
 
         await customer.save();
       }
@@ -393,7 +390,6 @@ export class CustomerService {
     const { _id } = user;
     try {
       const customer: any = await this.findById(_id);
-      console.log("🚀 ~ CustomerService ~ customer:", customer);
       if (!customer) {
         throw new HttpException(`Customer not found`, HttpStatus.NOT_FOUND);
       }
@@ -424,6 +420,9 @@ export class CustomerService {
           }),
           ...(updateCustomerDto?.phoneNumber && {
             mobilephone: updateCustomerDto?.phoneNumber
+          }),
+          ...(updateCustomerDto?.profile && {
+            ontegra_profilepicture: updateCustomerDto?.profile
           })
         }
       );

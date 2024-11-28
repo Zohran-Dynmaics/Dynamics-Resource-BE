@@ -174,8 +174,6 @@ export class CmsService {
           )
         ]);
 
-      // console.log("total ppm", totalPpm);
-
       returnData.reactiveCount = reactiveCount?.length ?? 0;
       returnData.taskCount = taskCount?.length ?? 0;
       returnData.todayPpm = todayPpm?.length ?? 0;
@@ -220,7 +218,6 @@ export class CmsService {
         query,
         data
       );
-      console.log("🚀 ~ CmsService ~ config:", config);
       return this.apiService.request(config);
     } catch (error) {
       throw error;

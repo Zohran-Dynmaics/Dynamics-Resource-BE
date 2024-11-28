@@ -1,12 +1,12 @@
-import { Module } from "@nestjs/common";
+import { forwardRef, Module } from "@nestjs/common";
 import { ResourceController } from "./resource.controller";
 import { ResourceService } from "./resource.service";
 import { ApiModule } from "src/modules/api/api.module";
 import { EnvironmentModule } from "src/modules/admin/environment/environment.module";
 
 @Module({
-  imports: [ApiModule],
+  imports: [forwardRef(() => ApiModule)],
   controllers: [ResourceController],
-  providers: [ResourceService],
+  providers: [ResourceService]
 })
-export class ResourceModule { }
+export class ResourceModule {}

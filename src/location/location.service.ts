@@ -18,12 +18,12 @@ export class LocationService {
   async createSocketConnection(
     socketConnection: SocketConnection
   ): Promise<SocketConnection> {
-    console.log("🚀 ~ LocationService ~ socketConnection:", socketConnection);
+    // console.log("🚀 ~ LocationService ~ socketConnection:", socketConnection);
     try {
       const socketUser = await this.socketConnectionModel.findOne({
         userId: socketConnection?.userId
       });
-      console.log("🚀 ~ LocationService ~ socketUser:", socketUser);
+      // console.log("🚀 ~ LocationService ~ socketUser:", socketUser);
       if (socketUser) {
         throw new Error("User already connected");
       }
