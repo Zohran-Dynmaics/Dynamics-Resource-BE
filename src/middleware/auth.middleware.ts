@@ -27,10 +27,10 @@ export class AuthMiddleware implements NestMiddleware {
         throw new HttpException("Token not found.", HttpStatus.UNAUTHORIZED);
       }
       const token = authHeader.split(" ")[1];
-      let decodedToken = null;
+      let decodedToken: any = null;
 
       try {
-        const decodedToken: any = this.jwtService.verify(token);
+        decodedToken = this.jwtService.verify(token);
       } catch (error) {
         throw new HttpException("Token Expired", HttpStatus.UNAUTHORIZED);
       }
