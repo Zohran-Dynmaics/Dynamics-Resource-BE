@@ -22,11 +22,18 @@ export class AuthMiddleware implements NestMiddleware {
   async use(req: Request, res: Response, next: NextFunction) {
     try {
       const authHeader: any = req?.headers?.authorization;
+
       if (!authHeader) {
         throw new HttpException("Token not found.", HttpStatus.UNAUTHORIZED);
       }
       const token = authHeader.split(" ")[1];
-      const decodedToken: any = this.jwtService.verify(token);
+      let decodedToken = null;
+
+      try {
+        const decodedToken: any = this.jwtService.verify(token);
+      } catch (error) {
+        throw new HttpException("Token Expired", HttpStatus.UNAUTHORIZED);
+      }
       if (!decodedToken) {
         throw new HttpException("Invalid token", HttpStatus.UNAUTHORIZED);
       }

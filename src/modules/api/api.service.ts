@@ -52,7 +52,9 @@ export class ApiService {
       const response = await axios.request(config);
       return response.data;
     } catch (error) {
+      console.log("before error if ");
       if (this.isTokenExpired(error)) {
+        console.log("here");
         // Refresh the token
         const newToken = await this.cmsService.refreshCrmToken(
           config.headers.Authorization.split(" ")[1]

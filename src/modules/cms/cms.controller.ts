@@ -26,6 +26,7 @@ export class CmsController {
     @Req() req: CustomRequest
   ) {
     const { env } = req;
+    console.log("🚀 ~ CmsController ~ env:", env);
     try {
       const endpoint = `${dynamic_endpoint}?${Object.keys(query)
         .map((key) => `${key}=${query[key]}`)
