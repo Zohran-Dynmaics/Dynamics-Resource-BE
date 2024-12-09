@@ -17,9 +17,8 @@ import { z } from "zod";
 
 // const __dirname = path.dirname(__filename);
 
-//"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";
-
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const OPENAI_API_KEY =
+  "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";
 
 // Define the LiveKit Agent
 export default defineAgent({
