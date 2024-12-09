@@ -10,15 +10,16 @@ import * as openai from "@livekit/agents-plugin-openai";
 import path from "path";
 import { fileURLToPath } from "url";
 import { z } from "zod";
+import { ConfigService } from "@nestjs/config";
 
+import * as dotenv from "dotenv";
+
+dotenv.config();
 // Convert import.meta.url to a file path
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
 
 // const __dirname = path.dirname(__filename);
-
-const OPENAI_API_KEY =
-  "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";
 
 // Define the LiveKit Agent
 export default defineAgent({
@@ -33,7 +34,7 @@ export default defineAgent({
 
       const model = new openai.realtime.RealtimeModel({
         instructions: `You are a helpful assistant that can answer questions and also perform actions like getting weather information based on user commands. If the user asks about the weather for any location, use the weather function to respond.`,
-        apiKey: OPENAI_API_KEY,
+        apiKey: process.env.OPENAI_API_KEY,
         voice: "sage",
         temperature: 0.7,
         maxResponseOutputTokens: 2500,
