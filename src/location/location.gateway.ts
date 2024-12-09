@@ -57,7 +57,7 @@ export class LocationGateway
       // });
       // Optionally, add technician-specific logic here
     }
-    // console.log("🚀 ~ customerSocketMap:", this.customerSocketMap);
+    console.log("🚀 ~ customerSocketMap:", this.customerSocketMap);
   }
 
   async handleDisconnect(client: Socket) {
@@ -73,7 +73,7 @@ export class LocationGateway
       // await this.socketLocationService.deleteConnectionById(
       //   socketRecord?._id.toString()
       // );
-      // console.log(`Customer ${customerId} disconnected.`);
+      console.log(`Customer ${customerId} disconnected.`);
     }
   }
 
@@ -82,7 +82,7 @@ export class LocationGateway
     client: Socket,
     payload: { technicianId: string; customerId: string }
   ) {
-    // console.log("🚀 ~ payload:", payload);
+    console.log("🚀 ~ payload:", payload);
     // Map technician to customer
     this.technicianCustomerMap.set(payload.technicianId, payload.customerId);
     // const socketConnection =
@@ -98,11 +98,11 @@ export class LocationGateway
     //     socketId: socketConnection?.socketId
     //   });
     // }
-    // console.log(
-    //   `Technician ${payload.technicianId} traveling to customer ${payload.customerId}`,
-    //   "------------------------",
-    //   this.technicianCustomerMap
-    // );
+    console.log(
+      `Technician ${payload.technicianId} traveling to customer ${payload.customerId}`,
+      "------------------------",
+      this.technicianCustomerMap
+    );
   }
 
   @SubscribeMessage("updateLocation")
@@ -124,9 +124,10 @@ export class LocationGateway
       //   );
 
       if (customerSocketId) {
-        // this.server.to(customerSocketId).emit("locationUpdate", payload);
+        console.log("🚀 ~ customerSocketId:", customerSocketId);
         this.server.to(customerSocketId).emit("locationUpdate", payload);
-        // console.log(`Location update sent to customer ${customerId}:`, payload);
+        // this.server.to(customerSocketId).emit("locationUpdate", payload);
+        console.log(`Location update sent to customer ${customerId}:`, payload);
       } else {
         console.warn(`Customer ${customerId} is not connected.`);
       }
