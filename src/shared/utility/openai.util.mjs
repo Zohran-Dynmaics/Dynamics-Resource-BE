@@ -1,5 +1,5 @@
 import {
-  type JobContext,
+  // type JobContext,
   WorkerOptions,
   cli,
   defineAgent,
@@ -11,19 +11,18 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { z } from "zod";
 import { ConfigService } from "@nestjs/config";
-
 import * as dotenv from "dotenv";
 
 dotenv.config();
 // Convert import.meta.url to a file path
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // const __dirname = path.dirname(__filename);
 
 // Define the LiveKit Agent
 export default defineAgent({
-  entry: async (ctx: JobContext) => {
+  entry: async (ctx) => {
     try {
       await ctx.connect();
       console.log("Waiting for participant...");
@@ -46,7 +45,7 @@ export default defineAgent({
         }
       });
 
-      const fncCtx: llm.FunctionContext = {
+      const fncCtx = {
         weather: {
           description:
             'Get weather information when a user asks about the current weather for a specific location. Examples: "What is the weather in Dubai?" or "Tell me the weather in New York".',
@@ -125,7 +124,7 @@ export default defineAgent({
 
       const session = await liveKitAgent
         .start(ctx.room, participant)
-        .then((session) => session as openai.realtime.RealtimeSession);
+        .then((session) => session);
 
       if (session) {
         console.log(
@@ -169,7 +168,7 @@ export default defineAgent({
 // Add a delay before starting the LiveKit agent to avoid conflicts
 setTimeout(async () => {
   try {
-    await cli.runApp(new WorkerOptions({ agent: __filename }));
+    await cli.runApp(new WorkerOptions({ agent: path.resolve(__filename) }));
   } catch (error) {
     console.error("Error running LiveKit agent CLI:", error);
   }
