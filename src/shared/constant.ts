@@ -1,4 +1,4 @@
-import * as moment from "moment";
+import moment from "moment";
 import { getDayBoundaries } from "./utility/utility";
 import { TaskFilterDto } from "src/modules/cms/modules/booking/booking.dto";
 

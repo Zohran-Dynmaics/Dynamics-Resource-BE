@@ -4,11 +4,12 @@ import {
   cli,
   defineAgent,
   llm,
-  multimodal
+  multimodal,
 } from "@livekit/agents";
 import * as openai from "@livekit/agents-plugin-openai";
+import { JobType } from "@livekit/protocol";
 import path from "path";
-import { fileURLToPath } from "url";
+import { fileURLToPath } from "node:url";
 import { z } from "zod";
 import { ConfigService } from "@nestjs/config";
 import * as dotenv from "dotenv";
@@ -17,8 +18,6 @@ dotenv.config();
 // Convert import.meta.url to a file path
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-// const __dirname = path.dirname(__filename);
 
 // Define the LiveKit Agent
 export default defineAgent({
@@ -41,8 +40,8 @@ export default defineAgent({
           type: "server_vad",
           threshold: 0.7,
           prefix_padding_ms: 1000,
-          silence_duration_ms: 1000
-        }
+          silence_duration_ms: 1000,
+        },
       });
 
       const fncCtx = {
@@ -50,7 +49,9 @@ export default defineAgent({
           description:
             'Get weather information when a user asks about the current weather for a specific location. Examples: "What is the weather in Dubai?" or "Tell me the weather in New York".',
           parameters: z.object({
-            location: z.string().describe("The location to get the weather for")
+            location: z
+              .string()
+              .describe("The location to get the weather for"),
           }),
           execute: async ({ location }) => {
             console.debug(`Executing weather function for ${location}`);
@@ -69,7 +70,7 @@ export default defineAgent({
               console.error(`Error fetching weather data: ${error}`);
               return `I'm having trouble fetching the weather data for ${location}. Please try again later.`;
             }
-          }
+          },
           // Instead of defining `execute` function locally, we forward it to an RPC endpoint
           // execute: async (params) => {
           //     try {
@@ -83,7 +84,7 @@ export default defineAgent({
           //         return "Unable to retrieve user location";
           //     }
           // }
-        }
+        },
         // getCase: {
         //     description: 'get status of case id, when user ask for case status or status of issue he reported.".',
         //     parameters: z.object({
@@ -107,7 +108,7 @@ export default defineAgent({
 
       const liveKitAgent = new multimodal.MultimodalAgent({
         model,
-        fncCtx
+        fncCtx,
       });
 
       // Function Call Debugging Logs
@@ -135,7 +136,7 @@ export default defineAgent({
       session.conversation.item.create(
         llm.ChatMessage.create({
           role: llm.ChatRole.USER,
-          text: "Can you get me the weather information for New York City?"
+          text: "Can you get me the weather information for New York City?",
         })
       );
 
@@ -162,13 +163,21 @@ export default defineAgent({
     } catch (error) {
       console.error("Error in agent entry function:", error);
     }
-  }
+  },
 });
 
 // Add a delay before starting the LiveKit agent to avoid conflicts
 setTimeout(async () => {
   try {
-    await cli.runApp(new WorkerOptions({ agent: path.resolve(__filename) }));
+    await cli.runApp(
+      new WorkerOptions({
+        agent: path.resolve(__filename),
+        apiKey: process.env.LIVEKIT_API_KEY, // Replace with your LiveKit API key
+        apiSecret: process.env.LIVEKIT_API_SECRET, // Replace with your LiveKit API secret
+        // url: process.env.LIVEKIT_URL,
+        workerType: JobType.JT_ROOM,
+      })
+    );
   } catch (error) {
     console.error("Error running LiveKit agent CLI:", error);
   }
