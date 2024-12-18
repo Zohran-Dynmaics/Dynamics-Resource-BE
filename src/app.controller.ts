@@ -1,5 +1,5 @@
 import { Controller, Get, HttpException, Req } from "@nestjs/common";
-import axios from "axios";
+import { AccessToken } from "livekit-server-sdk";
 import { CustomRequest } from "src/shared/custom-interface";
 // (async () => {
 //   const openaiUtil = await import("./shared/utility/openai.util");
@@ -15,51 +15,49 @@ export class AppController {
     return "Cms is running is running";
   }
 
-  generateLiveKitToken = async (participantName: string, roomName: string) => {
-    try {
-      const response = await axios.post(
-        process.env.SANDBOX_URL,
-        {},
-        {
-          headers: {
-            "X-Sandbox-ID": process.env.SANDBOX_ID,
-            "Content-Type": "application/json"
-          },
-          params: {
-            roomName: roomName,
-            /* In the code snippet provided, `participantName: participantName` is setting the value of
-            the `participantName` parameter in the request to the value of the `participantName`
-            variable passed into the `generateLiveKitToken` function. */
-            participantName: participantName
-          }
-        }
-      );
-
-      if (response.data && response.data.participantToken) {
-        return response.data.participantToken;
-      } else {
-        throw new Error("Token generation failed: No token in response");
+  generateLiveKitToken = async (
+    participantName: string,
+    roomName: string,
+    metadata: string
+  ) => {
+    const at = new AccessToken(
+      process.env.LIVEKIT_API_KEY,
+      process.env.LIVEKIT_API_SECRET,
+      {
+        identity: participantName, // Unique identifier for the participant
+        ttl: 3600 // Token expiry in seconds (1 hour)
       }
-    } catch (error) {
-      console.error("Error generating token from LiveKit Sandbox:", error);
-      throw new Error("Failed to generate LiveKit token");
-    }
+    );
+
+    // Attach metadata to the participant
+    at.addGrant({
+      roomJoin: true,
+      room: roomName
+    });
+    at.metadata = JSON.stringify(metadata); // Metadata as a JSON string
+
+    return at.toJwt(); // Return the token
   };
 
   @Get("getLiveKitToken")
   async GetLiveKitToken(@Req() req: CustomRequest): Promise<any> {
-    const { userName, roomName } = req.query as {
+    const { userName, roomName, metadata } = req.query as {
       userName: string;
       roomName: string;
+      metadata: string;
     };
 
-    if (!userName || !roomName) {
+    if (!userName || !roomName || !metadata) {
       //   return res.status(400).send("Missing required parameters");
       throw new HttpException("Missing required parameters", 500);
     }
 
     try {
-      const token = await this.generateLiveKitToken(userName, roomName);
+      const token = await this.generateLiveKitToken(
+        userName,
+        roomName,
+        metadata
+      );
       return { token };
     } catch (error) {
       //   res.status(500).send("Error generating token");
